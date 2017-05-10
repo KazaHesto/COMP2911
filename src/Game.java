@@ -9,19 +9,27 @@ public class Game implements Runnable{
 	public int width, height;
 	public String title;
 	private boolean running = false;
-	
 	//stuff for graphics
 	private BufferStrategy bs;
 	private Graphics g;	
 	private Thread thread;
 	
-	
+	private int[][] matrix;
+	private int xCoord;
+	private int yCoord;
 	//constructor
 	public Game(String title, int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		
+		this.matrix = new int[][] {
+			{0,0,0,0,0,0,0,0,0,0,0},
+			{0,1,4,4,4,4,4,4,4,0,0},
+			{0,0,0,0,2,0,4,4,0,0,0},
+			{0,0,0,0,4,0,4,2,4,3,0},
+			{0,0,0,3,4,4,4,2,4,3,0},
+			{0,0,0,0,0,0,0,0,0,0,0}
+		};
 		//needs
 		//map - adj matrix
 		//player
@@ -43,6 +51,17 @@ public class Game implements Runnable{
 		//maybe check for win first -> check if crosses and boxes share coords
 		
 		//get user input
+		int x = getXCoordinate();
+		int tempX = x;
+		int y = getYCoordinate();
+		int tempY = y;
+		x += xCoord;
+		y+= yCoord;
+		int temp = this.matrix[x][y];
+		matrix[x][y] = 1;
+		matrix[tempX][tempY] = temp;
+		
+		
 		//parse input - menu,info,quit,reset,move
 		
 		//pass move to player -> player checks for collision, moves accordingly and updates position
@@ -67,23 +86,7 @@ public class Game implements Runnable{
 				break;
 		}
 	}
-	/*
-		//changes graphics color based on matrix value
-		private void changeImage(int z, int x, int y) {
-			switch(z) {
-			case 0: testImage = Game.loadImage("/textures/Wall.png.png");
-					break;
-			case 1: testImage = Game.loadImage("/textures/ManU1.png.png");
-					break;
-			case 2: testImage = Game.loadImage("/textures/Box2.png.png");
-					break;
-			case 3: testImage = Game.loadImage("/textures/Cross.png.png");
-					break;
-			case 4: g.setColor(Color.WHITE);
-					break;
-			}
-		}
-	*/
+	
 	//takes the game state and puts it on the canvas
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
@@ -96,29 +99,14 @@ public class Game implements Runnable{
 		g.clearRect(0, 0, width, height);		
 		//draw here
 		g.setColor(Color.RED);
-		int[][] matrix = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,1,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,2,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,2,4,3,0},
-			{0,0,0,3,4,4,4,2,4,3,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
-		};
+
 		int i = 0;
 		int j = 0;
 		while (i <= 10) {
 			j = 0;
 			while (j <= 5) {
-				changeColor(matrix[j][i]);
-				g.fillRect(i*64, j*64, 64, 64);
-				/*
-				changeImage(matrix[j][i], j, i);
-				if (matrix[j][i] < 4) {
-					g.drawImage(testImage, i*64, j*64, null);
-				} else {
-					g.fillRect(i*64, j*64, 64, 64);
-				}
-				*/
+				changeColor(this.matrix[j][i]);
+				g.fillRect(i*100, j*100, 100, 100);
 				j++;
 			}
 			
@@ -135,6 +123,32 @@ public class Game implements Runnable{
 		bs.show();
 		g.dispose();
 	}
+	public int getXCoordinate(){
+	int x = 0;
+	for(int row = 0; row<this.matrix.length; row++){
+		for(int col = 0; col<this.matrix.length;col++){
+			if(this.matrix[row][col] == 1){
+				x = col;
+				break;
+			}
+		}
+	}
+	return x;
+	}
+	
+	public int getYCoordinate(){
+	int y = 0;
+	for(int row = 0; row<this.matrix.length; row++){
+		for(int col = 0; col<this.matrix.length;col++){
+			if(this.matrix[row][col] == 1){
+				y = row;
+				break;
+			}
+		}
+	}
+	return y;
+	}
+	
 	
 	public void run(){
 		
@@ -170,4 +184,5 @@ public class Game implements Runnable{
 			e.printStackTrace();
 		}
 	}
+
 }
