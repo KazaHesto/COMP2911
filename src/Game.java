@@ -109,14 +109,16 @@ public class Game implements Runnable{
 		while (i <= 10) {
 			j = 0;
 			while (j <= 5) {
-				//changeColor(matrix[j][i]);
-				//g.fillRect(i*10, j*10, 10, 10);
+				changeColor(matrix[j][i]);
+				g.fillRect(i*64, j*64, 64, 64);
+				/*
 				changeImage(matrix[j][i], j, i);
 				if (matrix[j][i] < 4) {
 					g.drawImage(testImage, i*64, j*64, null);
 				} else {
 					g.fillRect(i*64, j*64, 64, 64);
 				}
+				*/
 				j++;
 			}
 			
