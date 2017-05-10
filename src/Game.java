@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
 public class Game implements Runnable{
@@ -15,8 +17,9 @@ public class Game implements Runnable{
 	private Thread thread;
 	
 	private int[][] matrix;
-	private int xCoord;
-	private int yCoord;
+	private int[][] originalState;
+	
+	private KeyListener listener;
 	//constructor
 	public Game(String title, int width, int height) {
 		this.width = width;
@@ -30,23 +33,74 @@ public class Game implements Runnable{
 			{0,0,0,3,4,4,4,2,4,3,0},
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
+		this.originalState = new int[][] {
+				{0,0,0,0,0,0,0,0,0,0,0},
+				{0,4,4,4,4,4,4,4,4,0,0},
+				{0,0,0,0,2,0,4,4,0,0,0},
+				{0,0,0,0,4,0,4,2,4,3,0},
+				{0,0,0,3,4,4,4,2,4,3,0},
+				{0,0,0,0,0,0,0,0,0,0,0}
+			};
 		//needs
 		//map - adj matrix
 		//player
 		//linkedlist of boxes
 		//linkedlist of crosses
-		
+		this.listener = new ArrowKeyListener();
 	}
 	
 	//Initializes the game state and visuals
 	private void init(){
-		display = new Display(title,width,height);
+		display = new Display(title,width,height, this.listener);
+		display.getListener();
 	}
-	
+
+	public class ArrowKeyListener implements KeyListener{
+		private int xCoord = 0;
+		private int yCoord = 0;
+		public void keyPressed(KeyEvent e){
+			int key = e.getKeyCode();
+			
+			if(key == KeyEvent.VK_W){
+				update(0, -1);
+				this.yCoord = -1;
+				System.out.println("yCoord = " + yCoord);
+			} else if(key == KeyEvent.VK_A){
+				update(-1, 0);
+				this.xCoord = -1;
+				System.out.println("XCoord = " + xCoord);
+			} else if(key == KeyEvent.VK_S){
+				update(0, 1);
+				this.yCoord = 1;
+				System.out.println("yCoord = " + yCoord);
+			} else if(key == KeyEvent.VK_D){
+				update(1, 0);
+				this.xCoord = 1;
+				System.out.println("XCoord = " + xCoord);
+			}
+		}
+		
+		public void keyReleased(KeyEvent e){
+		}
+		
+		public int getX(){
+			return this.xCoord;
+		}
+		
+		public int getY(){
+			return this.yCoord;
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
 	//update the game state
 	//probs gets passed user key input
 	//then changes the game state
-	private void update() {
+	private void update(int xCoord, int yCoord) {
 		
 		//maybe check for win first -> check if crosses and boxes share coords
 		
@@ -55,11 +109,12 @@ public class Game implements Runnable{
 		int tempX = x;
 		int y = getYCoordinate();
 		int tempY = y;
+		System.out.println(x + " " + y);
 		x += xCoord;
-		y+= yCoord;
+		y += yCoord;
 		int temp = this.matrix[x][y];
 		matrix[x][y] = 1;
-		matrix[tempX][tempY] = temp;
+		matrix[tempX][tempY] = originalState[tempX][tempY];
 		
 		
 		//parse input - menu,info,quit,reset,move
@@ -156,7 +211,7 @@ public class Game implements Runnable{
 
 		//game loop
 		while(running) {
-			update();
+//			update(); update called directly by keylistener, should probably change this entirely when we have time
 			render();
 		}
 		stop();
@@ -184,5 +239,4 @@ public class Game implements Runnable{
 			e.printStackTrace();
 		}
 	}
-
 }
