@@ -67,7 +67,7 @@ public class Game implements Runnable{
 				break;
 		}
 	}
-	
+	/*
 		//changes graphics color based on matrix value
 		private void changeImage(int z, int x, int y) {
 			switch(z) {
@@ -83,7 +83,7 @@ public class Game implements Runnable{
 					break;
 			}
 		}
-	
+	*/
 	//takes the game state and puts it on the canvas
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
