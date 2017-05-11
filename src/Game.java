@@ -1,18 +1,27 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-public class Game {
+import javax.imageio.ImageIO;
+
+public class Game implements Runnable{
 	
 	//local stuff for the game
 	private Display display;
 	public int width, height;
 	public String title;
+	private boolean running = false;
 	//stuff for graphics
 	private BufferStrategy bs;
-	private Graphics g;
+	private Graphics g;	
+	private Thread thread;
+	
+	private Image testImage;
 	
 	private int[][] matrix;
 	private int[][] originalState;
@@ -34,9 +43,9 @@ public class Game {
 		this.originalState = new int[][] {
 				{0,0,0,0,0,0,0,0,0,0,0},
 				{0,4,4,4,4,4,4,4,4,0,0},
-				{0,0,0,0,2,0,4,4,0,0,0},
-				{0,0,0,0,4,0,4,2,4,3,0},
-				{0,0,0,3,4,4,4,2,4,3,0},
+				{0,0,0,0,4,0,4,4,0,0,0},
+				{0,0,0,0,4,0,4,4,4,3,0},
+				{0,0,0,3,4,4,4,4,4,3,0},
 				{0,0,0,0,0,0,0,0,0,0,0}
 			};
 		//needs
@@ -45,37 +54,54 @@ public class Game {
 		//linkedlist of boxes
 		//linkedlist of crosses
 		this.listener = new ArrowKeyListener();
-		display = new Display(title,width,height, this.listener);
-		// Add delay so that the window can render without being blank
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	}
+	
+	private void changeImage(int z, int x, int y) {
+		switch(z) {
+			case 0: testImage = Game.loadImage("/textures/Wall.png.png");
+					break;
+			case 1: testImage = Game.loadImage("/textures/ManU1.png.png");
+					break;
+			case 2: testImage = Game.loadImage("/textures/Box2.png.png");
+					break;
+			case 3: testImage = Game.loadImage("/textures/Cross.png.png");
+					break;
+			case 4: g.setColor(Color.white);
+					break;
 		}
-		render();
+	}
+	
+	//Initializes the game state and visuals
+	private void init(){
+		display = new Display(title,width,height, this.listener);
+		display.getListener();
 	}
 
 	public class ArrowKeyListener implements KeyListener{
 		private int xCoord = 0;
 		private int yCoord = 0;
+		private char keyPres;
 		public void keyPressed(KeyEvent e){
 			int key = e.getKeyCode();
 			
 			if(key == KeyEvent.VK_W){
-				update(0, -1);
+				keyPres = 'W';
+				update(0, -1, keyPres);
 				this.yCoord = -1;
 				System.out.println("yCoord = " + yCoord);
 			} else if(key == KeyEvent.VK_A){
-				update(-1, 0);
+				keyPres = 'A';
+				update(-1, 0,keyPres);
 				this.xCoord = -1;
 				System.out.println("XCoord = " + xCoord);
 			} else if(key == KeyEvent.VK_S){
-				update(0, 1);
+				keyPres = 'S';
+				update(0, 1,keyPres);
 				this.yCoord = 1;
 				System.out.println("yCoord = " + yCoord);
 			} else if(key == KeyEvent.VK_D){
-				update(1, 0);
+				keyPres = 'D';
+				update(1, 0, keyPres);
 				this.xCoord = 1;
 				System.out.println("XCoord = " + xCoord);
 			}
@@ -102,7 +128,7 @@ public class Game {
 	//update the game state
 	//probs gets passed user key input
 	//then changes the game state
-	private void update(int xCoord, int yCoord) {
+	private void update(int xCoord, int yCoord, char keyPress) {
 		
 		//maybe check for win first -> check if crosses and boxes share coords
 		
@@ -111,15 +137,48 @@ public class Game {
 		int tempX = x;
 		int y = getYCoordinate();
 		int tempY = y;
-//		int temp = this.matrix[x][y];
-//		System.out.println("length = " + this.matrix.length);
 		System.out.println(x + " " + y);
 		x += xCoord;
 		y += yCoord;
-		matrix[y][x] = 1;
-		matrix[tempY][tempX] = originalState[tempY][tempX];
-		
-		render();
+		char key = keyPress;
+		if(matrix[y][x] == 0){
+			return;
+		} else if(matrix[y][x] == 2){
+			
+			if(key == 'W'){
+				if(matrix[y-1][x] == 0 || matrix[y-1][x] == 2){
+					return;
+				}
+				matrix[y-1][x] = matrix[y][x];
+				matrix[y][x] = 1;
+				matrix[tempY][tempX] = originalState[tempY][tempX];
+				
+			} else if(key == 'A'){
+				if(matrix[y][x-1] == 0 || matrix[y][x-1] == 2){
+					return;
+				}
+				matrix[y][x-1] = matrix[y][x];
+				matrix[y][x] = 1;
+				matrix[tempY][tempX] = originalState[tempY][tempX];
+			} else if(key == 'S'){
+				if(matrix[y+1][x] == 0 || matrix[y+1][x] == 2){
+					return;
+				}
+				matrix[y+1][x] = matrix[y][x];
+				matrix[y][x] = 1;
+				matrix[tempY][tempX] = originalState[tempY][tempX];
+			} else if(key == 'D'){
+				if(matrix[y][x+1] == 0 || matrix[y][x+1] == 2){
+					return;
+				}
+				matrix[y][x+1] = matrix[y][x];
+				matrix[y][x] = 1;
+				matrix[tempY][tempX] = originalState[tempY][tempX];
+			}
+		} else {
+			matrix[y][x] = 1;
+			matrix[tempY][tempX] = originalState[tempY][tempX];
+		}
 		
 		//parse input - menu,info,quit,reset,move
 		
@@ -150,8 +209,8 @@ public class Game {
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
 		if(bs == null) {
-			display.getCanvas().createBufferStrategy(1);
-			render();
+			display.getCanvas().createBufferStrategy(3);
+			return;
 		}
 		g = bs.getDrawGraphics();
 		//clear the screen
@@ -164,10 +223,18 @@ public class Game {
 		while (i <= 10) {
 			j = 0;
 			while (j <= 5) {
-				changeColor(this.matrix[j][i]);
-				g.fillRect(i*100, j*100, 100, 100);
+				//changeColor(this.matrix[j][i]);
+				//g.fillRect(i*100, j*100, 100, 100);
+				g.setColor(Color.white);
+				changeImage(matrix[j][i], j, i);
+				if (matrix[j][i] < 4) {
+					g.drawImage(testImage, i*64, j*64, null);
+				} else {
+					g.fillRect(i*64, j*64, 64, 64);
+				}
 				j++;
 			}
+			
 			i++;
 		}
 		
@@ -205,5 +272,51 @@ public class Game {
 		}
 	}
 	return y;
+	}
+	
+	public static BufferedImage loadImage(String path) {
+		try {
+			return ImageIO.read(Game.class.getResource(path));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		}
+		return null;
+	}
+	
+	public void run(){
+		
+		init();
+
+		//game loop
+		while(running) {
+//			update(); update called directly by keylistener, should probably change this entirely when we have time			
+			render();
+		}
+		stop();
+		
+	}
+	
+	//used to start the game
+	public synchronized void start(){
+		if (running)
+			return;
+		running = true;
+		thread = new Thread(this);
+		thread.start();
+	}
+	
+	//used to close the game
+	public synchronized void stop(){
+		if(!running)
+			return;
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
