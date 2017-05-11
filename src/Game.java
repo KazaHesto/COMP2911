@@ -79,22 +79,9 @@ public class Game implements Runnable{
 				System.out.println("XCoord = " + xCoord);
 			}
 		}
-		
-		public void keyReleased(KeyEvent e){
+		public void keyReleased(KeyEvent e) {
 		}
-		
-		public int getX(){
-			return this.xCoord;
-		}
-		
-		public int getY(){
-			return this.yCoord;
-		}
-
-		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 	//update the game state
@@ -112,9 +99,10 @@ public class Game implements Runnable{
 		System.out.println(x + " " + y);
 		x += xCoord;
 		y += yCoord;
-		int temp = this.matrix[x][y];
-		matrix[x][y] = 1;
-		matrix[tempX][tempY] = originalState[tempX][tempY];
+		System.out.println(x + " " + y);
+		matrix[y][x] = 1;
+		matrix[tempY][tempX] = originalState[tempY][tempX];
+		System.out.println(originalState[tempX][tempY]);
 		
 		
 		//parse input - menu,info,quit,reset,move
