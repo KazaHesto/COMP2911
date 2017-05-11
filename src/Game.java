@@ -4,17 +4,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
-public class Game implements Runnable{
+public class Game {
 	
 	//local stuff for the game
 	private Display display;
 	public int width, height;
 	public String title;
-	private boolean running = false;
 	//stuff for graphics
 	private BufferStrategy bs;
-	private Graphics g;	
-	private Thread thread;
+	private Graphics g;
 	
 	private int[][] matrix;
 	private int[][] originalState;
@@ -47,12 +45,15 @@ public class Game implements Runnable{
 		//linkedlist of boxes
 		//linkedlist of crosses
 		this.listener = new ArrowKeyListener();
-	}
-	
-	//Initializes the game state and visuals
-	private void init(){
 		display = new Display(title,width,height, this.listener);
-		display.getListener();
+		// Add delay so that the window can render without being blank
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		render();
 	}
 
 	public class ArrowKeyListener implements KeyListener{
@@ -118,6 +119,8 @@ public class Game implements Runnable{
 		matrix[y][x] = 1;
 		matrix[tempY][tempX] = originalState[tempY][tempX];
 		
+		render();
+		
 		//parse input - menu,info,quit,reset,move
 		
 		//pass move to player -> player checks for collision, moves accordingly and updates position
@@ -147,8 +150,8 @@ public class Game implements Runnable{
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
 		if(bs == null) {
-			display.getCanvas().createBufferStrategy(3);
-			return;
+			display.getCanvas().createBufferStrategy(1);
+			render();
 		}
 		g = bs.getDrawGraphics();
 		//clear the screen
@@ -165,7 +168,6 @@ public class Game implements Runnable{
 				g.fillRect(i*100, j*100, 100, 100);
 				j++;
 			}
-			
 			i++;
 		}
 		
@@ -203,41 +205,5 @@ public class Game implements Runnable{
 		}
 	}
 	return y;
-	}
-	
-	
-	public void run(){
-		
-		init();
-
-		//game loop
-		while(running) {
-//			update(); update called directly by keylistener, should probably change this entirely when we have time
-			render();
-		}
-		stop();
-		
-	}
-	
-	//used to start the game
-	public synchronized void start(){
-		if (running)
-			return;
-		running = true;
-		thread = new Thread(this);
-		thread.start();
-	}
-	
-	//used to close the game
-	public synchronized void stop(){
-		if(!running)
-			return;
-		running = false;
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
