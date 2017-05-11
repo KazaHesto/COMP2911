@@ -79,9 +79,23 @@ public class Game implements Runnable{
 				System.out.println("XCoord = " + xCoord);
 			}
 		}
-		public void keyReleased(KeyEvent e) {
+		
+		public void keyReleased(KeyEvent e){
+
 		}
+		
+		public int getX(){
+			return this.xCoord;
+		}
+		
+		public int getY(){
+			return this.yCoord;
+		}
+
+		@Override
 		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	//update the game state
@@ -96,14 +110,13 @@ public class Game implements Runnable{
 		int tempX = x;
 		int y = getYCoordinate();
 		int tempY = y;
+//		int temp = this.matrix[x][y];
+//		System.out.println("length = " + this.matrix.length);
 		System.out.println(x + " " + y);
 		x += xCoord;
 		y += yCoord;
-		System.out.println(x + " " + y);
 		matrix[y][x] = 1;
 		matrix[tempY][tempX] = originalState[tempY][tempX];
-		System.out.println(originalState[tempX][tempY]);
-		
 		
 		//parse input - menu,info,quit,reset,move
 		
@@ -169,7 +182,7 @@ public class Game implements Runnable{
 	public int getXCoordinate(){
 	int x = 0;
 	for(int row = 0; row<this.matrix.length; row++){
-		for(int col = 0; col<this.matrix.length;col++){
+		for(int col = 0; col<this.matrix[0].length;col++){
 			if(this.matrix[row][col] == 1){
 				x = col;
 				break;
@@ -182,7 +195,7 @@ public class Game implements Runnable{
 	public int getYCoordinate(){
 	int y = 0;
 	for(int row = 0; row<this.matrix.length; row++){
-		for(int col = 0; col<this.matrix.length;col++){
+		for(int col = 0; col<this.matrix[0].length;col++){
 			if(this.matrix[row][col] == 1){
 				y = row;
 				break;
