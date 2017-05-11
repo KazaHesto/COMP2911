@@ -9,20 +9,21 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Game implements Runnable{
+public class Game {
 	
 	//local stuff for the game
 	private Display display;
 	public int width, height;
 	public String title;
-	private boolean running = false;
 	//stuff for graphics
 	private BufferStrategy bs;
 	private Graphics g;	
-	private Thread thread;
 	
-	private Image testImage;
-	
+	private Image wall;
+	private Image player;
+	private Image box;
+	private Image cross;
+
 	private int[][] matrix;
 	private int[][] originalState;
 	
@@ -54,27 +55,29 @@ public class Game implements Runnable{
 		//linkedlist of boxes
 		//linkedlist of crosses
 		this.listener = new ArrowKeyListener();
-	}
-	
-	private void changeImage(int z, int x, int y) {
-		switch(z) {
-			case 0: testImage = Game.loadImage("/textures/Wall.png.png");
-					break;
-			case 1: testImage = Game.loadImage("/textures/ManU1.png.png");
-					break;
-			case 2: testImage = Game.loadImage("/textures/Box2.png.png");
-					break;
-			case 3: testImage = Game.loadImage("/textures/Cross.png.png");
-					break;
-			case 4: g.setColor(Color.white);
-					break;
+		this.display = new Display(title,width,height, this.listener);
+		this.wall = Game.loadImage("/textures/Wall.png.png");
+		this.player = Game.loadImage("/textures/ManU1.png.png");
+		this.box = Game.loadImage("/textures/Box2.png.png");
+		this.cross = Game.loadImage("/textures/Cross.png.png");
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		render();
+		
 	}
 	
-	//Initializes the game state and visuals
-	private void init(){
-		display = new Display(title,width,height, this.listener);
-		display.getListener();
+	private Image changeImage(int z, int x, int y) {
+		switch(z) {
+			case 0: return this.wall; //testImage = Game.loadImage("/textures/Wall.png.png");
+			case 1: return this.player; //testImage = Game.loadImage("/textures/ManU1.png.png");
+			case 2: return this.box; //testImage = Game.loadImage("/textures/Box2.png.png");
+			case 3: return this.cross; //testImage = Game.loadImage("/textures/Cross.png.png");
+		}
+		return null;
 	}
 
 	public class ArrowKeyListener implements KeyListener{
@@ -179,7 +182,7 @@ public class Game implements Runnable{
 			matrix[y][x] = 1;
 			matrix[tempY][tempX] = originalState[tempY][tempX];
 		}
-		
+		render();
 		//parse input - menu,info,quit,reset,move
 		
 		//pass move to player -> player checks for collision, moves accordingly and updates position
@@ -209,8 +212,8 @@ public class Game implements Runnable{
 	private void render() {
 		bs = display.getCanvas().getBufferStrategy();
 		if(bs == null) {
-			display.getCanvas().createBufferStrategy(3);
-			return;
+			display.getCanvas().createBufferStrategy(1);
+			render();
 		}
 		g = bs.getDrawGraphics();
 		//clear the screen
@@ -226,9 +229,9 @@ public class Game implements Runnable{
 				//changeColor(this.matrix[j][i]);
 				//g.fillRect(i*100, j*100, 100, 100);
 				g.setColor(Color.white);
-				changeImage(matrix[j][i], j, i);
+	//			changeImage(matrix[j][i], j, i);
 				if (matrix[j][i] < 4) {
-					g.drawImage(testImage, i*64, j*64, null);
+					g.drawImage(changeImage(matrix[j][i], j, i), i*64, j*64, null);
 				} else {
 					g.fillRect(i*64, j*64, 64, 64);
 				}
@@ -283,40 +286,5 @@ public class Game implements Runnable{
 			System.exit(1);
 		}
 		return null;
-	}
-	
-	public void run(){
-		
-		init();
-
-		//game loop
-		while(running) {
-//			update(); update called directly by keylistener, should probably change this entirely when we have time			
-			render();
-		}
-		stop();
-		
-	}
-	
-	//used to start the game
-	public synchronized void start(){
-		if (running)
-			return;
-		running = true;
-		thread = new Thread(this);
-		thread.start();
-	}
-	
-	//used to close the game
-	public synchronized void stop(){
-		if(!running)
-			return;
-		running = false;
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
