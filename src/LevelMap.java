@@ -47,7 +47,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.box = loadImage("/textures/Box2.png.png");
 		this.cross = loadImage("/textures/Cross.png.png");
 
-		this.timer = new Timer(32, this);
+		this.timer = new Timer(16, this);
 		this.timer.stop();
 
 		this.x = -1;
