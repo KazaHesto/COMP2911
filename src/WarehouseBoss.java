@@ -16,7 +16,7 @@ public class WarehouseBoss {
 		frame.setTitle("Warehouse Boss");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		LevelMap mapUI = new LevelMap(6, 11, game);
+		LevelMap mapUI = new LevelMap(6, 11);
 		frame.add(mapUI);
 		LevelMapController controller = new LevelMapController(game, mapUI);
 		mapUI.setController(controller);

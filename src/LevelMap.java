@@ -15,15 +15,14 @@ public class LevelMap extends JPanel implements ActionListener {
 	private static final int BOX_HEIGHT = 64;
 	private static final int BOX_WIDTH = 64;
 
-//	private static final int UP = 0;
-//	private static final int DOWN = 1;
-//	private static final int LEFT = 2;
-//	private static final int RIGHT = 3;
+	// private static final int UP = 0;
+	// private static final int DOWN = 1;
+	// private static final int LEFT = 2;
+	// private static final int RIGHT = 3;
 
 	private int rows;
 	private int columns;
 	private int[][] grid;
-	private Game game;
 	private LevelMapController controller;
 	private Image wall;
 	private Image player;
@@ -35,15 +34,13 @@ public class LevelMap extends JPanel implements ActionListener {
 	private double tempY;
 	private Timer timer;
 
-	public LevelMap(int rows, int columns, Game game) {
+	public LevelMap(int rows, int columns) {
 		super();
 		this.rows = rows;
 		this.columns = columns;
 		setSize(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
 		setFocusable(true);
 		setVisible(true);
-
-		this.game = game;
 
 		this.wall = loadImage("/textures/Wall.png.png");
 		this.player = loadImage("/textures/ManU1.png.png");
@@ -57,6 +54,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.y = -1;
 	}
 
+	// Updates the grid shown in the ui
 	public void setGrid(int[][] grid) {
 		this.grid = new int[grid.length][];
 		for (int i = 0; i < grid.length; i++) {
@@ -65,6 +63,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		checkPlayer();
 	}
 
+	// Checks if the player has moved
 	private void checkPlayer() {
 		double x = 0;
 		double y = 0;
@@ -76,27 +75,30 @@ public class LevelMap extends JPanel implements ActionListener {
 				}
 			}
 		}
+		// Check if this is the first move
 		if (this.x == -1 && this.y == -1) {
 			this.x = x;
 			this.y = y;
 		} else {
-		if (!this.timer.isRunning()) {
+			if (!this.timer.isRunning()) {
 				this.timer.start();
 			}
 			this.tempX = x;
 			this.tempY = y;
 
-//			animate(x, y);
-//			this.x = x;
-//			this.y = y;
+			// animate(x, y);
+			// this.x = x;
+			// this.y = y;
 		}
 	}
 
+	// Adds keylistener
 	public void setController(LevelMapController controller) {
 		this.controller = controller;
 		this.addKeyListener(this.controller);
 	}
 
+	// Decides what image to show at each tile
 	private Image changeImage(int z) {
 		switch (z) {
 		case 0:
@@ -104,13 +106,14 @@ public class LevelMap extends JPanel implements ActionListener {
 		case 1:
 			return this.player;
 		case 2:
-			return this.box; 
+			return this.box;
 		case 3:
 			return this.cross;
 		}
 		return null;
 	}
 
+	// Reads images from file system
 	private BufferedImage loadImage(String path) {
 		try {
 			return ImageIO.read(Game.class.getResource(path));
@@ -121,14 +124,16 @@ public class LevelMap extends JPanel implements ActionListener {
 	}
 
 	private boolean fuzzyMatch(double a, double b) {
-		return Math.abs(a - b) < 0.1;
+		return Math.abs(a - b) < 0.01;
 	}
 
+	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
 	}
 
+	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
 		for (int row = 0; row < this.grid.length; row++) {
@@ -144,13 +149,14 @@ public class LevelMap extends JPanel implements ActionListener {
 		g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH), (int) (this.y * BOX_HEIGHT), null);
 	}
 
+	// Sets what happens when the timer changes
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (!fuzzyMatch(this.tempX, this.x)) {
-			this.x = (20 * this.x + this.tempX) / 21;
+			this.x = (5 * this.x + this.tempX) / 6;
 		}
 		if (!fuzzyMatch(this.tempY, this.y)) {
-			this.y = (20 * this.y + this.tempY) / 21;
+			this.y = (5 * this.y + this.tempY) / 6;
 		}
 		if (fuzzyMatch(this.tempX, this.x) && fuzzyMatch(this.tempY, this.y)) {
 			this.timer.stop();
