@@ -7,16 +7,16 @@ public class ArrowKeyListener implements KeyListener{
 	public void keyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 		
-		if(key == KeyEvent.VK_W){
+		if(key == KeyEvent.VK_W || key == KeyEvent.VK_UP){
 			this.yCoord = -1;
 			System.out.println("yCoord = " + yCoord);
-		} else if(key == KeyEvent.VK_A){
+		} else if(key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT){
 			this.xCoord = -1;
 			System.out.println("XCoord = " + xCoord);
-		} else if(key == KeyEvent.VK_S){
+		} else if(key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN){
 			this.yCoord = 1;
 			System.out.println("yCoord = " + yCoord);
-		} else if(key == KeyEvent.VK_D){
+		} else if(key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT){
 			this.xCoord = 1;
 			System.out.println("XCoord = " + xCoord);
 		}
@@ -25,16 +25,16 @@ public class ArrowKeyListener implements KeyListener{
 	public void keyReleased(KeyEvent e){
 		int key = e.getKeyCode();
 		
-		if(key == KeyEvent.VK_W){
+		if(key == KeyEvent.VK_W || key == KeyEvent.VK_UP){
 			this.yCoord = 0;
 			System.out.println("yCoord = " + yCoord);
-		} else if(key == KeyEvent.VK_A){
+		} else if(key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT){
 			this.xCoord = 0;
 			System.out.println("XCoord = " + xCoord);
-		} else if(key == KeyEvent.VK_S){
+		} else if(key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN){
 			this.yCoord = 0;
 			System.out.println("yCoord = " + yCoord);
-		} else if(key == KeyEvent.VK_D){
+		} else if(key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT){
 			this.xCoord = 0;
 			System.out.println("XCoord = " + xCoord);
 		}
