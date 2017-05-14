@@ -13,18 +13,22 @@ public class ArrowKeyListener implements KeyListener{
 			this.yCoord = -1;
 			System.out.println("yCoord = " + yCoord);
 			numMoves++;
+			System.out.println("numMoves = " + numMoves);
 		} else if(key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT){
 			this.xCoord = -1;
 			System.out.println("XCoord = " + xCoord);
 			numMoves++;
+			System.out.println("numMoves = " + numMoves);
 		} else if(key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN){
 			this.yCoord = 1;
 			System.out.println("yCoord = " + yCoord);
 			numMoves++;
+			System.out.println("numMoves = " + numMoves);
 		} else if(key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT){
 			this.xCoord = 1;
 			System.out.println("XCoord = " + xCoord);
 			numMoves++;
+			System.out.println("numMoves = " + numMoves);
 		}
 	}
 	

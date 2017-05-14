@@ -84,29 +84,38 @@ public class Game {
 		private int xCoord = 0;
 		private int yCoord = 0;
 		private char keyPres;
+		private int numMoves = 0;
 		public void keyPressed(KeyEvent e){
 			int key = e.getKeyCode();
 			
-			if(key == KeyEvent.VK_W){
+			if(key == KeyEvent.VK_W || key == KeyEvent.VK_UP){
 				keyPres = 'W';
 				update(0, -1, keyPres);
 				this.yCoord = -1;
 				System.out.println("yCoord = " + yCoord);
-			} else if(key == KeyEvent.VK_A){
+				numMoves++;
+				System.out.println("numMoves = " + numMoves);
+			} else if(key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT){
 				keyPres = 'A';
 				update(-1, 0,keyPres);
 				this.xCoord = -1;
 				System.out.println("XCoord = " + xCoord);
-			} else if(key == KeyEvent.VK_S){
+				numMoves++;
+				System.out.println("numMoves = " + numMoves);
+			} else if(key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN){
 				keyPres = 'S';
 				update(0, 1,keyPres);
 				this.yCoord = 1;
 				System.out.println("yCoord = " + yCoord);
-			} else if(key == KeyEvent.VK_D){
+				numMoves++;
+				System.out.println("numMoves = " + numMoves);
+			} else if(key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT){
 				keyPres = 'D';
 				update(1, 0, keyPres);
 				this.xCoord = 1;
 				System.out.println("XCoord = " + xCoord);
+				numMoves++;
+				System.out.println("numMoves = " + numMoves);
 			}
 		}
 		
