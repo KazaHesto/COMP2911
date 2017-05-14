@@ -12,13 +12,13 @@ import javax.swing.Timer;
 
 public class LevelMap extends JPanel implements ActionListener {
 
-	private static final int BOX_HEIGHT = 64;
-	private static final int BOX_WIDTH = 64;
+	private final int BOX_HEIGHT = 64;
+	private final int BOX_WIDTH = 64;
 
-	// private static final int UP = 0;
-	// private static final int DOWN = 1;
-	// private static final int LEFT = 2;
-	// private static final int RIGHT = 3;
+	// private final int UP = 0;
+	// private final int DOWN = 1;
+	// private final int LEFT = 2;
+	// private final int RIGHT = 3;
 
 	private int rows;
 	private int columns;
