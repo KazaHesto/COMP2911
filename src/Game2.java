@@ -5,6 +5,7 @@ public class Game2 extends Observable {
 	//local stuff for the game
 	private int[][] matrix;
 	private int[][] originalState;
+	private int numMoves;
 	
 	//constructor
 	public Game2() {
@@ -124,5 +125,13 @@ public class Game2 extends Observable {
 		}
 	}
 	return y;
+	}
+	
+	public void addMove(){
+		this.numMoves++;
+	}
+	
+	public int getNumMoves(){
+		return this.numMoves;
 	}
 }
