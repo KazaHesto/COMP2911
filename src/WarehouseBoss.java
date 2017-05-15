@@ -9,7 +9,7 @@ public class WarehouseBoss {
 	}
 
 	private void initGame() {
-		Game game = new Game();
+		Game2 game = new Game2();
 
 		this.frame = new JFrame();
 		frame.setResizable(false);
