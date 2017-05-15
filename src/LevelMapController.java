@@ -20,13 +20,13 @@ public class LevelMapController implements KeyListener, Observer {
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		int key = arg0.getKeyCode();
-		if (key == KeyEvent.VK_W) {
+		if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
 			this.game.update(0, -1, 'W');
-		} else if (key == KeyEvent.VK_A) {
+		} else if (key == KeyEvent.VK_A|| key == KeyEvent.VK_LEFT) {
 			this.game.update(-1, 0, 'A');
-		} else if (key == KeyEvent.VK_S) {
+		} else if (key == KeyEvent.VK_S|| key == KeyEvent.VK_DOWN) {
 			this.game.update(0, 1, 'S');
-		} else if (key == KeyEvent.VK_D) {
+		} else if (key == KeyEvent.VK_D|| key == KeyEvent.VK_RIGHT) {
 			this.game.update(1, 0, 'D');
 		}
 	}
