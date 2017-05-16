@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ public class LevelMap extends JPanel implements ActionListener {
 
 	private final int BOX_HEIGHT = 64;
 	private final int BOX_WIDTH = 64;
+	private final int SCORE_GUTTER = 60;
 
 	// private final int UP = 0;
 	// private final int DOWN = 1;
@@ -130,23 +132,32 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
+		return new Dimension(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 	}
 
 	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
+		// Shows score at the top of the window
+		Font font = new Font("Veranda", Font.BOLD, 40);
+		g.setFont(font);
+		g.setColor(Color.BLACK);
+		g.drawString("SCORE GOES HERE", 5, 45);
+
+		// Shows level
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
-					g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH, row * BOX_HEIGHT, null);
+					g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
+							row * BOX_HEIGHT + SCORE_GUTTER, null);
 				} else {
 					g.setColor(Color.WHITE);
-					g.fillRect(col * BOX_WIDTH, row * BOX_HEIGHT, BOX_WIDTH, BOX_HEIGHT);
+					g.fillRect(col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH, BOX_HEIGHT);
 				}
 			}
 		}
-		g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH), (int) (this.y * BOX_HEIGHT), null);
+		g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
+				(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 	}
 
 	// Sets what happens when the timer changes
