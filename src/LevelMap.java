@@ -32,8 +32,8 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image cross;
 	private double x;
 	private double y;
-	private double tempX;
-	private double tempY;
+	private int tempX;
+	private int tempY;
 	private Timer timer;
 	private int numMoves;
 
@@ -67,10 +67,14 @@ public class LevelMap extends JPanel implements ActionListener {
 		checkPlayer();
 	}
 
+	public void setNumMoves(int numMoves) {
+		this.numMoves = numMoves;
+	}
+
 	// Checks if the player has moved
 	private void checkPlayer() {
-		double x = 0;
-		double y = 0;
+		int x = 0;
+		int y = 0;
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] == 1) {
@@ -89,10 +93,6 @@ public class LevelMap extends JPanel implements ActionListener {
 			}
 			this.tempX = x;
 			this.tempY = y;
-
-			// animate(x, y);
-			// this.x = x;
-			// this.y = y;
 		}
 	}
 
@@ -176,9 +176,5 @@ public class LevelMap extends JPanel implements ActionListener {
 			this.y = this.tempY;
 		}
 		repaint();
-	}
-	
-	public void updateMoves(int update){
-		this.numMoves = update;
 	}
 }

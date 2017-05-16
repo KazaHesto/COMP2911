@@ -46,7 +46,7 @@ public class LevelMapController implements KeyListener, Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		this.mapUI.setGrid(this.game.getMatrix());
-		this.mapUI.updateMoves(this.game.getNumMoves());
+		this.mapUI.setNumMoves(this.game.getNumMoves());
 		this.mapUI.repaint();
 	}
 }
