@@ -6,12 +6,13 @@ public class Game2 extends Observable {
 	private int[][] matrix;
 	private int[][] originalState;
 	private int numMoves;
+	private Player player;
 	
 	//constructor
 	public Game2() {
 		this.matrix = new int[][] {
 			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,1,4,4,4,4,4,4,4,0,0},
+			{0,4,4,4,4,4,4,4,4,0,0},
 			{0,0,0,0,2,0,4,4,0,0,0},
 			{0,0,0,0,4,0,4,2,4,3,0},
 			{0,0,0,3,4,4,4,2,4,3,0},
@@ -25,6 +26,7 @@ public class Game2 extends Observable {
 			{0,0,0,3,4,4,4,4,4,3,0},
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
+		this.player = new Player(1, 1);
 		//needs
 		//map - adj matrix
 		//player
@@ -61,7 +63,9 @@ public class Game2 extends Observable {
 					return;
 				}
 				matrix[y-1][x] = matrix[y][x];
-				matrix[y][x] = 1;
+			//	matrix[y][x] = 1;
+				this.player.x = x;
+				this.player.y = y;
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 				
 			} else if(key == 'A'){
@@ -69,25 +73,33 @@ public class Game2 extends Observable {
 					return;
 				}
 				matrix[y][x-1] = matrix[y][x];
-				matrix[y][x] = 1;
+			//	matrix[y][x] = 1;
+				this.player.x = x;
+				this.player.y = y;
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 			} else if(key == 'S'){
 				if(matrix[y+1][x] == 0 || matrix[y+1][x] == 2){
 					return;
 				}
 				matrix[y+1][x] = matrix[y][x];
-				matrix[y][x] = 1;
+			//	matrix[y][x] = 1;
+				this.player.x = x;
+				this.player.y = y;
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 			} else if(key == 'D'){
 				if(matrix[y][x+1] == 0 || matrix[y][x+1] == 2){
 					return;
 				}
 				matrix[y][x+1] = matrix[y][x];
-				matrix[y][x] = 1;
+			//	matrix[y][x] = 1;
+				this.player.x = x;
+				this.player.y = y;
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 			}
 		} else {
-			matrix[y][x] = 1;
+			//	matrix[y][x] = 1;
+			this.player.x = x;
+			this.player.y = y;
 			matrix[tempY][tempX] = originalState[tempY][tempX];
 		}
 		this.numMoves++;
@@ -103,7 +115,7 @@ public class Game2 extends Observable {
 	}
 	
 	public int getXCoordinate(){
-	int x = 0;
+	/*int x = 0;
 	for(int row = 0; row<this.matrix.length; row++){
 		for(int col = 0; col<this.matrix[0].length;col++){
 			if(this.matrix[row][col] == 1){
@@ -112,11 +124,12 @@ public class Game2 extends Observable {
 			}
 		}
 	}
-	return x;
+	return x;*/
+		return this.player.x;
 	}
 	
 	public int getYCoordinate(){
-	int y = 0;
+	/*int y = 0;
 	for(int row = 0; row<this.matrix.length; row++){
 		for(int col = 0; col<this.matrix[0].length;col++){
 			if(this.matrix[row][col] == 1){
@@ -125,7 +138,8 @@ public class Game2 extends Observable {
 			}
 		}
 	}
-	return y;
+	return y;*/
+		return this.player.y;
 	}
 
 	public int getNumMoves(){

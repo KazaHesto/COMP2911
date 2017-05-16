@@ -85,16 +85,20 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
-		checkPlayer();
+	//	checkPlayer();
 	}
 	
 	public void setNumMoves(int numMoves) {
 		this.numMoves = numMoves;
 	}
 
+	public void setPlayerPosition(int x, int y) {
+		checkPlayer(x, y);
+	}
+
 	// Checks if the player has moved
-	private void checkPlayer() {
-		int x = 0;
+	private void checkPlayer(int x, int y) {
+	/*	int x = 0;
 		int y = 0;
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
@@ -103,7 +107,7 @@ public class LevelMap extends JPanel implements ActionListener {
 					y = row;
 				}
 			}
-		}
+		}*/
 		// Check if this is the first move
 		if (this.x == -1 && this.y == -1) {
 			this.x = x;
