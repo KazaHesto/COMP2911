@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -138,8 +139,10 @@ public class LevelMap extends JPanel implements ActionListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		// Shows score at the top of the window
+		Font font = new Font("Veranda", Font.BOLD, 40);
+		g.setFont(font);
 		g.setColor(Color.BLACK);
-		g.drawString("SCORE GOES HERE", 10, 10);
+		g.drawString("SCORE GOES HERE", 5, 45);
 
 		// Shows level
 		for (int row = 0; row < this.grid.length; row++) {
