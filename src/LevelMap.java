@@ -140,6 +140,8 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
+		// For some reason this is needed on Windows?
+		g.clearRect(0, 0, this.columns * BOX_WIDTH, SCORE_GUTTER);
 		// Shows score at the top of the window
 		Font font = new Font("Veranda", Font.BOLD, 40);
 		g.setFont(font);
