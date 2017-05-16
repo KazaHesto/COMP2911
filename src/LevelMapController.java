@@ -14,6 +14,7 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI = mapUI;
 		game.addObserver(this);
 		this.mapUI.setGrid(this.game.getMatrix());
+		this.mapUI.setPlayerPosition(this.game.getXCoordinate(), this.game.getYCoordinate());
 		this.game.addObserver(this);
 	}
 
