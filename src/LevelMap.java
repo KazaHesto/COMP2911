@@ -141,7 +141,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		// For some reason this is needed on Windows?
-		g.clearRect(0, 0, this.columns * BOX_WIDTH, SCORE_GUTTER);
+		g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 		// Shows score at the top of the window
 		Font font = new Font("Veranda", Font.BOLD, 40);
 		g.setFont(font);
@@ -154,9 +154,6 @@ public class LevelMap extends JPanel implements ActionListener {
 				if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
 					g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
 							row * BOX_HEIGHT + SCORE_GUTTER, null);
-				} else {
-					g.setColor(Color.WHITE);
-					g.fillRect(col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH, BOX_HEIGHT);
 				}
 			}
 		}
