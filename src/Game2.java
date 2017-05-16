@@ -90,7 +90,7 @@ public class Game2 extends Observable {
 			matrix[y][x] = 1;
 			matrix[tempY][tempX] = originalState[tempY][tempX];
 		}
-		this.addMove();
+		this.numMoves++;
 		setChanged();
 		notifyObservers();
 		//parse input - menu,info,quit,reset,move
@@ -127,11 +127,7 @@ public class Game2 extends Observable {
 	}
 	return y;
 	}
-	
-	private void addMove(){
-		this.numMoves++;
-	}
-	
+
 	public int getNumMoves(){
 		return this.numMoves;
 	}
