@@ -183,12 +183,13 @@ public class LevelMap extends JPanel implements ActionListener {
 				this.y = (5 * this.y + this.tempY) / 6;
 			}
 			if (fuzzyMatch(this.tempX, this.x) && fuzzyMatch(this.tempY, this.y)) {
-//				this.timer.stop(); TODO: fix this
 				this.x = this.tempX;
 				this.y = this.tempY;
+				if (this.moveQueue.isEmpty()) {
+					this.timer.stop();
+				}
 			}
 		}
 		repaint();
-		
 	}
 }
