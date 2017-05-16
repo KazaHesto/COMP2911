@@ -3,10 +3,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayDeque;
+
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -36,12 +39,12 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int tempY;
 	private Timer timer;
 	private int numMoves;
+	private ArrayDeque<Point> moveQueue;
 
 	public LevelMap(int rows, int columns) {
 		super();
 		this.rows = rows;
 		this.columns = columns;
-		setSize(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
 		setFocusable(true);
 		setVisible(true);
 
@@ -56,6 +59,8 @@ public class LevelMap extends JPanel implements ActionListener {
 
 		this.x = -1;
 		this.y = -1;
+
+		this.moveQueue = new ArrayDeque<Point>();
 	}
 
 	// Updates the grid shown in the ui
@@ -91,8 +96,9 @@ public class LevelMap extends JPanel implements ActionListener {
 			if (!this.timer.isRunning()) {
 				this.timer.start();
 			}
-			this.tempX = x;
-			this.tempY = y;
+			this.moveQueue.add(new Point(x,y));
+//			this.tempX = x;
+//			this.tempY = y;
 		}
 	}
 
@@ -164,17 +170,25 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Sets what happens when the timer changes
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if (!fuzzyMatch(this.tempX, this.x)) {
-			this.x = (5 * this.x + this.tempX) / 6;
-		}
-		if (!fuzzyMatch(this.tempY, this.y)) {
-			this.y = (5 * this.y + this.tempY) / 6;
-		}
-		if (fuzzyMatch(this.tempX, this.x) && fuzzyMatch(this.tempY, this.y)) {
-			this.timer.stop();
-			this.x = this.tempX;
-			this.y = this.tempY;
+		if (Math.round(this.x) == this.x && Math.round(this.y) == this.y && !this.moveQueue.isEmpty()) {
+			Point curr = this.moveQueue.poll();
+			this.tempX = curr.x;
+			this.tempY = curr.y;
+			return;
+		} else {
+			if (!fuzzyMatch(this.tempX, this.x)) {
+				this.x = (5 * this.x + this.tempX) / 6;
+			}
+			if (!fuzzyMatch(this.tempY, this.y)) {
+				this.y = (5 * this.y + this.tempY) / 6;
+			}
+			if (fuzzyMatch(this.tempX, this.x) && fuzzyMatch(this.tempY, this.y)) {
+//				this.timer.stop(); TODO: fix this
+				this.x = this.tempX;
+				this.y = this.tempY;
+			}
 		}
 		repaint();
+		
 	}
 }
