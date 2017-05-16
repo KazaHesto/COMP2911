@@ -22,19 +22,15 @@ public class LevelMapController implements KeyListener, Observer {
 		int key = arg0.getKeyCode();
 		if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
 			this.game.update(0, -1, 'W');
-			this.game.addMove();
 			System.out.println("numMoves = " + this.game.getNumMoves());
 		} else if (key == KeyEvent.VK_A|| key == KeyEvent.VK_LEFT) {
 			this.game.update(-1, 0, 'A');
-			this.game.addMove();
 			System.out.println("numMoves = " + this.game.getNumMoves());
 		} else if (key == KeyEvent.VK_S|| key == KeyEvent.VK_DOWN) {
 			this.game.update(0, 1, 'S');
-			this.game.addMove();
 			System.out.println("numMoves = " + this.game.getNumMoves());
 		} else if (key == KeyEvent.VK_D|| key == KeyEvent.VK_RIGHT) {
 			this.game.update(1, 0, 'D');
-			this.game.addMove();
 			System.out.println("numMoves = " + this.game.getNumMoves());
 		}
 	}
@@ -50,6 +46,7 @@ public class LevelMapController implements KeyListener, Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		this.mapUI.setGrid(this.game.getMatrix());
+		this.mapUI.updateMoves(this.game.getNumMoves());
 		this.mapUI.repaint();
 	}
 }
