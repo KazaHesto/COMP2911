@@ -13,9 +13,17 @@ import javax.swing.Timer;
 
 public class LevelMap extends JPanel implements ActionListener {
 
+	private enum STATE {
+		MENU,
+		GAME
+	};
+	
 	private final int BOX_HEIGHT = 64;
 	private final int BOX_WIDTH = 64;
 	private final int SCORE_GUTTER = 60;
+
+	private STATE state = STATE.MENU;
+	private Menu menu;
 
 	// private final int UP = 0;
 	// private final int DOWN = 1;
@@ -26,6 +34,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int columns;
 	private int[][] grid;
 	private LevelMapController controller;
+	private MenuController Mcontroller;
 	private Image wall;
 	private Image player;
 	private Image box;
@@ -39,6 +48,7 @@ public class LevelMap extends JPanel implements ActionListener {
 
 	public LevelMap(int rows, int columns) {
 		super();
+		this.menu = new Menu();
 		this.rows = rows;
 		this.columns = columns;
 		setSize(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
@@ -57,6 +67,17 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.x = -1;
 		this.y = -1;
 	}
+	
+	public int getState(){
+		if(state == STATE.MENU){
+			System.out.println("Menu State");
+			return 1;
+		} else if(state == STATE.GAME){
+			System.out.println("Game State");
+			return 2;
+		}
+		return 3;
+	}
 
 	// Updates the grid shown in the ui
 	public void setGrid(int[][] grid) {
@@ -66,7 +87,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		checkPlayer();
 	}
-
+	
 	public void setNumMoves(int numMoves) {
 		this.numMoves = numMoves;
 	}
@@ -101,6 +122,16 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.controller = controller;
 		this.addKeyListener(this.controller);
 	}
+	
+	public STATE setState(){
+		this.state = STATE.GAME;
+		return STATE.GAME;
+	}
+	
+	public void setMenuController(MenuController Mcontroller){
+		this.Mcontroller = Mcontroller;
+		this.addMouseListener(this.Mcontroller);
+	}
 
 	// Decides what image to show at each tile
 	private Image changeImage(int z) {
@@ -120,12 +151,13 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Reads images from file system
 	private BufferedImage loadImage(String path) {
 		try {
-			return ImageIO.read(Game.class.getResource(path));
+			return ImageIO.read(Game2.class.getResource(path));
 		} catch (IOException e) {
 			System.out.println("File not found");
 		}
 		return null;
 	}
+	
 
 	private boolean fuzzyMatch(double a, double b) {
 		return Math.abs(a - b) < 0.01;
@@ -140,25 +172,33 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
-		// For some reason this is needed on Windows?
-		g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
-		// Shows score at the top of the window
-		Font font = new Font("Veranda", Font.BOLD, 40);
-		g.setFont(font);
-		g.setColor(Color.BLACK);
-		g.drawString("MOVES MADE: " + this.numMoves, 5, 45);
+		if(this.state == STATE.GAME){
 
-		// Shows level
-		for (int row = 0; row < this.grid.length; row++) {
-			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
-					g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
-							row * BOX_HEIGHT + SCORE_GUTTER, null);
+			// For some reason this is needed on Windows?
+			g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
+			// Shows score at the top of the window
+			Font font = new Font("Veranda", Font.BOLD, 40);
+			g.setFont(font);
+			g.setColor(Color.BLACK);
+			g.drawString("MOVES MADE: " + this.numMoves, 5, 45);
+	
+			// Shows level
+			for (int row = 0; row < this.grid.length; row++) {
+				for (int col = 0; col < this.grid[row].length; col++) {
+					if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
+						g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
+								row * BOX_HEIGHT + SCORE_GUTTER, null);
+					}
 				}
+				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
+						(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
+			
+			g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
+					(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 			}
+		} else if(this.state == STATE.MENU){
+			menu.render(g);
 		}
-		g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
-				(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 	}
 
 	// Sets what happens when the timer changes
