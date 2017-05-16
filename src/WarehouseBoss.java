@@ -19,7 +19,9 @@ public class WarehouseBoss {
 		LevelMap mapUI = new LevelMap(6, 11);
 		frame.add(mapUI);
 		LevelMapController controller = new LevelMapController(game, mapUI);
+		MenuController Mcontroller = new MenuController(mapUI);
 		mapUI.setController(controller);
+		mapUI.setMenuController(Mcontroller);
 
 		frame.pack();
 		frame.setLocationRelativeTo(null);
