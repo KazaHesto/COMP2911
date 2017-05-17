@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Observable;
 
 public class Game2 extends Observable {
@@ -6,7 +5,6 @@ public class Game2 extends Observable {
 	// local stuff for the game
 	private int[][] matrix;
 	private int[][] originalState;
-	private int[][] winningState;
 	private int numMoves;
 	private Player player;
 	private Boolean checkWin;
@@ -29,16 +27,6 @@ public class Game2 extends Observable {
 			{0,0,0,3,4,4,4,4,4,3,0},
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
-		
-		this.winningState = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,4,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,4,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,4,4,2,0},
-			{0,0,0,2,4,4,4,4,4,2,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
-		};
-		
 		this.player = new Player(1, 1);
 		// needs
 		// map - adj matrix
@@ -122,11 +110,13 @@ public class Game2 extends Observable {
 	}
 
 	private void checkWin() {
-		// maybe check for win first -> check if crosses and boxes share coords
+		// check if crosses are present in level
 		checkWin = true;
-		for (int i = 0; i < winningState.length; i++) {
-			if (!Arrays.equals(this.matrix[i], winningState[i])) {
-				checkWin = false;
+		for (int i = 0; i < this.matrix.length; i++) {
+			for (int j = 0; j < this.matrix[i].length; j++) {
+				if (this.matrix[i][j] == 3) {
+					this.checkWin = false;
+				}
 			}
 		}
 		if (checkWin == true) {
