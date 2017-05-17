@@ -73,8 +73,7 @@ public class Game2 extends Observable {
 				}
 				matrix[y - 1][x] = matrix[y][x];
 				matrix[y][x] = 4;
-				this.player.x = x;
-				this.player.y = y;
+				this.player.setPosition(x, y);
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 
 			} else if (key == 'A') {
@@ -83,8 +82,7 @@ public class Game2 extends Observable {
 				}
 				matrix[y][x - 1] = matrix[y][x];
 				matrix[y][x] = 4;
-				this.player.x = x;
-				this.player.y = y;
+				this.player.setPosition(x, y);
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 			} else if (key == 'S') {
 				if (matrix[y + 1][x] == 0 || matrix[y + 1][x] == 2) {
@@ -92,8 +90,7 @@ public class Game2 extends Observable {
 				}
 				matrix[y + 1][x] = matrix[y][x];
 				matrix[y][x] = 4;
-				this.player.x = x;
-				this.player.y = y;
+				this.player.setPosition(x, y);
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 			} else if (key == 'D') {
 				if (matrix[y][x + 1] == 0 || matrix[y][x + 1] == 2) {
@@ -101,13 +98,11 @@ public class Game2 extends Observable {
 				}
 				matrix[y][x + 1] = matrix[y][x];
 				matrix[y][x] = 4;
-				this.player.x = x;
-				this.player.y = y;
+				this.player.setPosition(x, y);
 				matrix[tempY][tempX] = originalState[tempY][tempX];
 			}
 		} else {
-			this.player.x = x;
-			this.player.y = y;
+			this.player.setPosition(x, y);
 			matrix[tempY][tempX] = originalState[tempY][tempX];
 		}
 		checkWin();
@@ -140,21 +135,11 @@ public class Game2 extends Observable {
 	}
 
 	public int getXCoordinate() {
-		/*
-		 * int x = 0; for(int row = 0; row<this.matrix.length; row++){ for(int
-		 * col = 0; col<this.matrix[0].length;col++){ if(this.matrix[row][col]
-		 * == 1){ x = col; break; } } } return x;
-		 */
-		return this.player.x;
+		return this.player.getX();
 	}
 
 	public int getYCoordinate() {
-		/*
-		 * int y = 0; for(int row = 0; row<this.matrix.length; row++){ for(int
-		 * col = 0; col<this.matrix[0].length;col++){ if(this.matrix[row][col]
-		 * == 1){ y = row; break; } } } return y;
-		 */
-		return this.player.y;
+		return this.player.getY();
 	}
 
 	public int getNumMoves() {
