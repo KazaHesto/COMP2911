@@ -20,20 +20,16 @@ public class LevelMapController implements KeyListener, Observer {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(mapUI.getState() == 2){
+		if (mapUI.getState() == LevelMap.STATE.GAME) {
 			int key = arg0.getKeyCode();
 			if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
 				this.game.update(0, -1, 'W');
-				System.out.println("numMoves = " + this.game.getNumMoves());
-			} else if (key == KeyEvent.VK_A|| key == KeyEvent.VK_LEFT) {
+			} else if (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) {
 				this.game.update(-1, 0, 'A');
-				System.out.println("numMoves = " + this.game.getNumMoves());
-			} else if (key == KeyEvent.VK_S|| key == KeyEvent.VK_DOWN) {
+			} else if (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) {
 				this.game.update(0, 1, 'S');
-				System.out.println("numMoves = " + this.game.getNumMoves());
-			} else if (key == KeyEvent.VK_D|| key == KeyEvent.VK_RIGHT) {
+			} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
 				this.game.update(1, 0, 'D');
-				System.out.println("numMoves = " + this.game.getNumMoves());
 			}
 		}
 

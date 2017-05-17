@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -13,11 +12,10 @@ import javax.swing.Timer;
 
 public class LevelMap extends JPanel implements ActionListener {
 
-	private enum STATE {
-		MENU,
-		GAME
+	public enum STATE {
+		MENU, GAME
 	};
-	
+
 	private final int BOX_HEIGHT = 64;
 	private final int BOX_WIDTH = 64;
 	private final int SCORE_GUTTER = 60;
@@ -67,16 +65,9 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.x = -1;
 		this.y = -1;
 	}
-	
-	public int getState(){
-		if(state == STATE.MENU){
-			System.out.println("Menu State");
-			return 1;
-		} else if(state == STATE.GAME){
-			System.out.println("Game State");
-			return 2;
-		}
-		return 3;
+
+	public STATE getState() {
+		return this.state;
 	}
 
 	// Updates the grid shown in the ui
@@ -85,30 +76,13 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
-	//	checkPlayer();
 	}
-	
+
 	public void setNumMoves(int numMoves) {
 		this.numMoves = numMoves;
 	}
 
 	public void setPlayerPosition(int x, int y) {
-		checkPlayer(x, y);
-	}
-
-	// Checks if the player has moved
-	private void checkPlayer(int x, int y) {
-	/*	int x = 0;
-		int y = 0;
-		for (int row = 0; row < this.grid.length; row++) {
-			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] == 1) {
-					x = col;
-					y = row;
-				}
-			}
-		}*/
-		// Check if this is the first move
 		if (this.x == -1 && this.y == -1) {
 			this.x = x;
 			this.y = y;
@@ -126,13 +100,13 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.controller = controller;
 		this.addKeyListener(this.controller);
 	}
-	
-	public STATE setState(){
+
+	public STATE setState() {
 		this.state = STATE.GAME;
 		return STATE.GAME;
 	}
-	
-	public void setMenuController(MenuController Mcontroller){
+
+	public void setMenuController(MenuController Mcontroller) {
 		this.Mcontroller = Mcontroller;
 		this.addMouseListener(this.Mcontroller);
 	}
@@ -153,7 +127,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	}
 
 	// Reads images from file system
-	private BufferedImage loadImage(String path) {
+	private Image loadImage(String path) {
 		try {
 			return ImageIO.read(Game2.class.getResource(path));
 		} catch (IOException e) {
@@ -161,7 +135,6 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		return null;
 	}
-	
 
 	private boolean fuzzyMatch(double a, double b) {
 		return Math.abs(a - b) < 0.01;
@@ -176,8 +149,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
-		if(this.state == STATE.GAME){
-
+		if (this.state == STATE.GAME) {
 			// For some reason this is needed on Windows?
 			g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 			// Shows score at the top of the window
@@ -185,22 +157,22 @@ public class LevelMap extends JPanel implements ActionListener {
 			g.setFont(font);
 			g.setColor(Color.BLACK);
 			g.drawString("MOVES MADE: " + this.numMoves, 5, 45);
-	
+
 			// Shows level
 			for (int row = 0; row < this.grid.length; row++) {
 				for (int col = 0; col < this.grid[row].length; col++) {
 					if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
-						g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
-								row * BOX_HEIGHT + SCORE_GUTTER, null);
+						g.drawImage(changeImage(this.grid[row][col]),
+								col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, null);
 					}
 				}
 				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
 						(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
-			
-			g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
-					(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
+
+				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
+						(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 			}
-		} else if(this.state == STATE.MENU){
+		} else if (this.state == STATE.MENU) {
 			menu.render(g);
 		}
 	}
