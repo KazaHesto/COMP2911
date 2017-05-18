@@ -34,7 +34,6 @@ public class Game2 extends Observable implements ActionListener {
 		};
 		this.player = new Player(1, 1);
 		this.gameTimer = new Timer(1000, this);
-		this.gameTimer.start();
 		this.seconds = 0;
 		// needs
 		// map - adj matrix
@@ -101,6 +100,9 @@ public class Game2 extends Observable implements ActionListener {
 			this.player.setPosition(x, y);
 			matrix[tempY][tempX] = originalState[tempY][tempX];
 		}
+		if(!this.gameTimer.isRunning()){
+			this.gameTimer.start();
+		}
 		checkWin();
 		this.numMoves++;
 		setChanged();
@@ -151,8 +153,6 @@ public class Game2 extends Observable implements ActionListener {
 		System.out.println("Seconds: " + seconds);
 		setChanged();
 		notifyObservers();
-		this.gameTimer.stop();
-		this.gameTimer.start();
 	}
 	
 	public void updateMoves(int update){
