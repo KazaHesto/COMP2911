@@ -1,6 +1,8 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JOptionPane;
+
 public class MenuController implements MouseListener{
 	
 	private LevelMap levelMap;
@@ -41,7 +43,14 @@ public class MenuController implements MouseListener{
 			}
 		}
 		
-		if(mx >= 195 && mx <= 395){
+		if(mx >= 295 && mx <= 395){
+			if(my >= 200 && my <= 250){
+				JOptionPane.showMessageDialog(null, "W - Forward\nA - Left\n"
+						+ "S - Backwards\nD - Right\nAim : To successfully move all the Warehouse Boxes onto the Green Cross", "Help", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		
+		if(mx >= 295 && mx <= 395){
 			if(my >= 300 && my <= 350){
 				System.exit(1);
 			}
