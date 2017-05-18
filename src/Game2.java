@@ -1,6 +1,9 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
+import javax.swing.Timer;
 
-public class Game2 extends Observable {
+public class Game2 extends Observable implements ActionListener {
 
 	// local stuff for the game
 	private int[][] matrix;
@@ -8,6 +11,8 @@ public class Game2 extends Observable {
 	private int numMoves;
 	private Player player;
 	private Boolean checkWin;
+	private Timer gameTimer;
+	private int seconds;
 
 	// constructor
 	public Game2() {
@@ -28,6 +33,9 @@ public class Game2 extends Observable {
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
 		this.player = new Player(1, 1);
+		this.gameTimer = new Timer(1000, this);
+		this.gameTimer.start();
+		this.seconds = 0;
 		// needs
 		// map - adj matrix
 		// player
@@ -120,6 +128,7 @@ public class Game2 extends Observable {
 			}
 		}
 		if (checkWin == true) {
+			this.gameTimer.stop();
 			System.out.println("win");
 		}
 	}
@@ -134,5 +143,23 @@ public class Game2 extends Observable {
 
 	public int getNumMoves() {
 		return this.numMoves;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		seconds++;
+		System.out.println("Seconds: " + seconds);
+		setChanged();
+		notifyObservers();
+		this.gameTimer.stop();
+		this.gameTimer.start();
+	}
+	
+	public void updateMoves(int update){
+		this.numMoves = update;
+	}
+	
+	public int getTime(){
+		return this.seconds;
 	}
 }

@@ -43,6 +43,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int tempY;
 	private Timer timer;
 	private int numMoves;
+	private int seconds;
 
 	public LevelMap(int rows, int columns) {
 		super();
@@ -61,6 +62,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.timer = new Timer(16, this);
 		this.timer.stop();
 		this.numMoves = 0;
+		this.seconds = 0;
 
 		this.x = -1;
 		this.y = -1;
@@ -153,10 +155,11 @@ public class LevelMap extends JPanel implements ActionListener {
 			// For some reason this is needed on Windows?
 			g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 			// Shows score at the top of the window
-			Font font = new Font("Veranda", Font.BOLD, 40);
+			Font font = new Font("Veranda", Font.BOLD, 20);
 			g.setFont(font);
 			g.setColor(Color.BLACK);
-			g.drawString("MOVES MADE: " + this.numMoves, 5, 45);
+			g.drawString("Move count: " + this.numMoves, 5, 20);
+			g.drawString("Timer: " + this.seconds, 5, 50);
 
 			// Shows level
 			for (int row = 0; row < this.grid.length; row++) {
@@ -192,5 +195,9 @@ public class LevelMap extends JPanel implements ActionListener {
 			this.y = this.tempY;
 		}
 		repaint();
+	}
+	
+	public void updateTime(int update){
+		this.seconds = update;
 	}
 }
