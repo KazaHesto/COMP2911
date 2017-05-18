@@ -16,6 +16,7 @@ public class Game2 extends Observable implements ActionListener {
 	// local stuff for the game
 	private int[][] matrix;
 	private int[][] originalState;
+	private int[][] resetState;
 	private int numMoves;
 	private Player player;
 	private Boolean checkWin;
@@ -40,6 +41,16 @@ public class Game2 extends Observable implements ActionListener {
 			{0,0,0,3,4,4,4,4,4,3,0},
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
+		
+		this.resetState = new int[][] {
+			{0,0,0,0,0,0,0,0,0,0,0},
+			{0,4,4,4,4,4,4,4,4,0,0},
+			{0,0,0,0,2,0,4,4,0,0,0},
+			{0,0,0,0,4,0,4,2,4,3,0},
+			{0,0,0,3,4,4,4,2,4,3,0},
+			{0,0,0,0,0,0,0,0,0,0,0}
+		};
+				
 		this.player = new Player(1, 1);
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
@@ -52,6 +63,16 @@ public class Game2 extends Observable implements ActionListener {
 
 	public int[][] getMatrix() {
 		return matrix;
+	}
+	//method to reset game level when R is pressed
+	public void ResetGame(){
+
+		this.player.setPosition(1,1);
+		    for(int y = 0; y < this.resetState.length; y++){
+		    	for (int x = 0; x < this.resetState[y].length; x++){
+		    		this.matrix[y][x] = this.resetState[y][x];
+		    	}
+		    } 
 	}
 
 	// update the game state

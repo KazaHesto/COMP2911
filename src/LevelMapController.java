@@ -30,6 +30,8 @@ public class LevelMapController implements KeyListener, Observer {
 				this.game.update('S');
 			} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
 				this.game.update('D');
+			} else if(key == KeyEvent.VK_R){
+				game.ResetGame();
 			}
 		}
 
