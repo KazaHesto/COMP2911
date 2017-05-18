@@ -5,6 +5,14 @@ import javax.swing.Timer;
 
 public class Game2 extends Observable implements ActionListener {
 
+	public enum DIRECTION {
+		UP, DOWN, LEFT, RIGHT
+	}
+
+	private final int WALL = 0;
+	private final int BOX = 2;
+	private final int CROSS = 3;
+
 	// local stuff for the game
 	private int[][] matrix;
 	private int[][] originalState;
@@ -47,119 +55,167 @@ public class Game2 extends Observable implements ActionListener {
 	}
 
 	// update the game state
-	// probs gets passed user key input
-	// then changes the game state
-	public void update(int xCoord, int yCoord, char keyPress) {
-		// get user input
-		int x = getXCoordinate();
-		int tempX = x;
-		int y = getYCoordinate();
-		int tempY = y;
-		System.out.println(x + " " + y);
-		x += xCoord;
-		y += yCoord;
-		char key = keyPress;
-		if (matrix[y][x] == 0) {
-			return;
-		} else if (matrix[y][x] == 2) {
-			if (key == 'W') {
-				if (matrix[y - 1][x] == 0 || matrix[y - 1][x] == 2) {
-					return;
+	public void update(char keyPress) {
+		int row = this.player.getRow();
+		int column = this.player.getColumn();
+		// Checks key press
+		if (keyPress == 'W') {
+			// Set direction player is facing
+			this.player.setDirection(0);
+			// Move player if they are not obstructed, otherwise check for a
+			// box, and see if box can be moved
+			if (!isObstructed(row - 1, column)) {
+				this.player.setPosition(row - 1, column);
+			} else if (isBox(row - 1, column)) {
+				if (moveBox(row - 1, column, DIRECTION.UP)) {
+					this.player.setPosition(row - 1, column);
 				}
-				matrix[y - 1][x] = matrix[y][x];
-				matrix[y][x] = 4;
-				this.player.setPosition(x, y);
-				matrix[tempY][tempX] = originalState[tempY][tempX];
-
-			} else if (key == 'A') {
-				if (matrix[y][x - 1] == 0 || matrix[y][x - 1] == 2) {
-					return;
-				}
-				matrix[y][x - 1] = matrix[y][x];
-				matrix[y][x] = 4;
-				this.player.setPosition(x, y);
-				matrix[tempY][tempX] = originalState[tempY][tempX];
-			} else if (key == 'S') {
-				if (matrix[y + 1][x] == 0 || matrix[y + 1][x] == 2) {
-					return;
-				}
-				matrix[y + 1][x] = matrix[y][x];
-				matrix[y][x] = 4;
-				this.player.setPosition(x, y);
-				matrix[tempY][tempX] = originalState[tempY][tempX];
-			} else if (key == 'D') {
-				if (matrix[y][x + 1] == 0 || matrix[y][x + 1] == 2) {
-					return;
-				}
-				matrix[y][x + 1] = matrix[y][x];
-				matrix[y][x] = 4;
-				this.player.setPosition(x, y);
-				matrix[tempY][tempX] = originalState[tempY][tempX];
 			}
-		} else {
-			this.player.setPosition(x, y);
-			matrix[tempY][tempX] = originalState[tempY][tempX];
-		}
-		if(!this.gameTimer.isRunning()){
-			this.gameTimer.start();
+		} else if (keyPress == 'A') {
+			this.player.setDirection(270);
+			if (!isObstructed(row, column - 1)) {
+				this.player.setPosition(row, column - 1);
+			} else if (isBox(row, column - 1)) {
+				if (moveBox(row, column - 1, DIRECTION.LEFT)) {
+					this.player.setPosition(row, column - 1);
+				}
+			}
+		} else if (keyPress == 'S') {
+			this.player.setDirection(180);
+			if (!isObstructed(row + 1, column)) {
+				this.player.setPosition(row + 1, column);
+			} else if (isBox(row + 1, column)) {
+				if (moveBox(row + 1, column, DIRECTION.DOWN)) {
+					this.player.setPosition(row + 1, column);
+				}
+			}
+		} else if (keyPress == 'D') {
+			this.player.setDirection(90);
+			if (!isObstructed(row, column + 1)) {
+				this.player.setPosition(row, column + 1);
+			} else if (isBox(row, column + 1)) {
+				if (moveBox(row, column + 1, DIRECTION.RIGHT)) {
+					this.player.setPosition(row, column + 1);
+				}
+			}
 		}
 		checkWin();
+		if (!this.gameTimer.isRunning()) {
+			this.gameTimer.start();
+		}
 		this.numMoves++;
 		setChanged();
 		notifyObservers();
-		// parse input - menu,info,quit,reset,move
+	}
 
-		// pass move to player -> player checks for collision, moves accordingly
-		// and updates position
-		// if collsion -> if box -> box checks for collision and player&box move
-		// and update positions
-		// if collision with box and box cant move on changes are made
+	/**
+	 * Checks if specified coordinate is obstructed
+	 * 
+	 * @param column column coordinate to check
+	 * @param row row coordinate to check
+	 * @return Returns true if there exists a box or wall, false otherwise.
+	 */
+	private boolean isObstructed(int row, int column) {
+		return this.matrix[row][column] == BOX || matrix[row][column] == WALL;
+	}
 
-		// get coords for player and boxes, update the adj matrix with new
-		// coords
+	/**
+	 * Checks if there is a box at the specified position
+	 * 
+	 * @param column
+	 * @param row
+	 * @return
+	 */
+	private boolean isBox(int row, int column) {
+		return matrix[row][column] == BOX;
+	}
+
+	/**
+	 * Moves box from specified position in specified direction
+	 * 
+	 * @param column column coordinate of box
+	 * @param row row coordinate of box
+	 * @param direction direction of box to move in
+	 * @return true if successful, false if box is colliding with something
+	 */
+	private boolean moveBox(int row, int column, DIRECTION direction) {
+		if (direction == DIRECTION.UP) {
+			// Check if move is legal
+			if (!isObstructed(row - 1, column)) {
+				this.matrix[row][column] = this.originalState[row][column];
+				this.matrix[row - 1][column] = BOX;
+				return true;
+			}
+		} else if (direction == DIRECTION.DOWN) {
+			// Check if move is legal
+			if (!isObstructed(row + 1, column)) {
+				this.matrix[row][column] = this.originalState[row][column];
+				this.matrix[row + 1][column] = BOX;
+				return true;
+			}
+		} else if (direction == DIRECTION.LEFT) {
+			// Check if move is legal
+			if (!isObstructed(row, column - 1)) {
+				this.matrix[row][column] = this.originalState[row][column];
+				this.matrix[row][column - 1] = BOX;
+				return true;
+			}
+
+		} else if (direction == DIRECTION.RIGHT) {
+			// Checks if move is legal
+			if (!isObstructed(row, column + 1)) {
+				this.matrix[row][column] = this.originalState[row][column];
+				this.matrix[row][column + 1] = BOX;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void checkWin() {
 		// check if crosses are present in level
-		checkWin = true;
+		this.checkWin = true;
 		for (int i = 0; i < this.matrix.length; i++) {
 			for (int j = 0; j < this.matrix[i].length; j++) {
-				if (this.matrix[i][j] == 3) {
+				if (this.matrix[i][j] == CROSS) {
 					this.checkWin = false;
 				}
 			}
 		}
-		if (checkWin == true) {
+		if (this.checkWin == true) {
 			this.gameTimer.stop();
 			System.out.println("win");
 		}
 	}
 
-	public int getXCoordinate() {
-		return this.player.getX();
+	public int getPlayerRow() {
+		return this.player.getRow();
 	}
 
-	public int getYCoordinate() {
-		return this.player.getY();
+	public int getPlayerColumn() {
+		return this.player.getColumn();
+	}
+
+	public int getPlayerDirection() {
+		return this.player.getdirection();
 	}
 
 	public int getNumMoves() {
 		return this.numMoves;
 	}
 
+	public void updateMoves(int update) {
+		this.numMoves = update;
+	}
+
+	public int getTime() {
+		return this.seconds;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		seconds++;
-		System.out.println("Seconds: " + seconds);
 		setChanged();
 		notifyObservers();
-	}
-	
-	public void updateMoves(int update){
-		this.numMoves = update;
-	}
-	
-	public int getTime(){
-		return this.seconds;
 	}
 }

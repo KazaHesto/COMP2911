@@ -1,24 +1,33 @@
 
 public class Player {
-	private int x;
-	private int y;
+	private int row;
+	private int column;
+	private int direction;
 
-	public Player(int x, int y) {
+	public Player(int row, int column) {
 		super();
-		this.x = x;
-		this.y = y;
+		this.row = row;
+		this.column = column;
 	}
 
-	public int getX() {
-		return x;
+	public int getRow() {
+		return this.row;
 	}
 
-	public int getY() {
-		return y;
+	public int getColumn() {
+		return this.column;
 	}
 
-	public void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public void setPosition(int row, int column) {
+		this.row = row;
+		this.column = column;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
+	public int getdirection() {
+		return this.direction;
 	}
 }

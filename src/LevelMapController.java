@@ -14,22 +14,22 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI = mapUI;
 		game.addObserver(this);
 		this.mapUI.setGrid(this.game.getMatrix());
-		this.mapUI.setPlayerPosition(this.game.getXCoordinate(), this.game.getYCoordinate());
+		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
 		this.game.addObserver(this);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if (mapUI.getState() == LevelMap.STATE.GAME) {
+		if (this.mapUI.getState() == LevelMap.STATE.GAME) {
 			int key = arg0.getKeyCode();
 			if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
-				this.game.update(0, -1, 'W');
+				this.game.update('W');
 			} else if (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) {
-				this.game.update(-1, 0, 'A');
+				this.game.update('A');
 			} else if (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) {
-				this.game.update(0, 1, 'S');
+				this.game.update('S');
 			} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
-				this.game.update(1, 0, 'D');
+				this.game.update('D');
 			}
 		}
 
@@ -46,7 +46,7 @@ public class LevelMapController implements KeyListener, Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		this.mapUI.setGrid(this.game.getMatrix());
-		this.mapUI.setPlayerPosition(this.game.getXCoordinate(), this.game.getYCoordinate());
+		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
 		this.mapUI.setNumMoves(this.game.getNumMoves());
 		this.mapUI.updateTime(this.game.getTime());
 		this.mapUI.repaint();
