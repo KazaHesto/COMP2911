@@ -18,7 +18,7 @@ public class LevelMap extends JPanel implements ActionListener {
 
 	private final int BOX_HEIGHT = 64;
 	private final int BOX_WIDTH = 64;
-	private final int SCORE_GUTTER = 60;
+	private final int SCORE_GUTTER = 120;
 
 	private STATE state = STATE.MENU;
 	private Menu menu;
@@ -60,6 +60,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.cross = loadImage("/textures/Cross.png.png");
 
 		this.timer = new Timer(16, this);
+		this.timer.stop();
 		this.numMoves = 0;
 		this.seconds = 0;
 
@@ -153,12 +154,16 @@ public class LevelMap extends JPanel implements ActionListener {
 		if (this.state == STATE.GAME) {
 			// For some reason this is needed on Windows?
 			g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
+			// "Title" on top of score pane
+			Font fnt0 = new Font("ariel", Font.BOLD, 50);
+			g.setFont(fnt0);
+			g.drawString("WAREHOUSE BOSS",120, 50);
 			// Shows score at the top of the window
 			Font font = new Font("Veranda", Font.BOLD, 20);
 			g.setFont(font);
 			g.setColor(Color.BLACK);
-			g.drawString("Move count: " + this.numMoves, 5, 20);
-			g.drawString("Timer: " + this.seconds, 5, 50);
+			g.drawString("Move count: " + this.numMoves, 5, 80);
+			g.drawString("Timer: " + this.seconds, 5, 110);
 
 			// Shows level
 			for (int row = 0; row < this.grid.length; row++) {

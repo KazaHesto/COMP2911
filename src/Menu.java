@@ -15,7 +15,7 @@ public class Menu {
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
 		g.setColor(Color.black);
-		g.drawString("PUZZLE GAME",175, 65);
+		g.drawString("WAREHOUSE BOSS",120, 65);
 		Font fnt1 = new Font("ariel", Font.BOLD,30);
 		g.setFont(fnt1);
 		g.drawString("Play", playButton.x + 19, playButton.y + 35);
