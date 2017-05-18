@@ -66,7 +66,8 @@ public class Game2 extends Observable implements ActionListener {
 	}
 	//method to reset game level when R is pressed
 	public void ResetGame(){
-
+		//restart timer not working?
+		this.numMoves = 0;
 		this.player.setPosition(1,1);
 		    for(int y = 0; y < this.resetState.length; y++){
 		    	for (int x = 0; x < this.resetState[y].length; x++){
