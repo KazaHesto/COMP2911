@@ -1,6 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
+
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class Game2 extends Observable implements ActionListener {
@@ -42,14 +44,8 @@ public class Game2 extends Observable implements ActionListener {
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
 		
-		this.resetState = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,4,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,2,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,2,4,3,0},
-			{0,0,0,3,4,4,4,2,4,3,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
-		};
+		this.resetState = new int[this.matrix.length][this.matrix[1].length];
+		this.resetState = copyMatrix(this.matrix, this.resetState);
 				
 		this.player = new Player(1, 1);
 		this.gameTimer = new Timer(1000, this);
@@ -64,16 +60,22 @@ public class Game2 extends Observable implements ActionListener {
 	public int[][] getMatrix() {
 		return matrix;
 	}
+	
+	private int[][] copyMatrix(int[][] resetState, int[][] matrix){
+	    for(int y = 0; y < resetState.length; y++){
+	    	for (int x = 0; x < resetState[y].length; x++){
+	    		matrix[y][x] = resetState[y][x];
+	    	}
+	    }
+	    return matrix;
+	}
+	
 	//method to reset game level when R is pressed
 	public void ResetGame(){
 		//restart timer not working?
 		this.numMoves = 0;
 		this.player.setPosition(1,1);
-		    for(int y = 0; y < this.resetState.length; y++){
-		    	for (int x = 0; x < this.resetState[y].length; x++){
-		    		this.matrix[y][x] = this.resetState[y][x];
-		    	}
-		    } 
+		 this.matrix = copyMatrix(this.resetState, this.matrix);
 	}
 
 	// update the game state
@@ -205,6 +207,20 @@ public class Game2 extends Observable implements ActionListener {
 			}
 		}
 		if (this.checkWin == true) {
+			String[] choices = {"Reset", "Next Level", "Quit"};
+			int choice = JOptionPane.showOptionDialog(null,
+										 "Would you like to continue?","Language Poll" , 
+										 JOptionPane.PLAIN_MESSAGE , 
+										 JOptionPane.YES_NO_CANCEL_OPTION, 
+										 null, 
+										 choices, 
+										 choices[0]);
+			if(choice == JOptionPane.CANCEL_OPTION){
+				System.exit(1);
+			} else if(choice == JOptionPane.YES_OPTION){
+				ResetGame();
+			}
+			
 			this.gameTimer.stop();
 			System.out.println("win");
 		}
