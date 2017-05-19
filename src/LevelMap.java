@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -142,6 +143,22 @@ public class LevelMap extends JPanel implements ActionListener {
 		return Math.abs(a - b) < 0.01;
 	}
 
+	public int showWin() {
+		// Windows guidelines suggest sentence-case for buttons,
+		// Mac suggests title-case, no idea what Linux guidelines suggest.
+		String[] choices = { "Next level", "Reset", "Quit game" };
+		int choice = JOptionPane.showOptionDialog(null, "Do you want to continue?", "",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+		if (choice == JOptionPane.CANCEL_OPTION) {
+			System.exit(1);
+		} else if (choice == JOptionPane.YES_OPTION) {
+			return 1;
+		} else if (choice == JOptionPane.NO_OPTION) {
+			return 2;
+		}
+		return 0;
+	}
+
 	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
@@ -157,7 +174,7 @@ public class LevelMap extends JPanel implements ActionListener {
 			// "Title" on top of score pane
 			Font fnt0 = new Font("ariel", Font.BOLD, 50);
 			g.setFont(fnt0);
-			g.drawString("WAREHOUSE BOSS",120, 50);
+			g.drawString("WAREHOUSE BOSS", 120, 50);
 			// Shows score at the top of the window
 			Font font = new Font("Veranda", Font.BOLD, 20);
 			g.setFont(font);
@@ -169,15 +186,15 @@ public class LevelMap extends JPanel implements ActionListener {
 			for (int row = 0; row < this.grid.length; row++) {
 				for (int col = 0; col < this.grid[row].length; col++) {
 					if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
-						g.drawImage(changeImage(this.grid[row][col]),
-								col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, null);
+						g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER,
+								null);
 					}
 				}
-				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
-						(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
+				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH), (int) (this.y * BOX_HEIGHT + SCORE_GUTTER),
+						null);
 
-				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH),
-						(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
+				g.drawImage(changeImage(1), (int) (this.x * BOX_WIDTH), (int) (this.y * BOX_HEIGHT + SCORE_GUTTER),
+						null);
 			}
 		} else if (this.state == STATE.MENU) {
 			menu.render(g);
@@ -200,8 +217,8 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		repaint();
 	}
-	
-	public void updateTime(int update){
+
+	public void updateTime(int update) {
 		this.seconds = update;
 	}
 }

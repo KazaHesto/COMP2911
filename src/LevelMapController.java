@@ -30,8 +30,8 @@ public class LevelMapController implements KeyListener, Observer {
 				this.game.update('S');
 			} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
 				this.game.update('D');
-			} else if(key == KeyEvent.VK_R){
-				game.ResetGame();
+			} else if (key == KeyEvent.VK_R) {
+				game.resetGame();
 			}
 		}
 
@@ -52,5 +52,13 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI.setNumMoves(this.game.getNumMoves());
 		this.mapUI.updateTime(this.game.getTime());
 		this.mapUI.repaint();
+		if (this.game.isWin()) {
+			int option = this.mapUI.showWin();
+			if (option == 1) {
+				// next level stuff
+			} else if (option == 2) {
+				this.game.resetGame();
+			}
+		}
 	}
 }

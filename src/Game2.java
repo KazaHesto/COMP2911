@@ -2,7 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class Game2 extends Observable implements ActionListener {
@@ -46,7 +45,7 @@ public class Game2 extends Observable implements ActionListener {
 		
 		this.resetState = new int[this.matrix.length][this.matrix[1].length];
 		this.resetState = copyMatrix(this.matrix, this.resetState);
-				
+
 		this.player = new Player(1, 1);
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
@@ -60,22 +59,25 @@ public class Game2 extends Observable implements ActionListener {
 	public int[][] getMatrix() {
 		return matrix;
 	}
-	
-	private int[][] copyMatrix(int[][] resetState, int[][] matrix){
-	    for(int y = 0; y < resetState.length; y++){
-	    	for (int x = 0; x < resetState[y].length; x++){
-	    		matrix[y][x] = resetState[y][x];
-	    	}
-	    }
-	    return matrix;
+
+	private int[][] copyMatrix(int[][] resetState, int[][] matrix) {
+		for (int y = 0; y < resetState.length; y++) {
+			for (int x = 0; x < resetState[y].length; x++) {
+				matrix[y][x] = resetState[y][x];
+			}
+		}
+		return matrix;
 	}
-	
-	//method to reset game level when R is pressed
-	public void ResetGame(){
-		//restart timer not working?
+
+	// method to reset game level when R is pressed
+	public void resetGame() {
 		this.numMoves = 0;
-		this.player.setPosition(1,1);
-		 this.matrix = copyMatrix(this.resetState, this.matrix);
+		this.player.setPosition(1, 1);
+		this.matrix = copyMatrix(this.resetState, this.matrix);
+		this.checkWin = false;
+		this.seconds = 0;
+		setChanged();
+		notifyObservers();
 	}
 
 	// update the game state
@@ -123,11 +125,11 @@ public class Game2 extends Observable implements ActionListener {
 				}
 			}
 		}
-		checkWin();
 		if (!this.gameTimer.isRunning()) {
 			this.gameTimer.start();
 		}
 		this.numMoves++;
+		checkWin();
 		setChanged();
 		notifyObservers();
 	}
@@ -207,23 +209,13 @@ public class Game2 extends Observable implements ActionListener {
 			}
 		}
 		if (this.checkWin == true) {
-			String[] choices = {"Reset", "Next Level", "Quit"};
-			int choice = JOptionPane.showOptionDialog(null,
-										 "Would you like to continue?","Language Poll" , 
-										 JOptionPane.PLAIN_MESSAGE , 
-										 JOptionPane.YES_NO_CANCEL_OPTION, 
-										 null, 
-										 choices, 
-										 choices[0]);
-			if(choice == JOptionPane.CANCEL_OPTION){
-				System.exit(1);
-			} else if(choice == JOptionPane.YES_OPTION){
-				ResetGame();
-			}
-			
 			this.gameTimer.stop();
 			System.out.println("win");
 		}
+	}
+
+	public boolean isWin() {
+		return this.checkWin;
 	}
 
 	public int getPlayerRow() {
