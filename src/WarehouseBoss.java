@@ -1,21 +1,21 @@
 import javax.swing.JFrame;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class WarehouseBoss implements MenuListener, ActionListener {
+public class WarehouseBoss implements ActionListener {
 
 	private JFrame frame;
 	private Game2 game;
-	private JMenu Quit;
-	private JMenuItem Reset;
 	private LevelMap mapUI;
+	private JMenuBar menuBar;
 
 	public WarehouseBoss() {
 		initGame();
@@ -28,26 +28,10 @@ public class WarehouseBoss implements MenuListener, ActionListener {
 		frame.setResizable(false);
 		frame.setTitle("Warehouse Boss");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JMenuBar mb = new JMenuBar();
-		JMenu Game = new JMenu("Game");
-		this.Quit = new JMenu("Quit");
-		Quit.addMenuListener(this);
-		mb.add(Game);
-		mb.add(Quit);
-		this.Reset = new JMenuItem("Reset");
-		this.Reset.addActionListener(this);
-		Game.add(Reset);
-		JMenu difficulty = new JMenu("Difficulty");
-		Game.add(difficulty);
-		JMenuItem Easy = new JMenuItem("Easy");
-		JMenuItem Normal = new JMenuItem("Normal");
-		JMenuItem Hard = new JMenuItem("Hard");
-		difficulty.add(Easy);
-		difficulty.add(Normal);
-		difficulty.add(Hard);
-		
-		frame.setJMenuBar(mb);
+
+		menuBar = createMenuBar();
+
+		frame.setJMenuBar(menuBar);
 
 		this.mapUI = new LevelMap(6, 11);
 		frame.add(mapUI);
@@ -60,34 +44,55 @@ public class WarehouseBoss implements MenuListener, ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-	
+
+	private JMenuBar createMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+
+		JMenu menu = new JMenu("Game");
+		menu.setMnemonic(KeyEvent.VK_G);
+		menuBar.add(menu);
+		JMenuItem menuItem = new JMenuItem("New Game", KeyEvent.VK_N);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke("F2"));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menu.addSeparator();
+		menuItem = new JMenuItem("Undo", KeyEvent.VK_U);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuItem = new JMenuItem("Options", KeyEvent.VK_O);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke("F5"));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menu.addSeparator();
+		menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuBar.add(menu);
+
+		menu = new JMenu("Help");
+		menuItem = new JMenuItem("View Help", KeyEvent.VK_V);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke("F1"));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuItem = new JMenuItem("About WarehouseBoss", KeyEvent.VK_A);
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuBar.add(menu);
+
+		return menuBar;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(this.mapUI.getState() == LevelMap.STATE.GAME){
-			if(e.getSource().equals(Reset)){
+		if (e.getSource().equals(menuBar.getMenu(0).getItem(5))) {
+			System.exit(1);
+		}
+		if (this.mapUI.getState() == LevelMap.STATE.GAME) {
+			if (e.getSource().equals(menuBar.getMenu(0).getItem(5))) {
 				this.game.resetGame();
 			}
 		}
-	}
-
-	@Override
-	public void menuCanceled(MenuEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void menuDeselected(MenuEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void menuSelected(MenuEvent mb) {
-		if(mb.getSource().equals(Quit)){
-			System.exit(1);
-		}
-		
 	}
 
 	public static void main(String[] args) {
@@ -99,6 +104,4 @@ public class WarehouseBoss implements MenuListener, ActionListener {
 		}
 		WarehouseBoss ex = new WarehouseBoss();
 	}
-
-
 }
