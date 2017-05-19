@@ -31,9 +31,6 @@ public class MenuController implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-//		public Rectangle playButton = new Rectangle(175+120,100,100,50);
-//		public Rectangle helpButton = new Rectangle(175+120,200,100,50);
-//		public Rectangle quitButton = new Rectangle(175+120,300,100,50);
 		int mx = e.getX();
 		int my = e.getY();
 		if(mx >= 295 && mx <= 395){
