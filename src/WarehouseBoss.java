@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class WarehouseBoss implements MenuListener, ActionListener {
 
@@ -63,7 +65,7 @@ public class WarehouseBoss implements MenuListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(this.mapUI.getState() == LevelMap.STATE.GAME){
 			if(e.getSource().equals(Reset)){
-				this.game.ResetGame();
+				this.game.resetGame();
 			}
 		}
 	}
@@ -89,6 +91,12 @@ public class WarehouseBoss implements MenuListener, ActionListener {
 	}
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		WarehouseBoss ex = new WarehouseBoss();
 	}
 
