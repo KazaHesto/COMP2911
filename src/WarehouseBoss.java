@@ -85,14 +85,18 @@ public class WarehouseBoss implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(menuBar.getMenu(0).getItem(0))) {
+			if (this.mapUI.getState() == LevelMap.STATE.GAME) {
+				this.game.resetGame();
+			} else {
+				this.mapUI.setState();
+				this.mapUI.repaint();
+			}
+		} 
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(5))) {
 			System.exit(1);
 		}
-		if (this.mapUI.getState() == LevelMap.STATE.GAME) {
-			if (e.getSource().equals(menuBar.getMenu(0).getItem(5))) {
-				this.game.resetGame();
-			}
-		}
+		
 	}
 
 	public static void main(String[] args) {
