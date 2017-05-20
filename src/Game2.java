@@ -1,6 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Stack;
 
 import javax.swing.Timer;
 
@@ -18,11 +20,15 @@ public class Game2 extends Observable implements ActionListener {
 	private int[][] matrix;
 	private int[][] originalState;
 	private int[][] resetState;
+	private int[][] prevState;
+	private Stack<Integer> undoPlayer;
+	private LinkedList<int[][]> undoMatrix;
 	private int numMoves;
 	private Player player;
 	private Boolean checkWin;
 	private Timer gameTimer;
 	private int seconds;
+	
 
 	// constructor
 	public Game2() {
@@ -45,8 +51,12 @@ public class Game2 extends Observable implements ActionListener {
 		
 		this.resetState = new int[this.matrix.length][this.matrix[1].length];
 		this.resetState = copyMatrix(this.matrix, this.resetState);
+		this.prevState = new int[this.matrix.length][this.matrix[1].length];
+		this.prevState = copyMatrix(this.matrix, this.prevState);
 
 		this.player = new Player(1, 1);
+		this.undoPlayer = new Stack<Integer>();
+		this.undoMatrix = new LinkedList<int[][]>();
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
 		// needs
@@ -82,6 +92,7 @@ public class Game2 extends Observable implements ActionListener {
 
 	// update the game state
 	public void update(char keyPress) {
+		
 		int row = this.player.getRow();
 		int column = this.player.getColumn();
 		// Checks key press
@@ -91,37 +102,78 @@ public class Game2 extends Observable implements ActionListener {
 			// Move player if they are not obstructed, otherwise check for a
 			// box, and see if box can be moved
 			if (!isObstructed(row - 1, column)) {
+				//create a temp matrix to add to linked list of matrix for undo
+				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
+				copyMatrix(this.matrix, temp);
+				this.undoMatrix.add(temp);
+				this.player.setPrevPosition(row,column);
 				this.player.setPosition(row - 1, column);
+				this.undoPlayer.push(this.player.getPrevColumn());
+				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row - 1, column)) {
 				if (moveBox(row - 1, column, DIRECTION.UP)) {
+					this.player.setPrevPosition(row,column);
 					this.player.setPosition(row - 1, column);
+					this.undoPlayer.push(this.player.getPrevColumn());
+					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		} else if (keyPress == 'A') {
 			this.player.setDirection(270);
 			if (!isObstructed(row, column - 1)) {
+				//create a temp matrix to add to linked list of matrix for undo
+				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
+				copyMatrix(this.matrix, temp);
+				this.undoMatrix.add(temp);
+				this.player.setPrevPosition(row,column);
 				this.player.setPosition(row, column - 1);
+				this.undoPlayer.push(this.player.getPrevColumn());
+				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row, column - 1)) {
 				if (moveBox(row, column - 1, DIRECTION.LEFT)) {
+					this.player.setPrevPosition(row,column);
 					this.player.setPosition(row, column - 1);
+					this.undoPlayer.push(this.player.getPrevColumn());
+					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		} else if (keyPress == 'S') {
 			this.player.setDirection(180);
 			if (!isObstructed(row + 1, column)) {
+				//create a temp matrix to add to linked list of matrix for undo
+				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
+				copyMatrix(this.matrix, temp);
+				this.undoMatrix.add(temp);
+				this.player.setPrevPosition(row,column);
 				this.player.setPosition(row + 1, column);
+				this.undoPlayer.push(this.player.getPrevColumn());
+				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row + 1, column)) {
 				if (moveBox(row + 1, column, DIRECTION.DOWN)) {
+					this.player.setPrevPosition(row,column);
 					this.player.setPosition(row + 1, column);
+					this.undoPlayer.push(this.player.getPrevColumn());
+					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		} else if (keyPress == 'D') {
 			this.player.setDirection(90);
 			if (!isObstructed(row, column + 1)) {
+				//create a temp matrix to add to linked list of matrix for undo
+				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
+				copyMatrix(this.matrix, temp);
+				this.undoMatrix.add(temp);
+				this.player.setPrevPosition(row,column);
 				this.player.setPosition(row, column + 1);
+				//add the players previous move to stack
+				this.undoPlayer.push(this.player.getPrevColumn());
+				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row, column + 1)) {
 				if (moveBox(row, column + 1, DIRECTION.RIGHT)) {
+					this.player.setPrevPosition(row,column);
 					this.player.setPosition(row, column + 1);
+					this.undoPlayer.push(this.player.getPrevColumn());
+					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		}
@@ -165,6 +217,10 @@ public class Game2 extends Observable implements ActionListener {
 	 * @return true if successful, false if box is colliding with something
 	 */
 	private boolean moveBox(int row, int column, DIRECTION direction) {
+		//create a temp matrix to add to linked list of matrix for undo
+		int[][] temp = new int[this.matrix.length][this.matrix[1].length];
+		copyMatrix(this.matrix, temp);
+		this.undoMatrix.add(temp);
 		if (direction == DIRECTION.UP) {
 			// Check if move is legal
 			if (!isObstructed(row - 1, column)) {
@@ -196,6 +252,38 @@ public class Game2 extends Observable implements ActionListener {
 			}
 		}
 		return false;
+	}
+	
+    public static void printRow(int[] row) {
+        for (int i : row) {
+            System.out.print(i);
+            System.out.print("\t");
+        }
+        System.out.println();
+    }
+	
+    //logic to undo move
+	public void undoMove(){
+		if(!this.undoPlayer.empty()){
+			Integer row = this.undoPlayer.pop();
+			Integer column = this.undoPlayer.pop();
+			this.player.setPosition(row, column);
+		}
+		if(!this.undoMatrix.isEmpty()){
+			this.matrix = this.undoMatrix.getLast();
+			this.undoMatrix.removeLast();
+		}
+		if(this.numMoves != 0){
+			this.numMoves++;
+		}
+	}
+	
+	//when reset is used when game is running empty all data
+	public void resetUndo(){
+		while(!this.undoPlayer.empty()){
+			this.undoPlayer.pop();
+		}
+		this.undoMatrix.clear();
 	}
 
 	private void checkWin() {

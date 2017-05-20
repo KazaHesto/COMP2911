@@ -32,6 +32,9 @@ public class LevelMapController implements KeyListener, Observer {
 				this.game.update('D');
 			} else if (key == KeyEvent.VK_R) {
 				game.resetGame();
+				game.resetUndo();
+			} else if (key == KeyEvent.VK_U){
+				game.undoMove();
 			}
 		}
 
@@ -58,6 +61,7 @@ public class LevelMapController implements KeyListener, Observer {
 				// next level stuff
 			} else if (option == 2) {
 				this.game.resetGame();
+				this.game.resetUndo();
 			}
 		}
 	}
