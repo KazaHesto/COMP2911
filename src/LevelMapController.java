@@ -20,23 +20,20 @@ public class LevelMapController implements KeyListener, Observer {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if (this.mapUI.getState() == LevelMap.STATE.GAME) {
-			int key = arg0.getKeyCode();
-			if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
-				this.game.update('W');
-			} else if (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) {
-				this.game.update('A');
-			} else if (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) {
-				this.game.update('S');
-			} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
-				this.game.update('D');
-			} else if (key == KeyEvent.VK_R) {
-				game.resetGame();
-			} else if (key == KeyEvent.VK_U) {
-				game.undoMove();
-			}
+		int key = arg0.getKeyCode();
+		if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
+			this.game.update('W');
+		} else if (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) {
+			this.game.update('A');
+		} else if (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) {
+			this.game.update('S');
+		} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
+			this.game.update('D');
+		} else if (key == KeyEvent.VK_R) {
+			game.resetGame();
+		} else if (key == KeyEvent.VK_U) {
+			game.undoMove();
 		}
-
 	}
 
 	@Override

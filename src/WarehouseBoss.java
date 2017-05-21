@@ -1,4 +1,6 @@
 import javax.swing.JFrame;
+
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,29 +19,54 @@ public class WarehouseBoss implements ActionListener {
 	private Game2 game;
 	private LevelMap mapUI;
 	private JMenuBar menuBar;
+	private Menu menu;
 
 	public WarehouseBoss() {
-		initGame();
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	createWindow();
+            	showMenu();
+            }
+        });
 	}
 
-	private void initGame() {
-		this.game = new Game2();
-
+	private void createWindow() {
 		this.frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle("Warehouse Boss");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		menuBar = createMenuBar();
-
 		frame.setJMenuBar(menuBar);
+	}
 
+	private void showMenu() {
+		frame.setVisible(false);
+		for (Component component : frame.getContentPane().getComponents()) {
+			frame.getContentPane().remove(component);
+		}
+
+		this.menu = new Menu();
+		MenuController controller = new MenuController(menu, this);
+		menu.setController(controller);
+
+		frame.getContentPane().add(menu);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
+
+	public void initGame() {
+		for (Component component : frame.getContentPane().getComponents()) {
+			frame.getContentPane().remove(component);
+		}
+
+		this.game = new Game2();
 		this.mapUI = new LevelMap(6, 11);
-		frame.add(mapUI);
+		frame.getContentPane().add(mapUI);
+
 		LevelMapController controller = new LevelMapController(game, mapUI);
-		MenuController Mcontroller = new MenuController(mapUI);
 		mapUI.setController(controller);
-		mapUI.setMenuController(Mcontroller);
+		game.addObserver(controller);
 
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -87,12 +114,7 @@ public class WarehouseBoss implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(0))) {
-			if (this.mapUI.getState() == LevelMap.STATE.GAME) {
-				this.game.resetGame();
-			} else {
-				this.mapUI.setState();
-				this.mapUI.repaint();
-			}
+			initGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(2))) {
 			this.game.undoMove();
@@ -101,14 +123,14 @@ public class WarehouseBoss implements ActionListener {
 			System.exit(1);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(0))) {
-			JOptionPane.showMessageDialog(null, "W - Forward\nA - Left\n"
-					+ "S - Backwards\nD - Right\nR - Reset Game\nU - Undo Previous Move\n"
-					+ "Aim : To successfully move all the Warehouse Boxes onto the Green Cross",
+			JOptionPane.showMessageDialog(null,
+					"W - Forward\nA - Left\n" + "S - Backwards\nD - Right\nR - Reset Game\nU - Undo Previous Move\n"
+							+ "Aim : To successfully move all the Warehouse Boxes onto the Green Cross",
 					"Help", JOptionPane.INFORMATION_MESSAGE);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(1))) {
-			JOptionPane.showMessageDialog(null, "IT'S A THING!",
-					"About WarehouseBoss", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "IT'S A THING!", "About WarehouseBoss",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
