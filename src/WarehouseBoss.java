@@ -41,8 +41,9 @@ public class WarehouseBoss implements ActionListener {
 		this.menu = new Menu();
 		MenuController controller = new MenuController(menu, this);
 		menu.setController(controller);
-
 		frame.getContentPane().add(menu);
+
+		titleMenuBar();
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -63,6 +64,7 @@ public class WarehouseBoss implements ActionListener {
 		frame.getContentPane().add(mapUI);
 		mapUI.requestFocusInWindow();
 
+		gameMenuBar();
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -104,6 +106,16 @@ public class WarehouseBoss implements ActionListener {
 		menuBar.add(menu);
 
 		return menuBar;
+	}
+
+	// enables game related menubar items, such as undo
+	private void gameMenuBar() {
+		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
+	}
+
+	// undo gameMenuBar()
+	private void titleMenuBar() {
+		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
 	}
 
 	@Override
