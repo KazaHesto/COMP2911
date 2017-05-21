@@ -101,7 +101,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Reads images from file system
 	private Image loadImage(String path) {
 		try {
-			return ImageIO.read(LevelMap.class.getResource(path));
+			return ImageIO.read(getClass().getResource(path));
 		} catch (IOException e) {
 			System.out.println("File not found");
 		}
@@ -137,8 +137,6 @@ public class LevelMap extends JPanel implements ActionListener {
 	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
-		// For some reason this is needed to keep keyboard focus
-		this.requestFocusInWindow();
 		// For some reason this is needed on Windows?
 		g.clearRect(0, 0, this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 		// "Title" on top of score pane

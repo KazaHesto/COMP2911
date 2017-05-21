@@ -21,26 +21,19 @@ public class WarehouseBoss implements ActionListener {
 	private JMenuBar menuBar;
 	private Menu menu;
 
-	public WarehouseBoss() {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	createWindow();
-            	showMenu();
-            }
-        });
-	}
-
-	private void createWindow() {
+	public void createWindow() {
 		this.frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle("Warehouse Boss");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuBar = createMenuBar();
 		frame.setJMenuBar(menuBar);
+
+		showMenu();
 	}
 
 	private void showMenu() {
-		frame.setVisible(false);
+		// Clears all the items currently on the window (if there are any)
 		for (Component component : frame.getContentPane().getComponents()) {
 			frame.getContentPane().remove(component);
 		}
@@ -56,17 +49,19 @@ public class WarehouseBoss implements ActionListener {
 	}
 
 	public void initGame() {
+		// Clears all the items currently on the window (if there are any)
 		for (Component component : frame.getContentPane().getComponents()) {
 			frame.getContentPane().remove(component);
 		}
 
 		this.game = new Game2();
 		this.mapUI = new LevelMap(6, 11);
-		frame.getContentPane().add(mapUI);
 
 		LevelMapController controller = new LevelMapController(game, mapUI);
 		mapUI.setController(controller);
 		game.addObserver(controller);
+		frame.getContentPane().add(mapUI);
+		mapUI.requestFocusInWindow();
 
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -142,5 +137,10 @@ public class WarehouseBoss implements ActionListener {
 			e.printStackTrace();
 		}
 		WarehouseBoss ex = new WarehouseBoss();
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	ex.createWindow();
+            }
+        });
 	}
 }
