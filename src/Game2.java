@@ -1,6 +1,5 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Stack;
 
@@ -20,15 +19,13 @@ public class Game2 extends Observable implements ActionListener {
 	private int[][] matrix;
 	private int[][] originalState;
 	private int[][] resetState;
-	private int[][] prevState;
 	private Stack<Integer> undoPlayer;
-	private LinkedList<int[][]> undoMatrix;
+	private Stack<int[][]> undoMatrix;
 	private int numMoves;
 	private Player player;
 	private Boolean checkWin;
 	private Timer gameTimer;
 	private int seconds;
-	
 
 	// constructor
 	public Game2() {
@@ -48,15 +45,12 @@ public class Game2 extends Observable implements ActionListener {
 			{0,0,0,3,4,4,4,4,4,3,0},
 			{0,0,0,0,0,0,0,0,0,0,0}
 		};
-		
-		this.resetState = new int[this.matrix.length][this.matrix[1].length];
-		this.resetState = copyMatrix(this.matrix, this.resetState);
-		this.prevState = new int[this.matrix.length][this.matrix[1].length];
-		this.prevState = copyMatrix(this.matrix, this.prevState);
+
+		this.resetState = copyMatrix(this.matrix);
 
 		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
-		this.undoMatrix = new LinkedList<int[][]>();
+		this.undoMatrix = new Stack<int[][]>();
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
 		// needs
@@ -70,11 +64,10 @@ public class Game2 extends Observable implements ActionListener {
 		return matrix;
 	}
 
-	private int[][] copyMatrix(int[][] resetState, int[][] matrix) {
-		for (int y = 0; y < resetState.length; y++) {
-			for (int x = 0; x < resetState[y].length; x++) {
-				matrix[y][x] = resetState[y][x];
-			}
+	private int[][] copyMatrix(int[][] original) {
+		int[][] copy = new int[original.length][];
+		for (int i = 0; i < original.length; i++) {
+			copy[i] = original[i].clone();
 		}
 		return matrix;
 	}
@@ -83,16 +76,17 @@ public class Game2 extends Observable implements ActionListener {
 	public void resetGame() {
 		this.numMoves = 0;
 		this.player.setPosition(1, 1);
-		this.matrix = copyMatrix(this.resetState, this.matrix);
+		this.matrix = copyMatrix(this.resetState);
 		this.checkWin = false;
 		this.seconds = 0;
+		this.undoPlayer.clear();
+		this.undoMatrix.clear();
 		setChanged();
 		notifyObservers();
 	}
 
 	// update the game state
 	public void update(char keyPress) {
-		
 		int row = this.player.getRow();
 		int column = this.player.getColumn();
 		// Checks key press
@@ -102,78 +96,57 @@ public class Game2 extends Observable implements ActionListener {
 			// Move player if they are not obstructed, otherwise check for a
 			// box, and see if box can be moved
 			if (!isObstructed(row - 1, column)) {
-				//create a temp matrix to add to linked list of matrix for undo
-				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
-				copyMatrix(this.matrix, temp);
-				this.undoMatrix.add(temp);
-				this.player.setPrevPosition(row,column);
+				this.undoMatrix.add(copyMatrix(this.matrix));
+				this.undoPlayer.push(column);
+				this.undoPlayer.push(row);
 				this.player.setPosition(row - 1, column);
-				this.undoPlayer.push(this.player.getPrevColumn());
-				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row - 1, column)) {
 				if (moveBox(row - 1, column, DIRECTION.UP)) {
-					this.player.setPrevPosition(row,column);
+					this.undoPlayer.push(column);
+					this.undoPlayer.push(row);
 					this.player.setPosition(row - 1, column);
-					this.undoPlayer.push(this.player.getPrevColumn());
-					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		} else if (keyPress == 'A') {
 			this.player.setDirection(270);
 			if (!isObstructed(row, column - 1)) {
-				//create a temp matrix to add to linked list of matrix for undo
-				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
-				copyMatrix(this.matrix, temp);
-				this.undoMatrix.add(temp);
-				this.player.setPrevPosition(row,column);
+				this.undoMatrix.add(copyMatrix(this.matrix));
+				this.undoPlayer.push(column);
+				this.undoPlayer.push(row);
 				this.player.setPosition(row, column - 1);
-				this.undoPlayer.push(this.player.getPrevColumn());
-				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row, column - 1)) {
 				if (moveBox(row, column - 1, DIRECTION.LEFT)) {
-					this.player.setPrevPosition(row,column);
+					this.undoPlayer.push(column);
+					this.undoPlayer.push(row);
 					this.player.setPosition(row, column - 1);
-					this.undoPlayer.push(this.player.getPrevColumn());
-					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		} else if (keyPress == 'S') {
 			this.player.setDirection(180);
 			if (!isObstructed(row + 1, column)) {
-				//create a temp matrix to add to linked list of matrix for undo
-				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
-				copyMatrix(this.matrix, temp);
-				this.undoMatrix.add(temp);
-				this.player.setPrevPosition(row,column);
+				this.undoMatrix.add(copyMatrix(this.matrix));
+				this.undoPlayer.push(column);
+				this.undoPlayer.push(row);
 				this.player.setPosition(row + 1, column);
-				this.undoPlayer.push(this.player.getPrevColumn());
-				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row + 1, column)) {
 				if (moveBox(row + 1, column, DIRECTION.DOWN)) {
-					this.player.setPrevPosition(row,column);
+					this.undoPlayer.push(column);
+					this.undoPlayer.push(row);
 					this.player.setPosition(row + 1, column);
-					this.undoPlayer.push(this.player.getPrevColumn());
-					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		} else if (keyPress == 'D') {
 			this.player.setDirection(90);
 			if (!isObstructed(row, column + 1)) {
-				//create a temp matrix to add to linked list of matrix for undo
-				int[][] temp = new int[this.matrix.length][this.matrix[1].length];
-				copyMatrix(this.matrix, temp);
-				this.undoMatrix.add(temp);
-				this.player.setPrevPosition(row,column);
+				this.undoMatrix.add(copyMatrix(this.matrix));
+				this.undoPlayer.push(column);
+				this.undoPlayer.push(row);
 				this.player.setPosition(row, column + 1);
-				//add the players previous move to stack
-				this.undoPlayer.push(this.player.getPrevColumn());
-				this.undoPlayer.push(this.player.getPrevRow());
 			} else if (isBox(row, column + 1)) {
 				if (moveBox(row, column + 1, DIRECTION.RIGHT)) {
-					this.player.setPrevPosition(row,column);
+					this.undoPlayer.push(column);
+					this.undoPlayer.push(row);
 					this.player.setPosition(row, column + 1);
-					this.undoPlayer.push(this.player.getPrevColumn());
-					this.undoPlayer.push(this.player.getPrevRow());
 				}
 			}
 		}
@@ -189,8 +162,10 @@ public class Game2 extends Observable implements ActionListener {
 	/**
 	 * Checks if specified coordinate is obstructed
 	 * 
-	 * @param column column coordinate to check
-	 * @param row row coordinate to check
+	 * @param column
+	 *            column coordinate to check
+	 * @param row
+	 *            row coordinate to check
 	 * @return Returns true if there exists a box or wall, false otherwise.
 	 */
 	private boolean isObstructed(int row, int column) {
@@ -211,16 +186,17 @@ public class Game2 extends Observable implements ActionListener {
 	/**
 	 * Moves box from specified position in specified direction
 	 * 
-	 * @param column column coordinate of box
-	 * @param row row coordinate of box
-	 * @param direction direction of box to move in
+	 * @param column
+	 *            column coordinate of box
+	 * @param row
+	 *            row coordinate of box
+	 * @param direction
+	 *            direction of box to move in
 	 * @return true if successful, false if box is colliding with something
 	 */
 	private boolean moveBox(int row, int column, DIRECTION direction) {
-		//create a temp matrix to add to linked list of matrix for undo
-		int[][] temp = new int[this.matrix.length][this.matrix[1].length];
-		copyMatrix(this.matrix, temp);
-		this.undoMatrix.add(temp);
+		// create a temp matrix to add to linked list of matrix for undo
+		this.undoMatrix.add(copyMatrix(this.matrix));
 		if (direction == DIRECTION.UP) {
 			// Check if move is legal
 			if (!isObstructed(row - 1, column)) {
@@ -253,37 +229,29 @@ public class Game2 extends Observable implements ActionListener {
 		}
 		return false;
 	}
-	
-    public static void printRow(int[] row) {
-        for (int i : row) {
-            System.out.print(i);
-            System.out.print("\t");
-        }
-        System.out.println();
-    }
-	
-    //logic to undo move
-	public void undoMove(){
-		if(!this.undoPlayer.empty()){
+
+	public static void printRow(int[] row) {
+		for (int i : row) {
+			System.out.print(i);
+			System.out.print("\t");
+		}
+		System.out.println();
+	}
+
+	// logic to undo move
+	public void undoMove() {
+		if (!this.undoPlayer.empty()) {
 			Integer row = this.undoPlayer.pop();
 			Integer column = this.undoPlayer.pop();
 			this.player.setPosition(row, column);
 		}
-		if(!this.undoMatrix.isEmpty()){
-			this.matrix = this.undoMatrix.getLast();
-			this.undoMatrix.removeLast();
+		if (!this.undoMatrix.isEmpty()) {
+			this.matrix = this.undoMatrix.pop();
 		}
-		if(this.numMoves != 0){
-			this.numMoves++;
-		}
-	}
-	
-	//when reset is used when game is running empty all data
-	public void resetUndo(){
-		while(!this.undoPlayer.empty()){
-			this.undoPlayer.pop();
-		}
-		this.undoMatrix.clear();
+		this.numMoves++;
+		setChanged();
+		notifyObservers();
+
 	}
 
 	private void checkWin() {
