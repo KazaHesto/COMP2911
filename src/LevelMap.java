@@ -24,11 +24,6 @@ public class LevelMap extends JPanel implements ActionListener {
 	private STATE state = STATE.MENU;
 	private Menu menu;
 
-	// private final int UP = 0;
-	// private final int DOWN = 1;
-	// private final int LEFT = 2;
-	// private final int RIGHT = 3;
-
 	private int rows;
 	private int columns;
 	private int[][] grid;

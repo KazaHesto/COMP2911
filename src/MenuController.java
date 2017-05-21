@@ -38,21 +38,21 @@ public class MenuController implements MouseListener{
 				levelMap.setState();
 				levelMap.repaint();
 			}
-		}
-		
-		if(mx >= 295 && mx <= 395){
+			
 			if(my >= 200 && my <= 250){
-				JOptionPane.showMessageDialog(null, "W - Forward\nA - Left\n"
-						+ "S - Backwards\nD - Right\nR - Reset Game\nU - Undo Previous Move\nAim : To successfully move all the Warehouse Boxes onto the Green Cross", "Help", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "W or Up Arrow - Forward\nA or Left Arrow - Left\n"
+						+ "S or Down Arrow - Backwards\nD or Right Arrow - Right\nR - Reset Game\nU - "
+						+ "Undo Previous Move\nAim : To successfully move all the Warehouse Boxes onto"
+						+ "the Green Crosses", "Help", JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
-		
-		if(mx >= 295 && mx <= 395){
+			
 			if(my >= 300 && my <= 350){
 				System.exit(1);
 			}
+			if(my >= 400 && my <= 450){
+				
+			}
 		}
-		
 	}
 
 	@Override
