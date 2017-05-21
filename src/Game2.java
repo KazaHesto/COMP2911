@@ -69,7 +69,7 @@ public class Game2 extends Observable implements ActionListener {
 		for (int i = 0; i < original.length; i++) {
 			copy[i] = original[i].clone();
 		}
-		return matrix;
+		return copy;
 	}
 
 	// method to reset game level when R is pressed
