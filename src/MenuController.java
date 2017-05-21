@@ -53,5 +53,4 @@ public class MenuController implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 	}
-
 }
