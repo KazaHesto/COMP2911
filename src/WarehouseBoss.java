@@ -20,6 +20,7 @@ public class WarehouseBoss implements ActionListener {
 	private LevelMap mapUI;
 	private JMenuBar menuBar;
 	private Menu menu;
+	private Player player;
 
 	public void createWindow() {
 		this.frame = new JFrame();
@@ -57,8 +58,10 @@ public class WarehouseBoss implements ActionListener {
 
 		this.game = new Game2();
 		this.mapUI = new LevelMap(6, 11);
+		this.player = new Player(1,1);
+		player.setPosition(player.getRow(), player.getColumn());
 
-		LevelMapController controller = new LevelMapController(game, mapUI);
+		LevelMapController controller = new LevelMapController(game, mapUI, player);
 		mapUI.setController(controller);
 		game.addObserver(controller);
 		frame.getContentPane().add(mapUI);

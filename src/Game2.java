@@ -63,6 +63,11 @@ public class Game2 extends Observable implements ActionListener {
 	public int[][] getMatrix() {
 		return matrix;
 	}
+	
+	public int[][] setMatrix(int[][] dataMatrix){
+		this.matrix = dataMatrix;
+		return this.matrix;
+	}
 
 	private int[][] copyMatrix(int[][] original) {
 		int[][] copy = new int[original.length][];

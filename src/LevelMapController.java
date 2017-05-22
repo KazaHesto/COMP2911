@@ -7,11 +7,13 @@ public class LevelMapController implements KeyListener, Observer {
 
 	private Game2 game;
 	private LevelMap mapUI;
+	private Player player;
 
-	public LevelMapController(Game2 game, LevelMap mapUI) {
+	public LevelMapController(Game2 game, LevelMap mapUI, Player player) {
 		super();
 		this.game = game;
 		this.mapUI = mapUI;
+		this.player = player;
 		game.addObserver(this);
 		this.mapUI.setGrid(this.game.getMatrix());
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
@@ -33,6 +35,26 @@ public class LevelMapController implements KeyListener, Observer {
 			game.resetGame();
 		} else if (key == KeyEvent.VK_U) {
 			game.undoMove();
+		} else if (key == KeyEvent.VK_K){
+			SaveData data = new SaveData();
+			data.matrix = game.getMatrix();
+			data.row = player.getRow();
+			data.column = player.getColumn();
+			System.out.println("Save : row = " + data.row + " column = " + data.column);
+			try {
+				ResourceManager.save(data, "1.save");
+			} catch (Exception e) {
+				System.out.println("Couldn't save: " + e.getMessage());
+			}
+		} else if (key == KeyEvent.VK_L){
+			try {
+				SaveData data = (SaveData) ResourceManager.load("1.save");
+				game.setMatrix(data.matrix);
+				System.out.println("Load : row = " + data.row + " column = " + data.column);
+				player.setPosition(data.row, data.column);
+			} catch (Exception e) {
+				System.out.println("Couldn't load save data: " + e.getMessage());
+			} 
 		}
 	}
 
