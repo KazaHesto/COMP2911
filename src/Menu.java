@@ -33,7 +33,7 @@ public class Menu extends JPanel {
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
 		g.setColor(Color.black);
-		g.drawString("WAREHOUSE BOSS", 120, 50);
+		g.drawString(Constants.GAME_TITLE, 120, 50);
 		Font fnt1 = new Font("ariel", Font.BOLD, 30);
 		g.setFont(fnt1);
 		g.drawString("Play", playButton.x + 19, playButton.y + 35);

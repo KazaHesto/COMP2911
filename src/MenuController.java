@@ -25,9 +25,8 @@ public class MenuController implements MouseListener {
 
 		if (mx >= 295 && mx <= 395) {
 			if (my >= 200 && my <= 250) {
-				JOptionPane.showMessageDialog(null,
-						"W - Forward\nA - Left\nS - Backwards\nD - Right\nR - Reset Game\nU - Undo Previous Move\nAim : To successfully move all the Warehouse Boxes onto the Green Cross",
-						"Help", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 

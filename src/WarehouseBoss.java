@@ -25,7 +25,7 @@ public class WarehouseBoss implements ActionListener {
 	public void createWindow() {
 		this.frame = new JFrame();
 		frame.setResizable(false);
-		frame.setTitle("Warehouse Boss");
+		frame.setTitle(Constants.GAME_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuBar = createMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -133,13 +133,11 @@ public class WarehouseBoss implements ActionListener {
 			System.exit(1);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(0))) {
-			JOptionPane.showMessageDialog(null,
-					"W - Forward\nA - Left\n" + "S - Backwards\nD - Right\nR - Reset Game\nU - Undo Previous Move\n"
-							+ "Aim : To successfully move all the Warehouse Boxes onto the Green Cross",
-					"Help", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, Constants.HELP_TITLE,
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(1))) {
-			JOptionPane.showMessageDialog(null, "IT'S A THING!", "About WarehouseBoss",
+			JOptionPane.showMessageDialog(null, Constants.ABOUT_TEXT, Constants.ABOUT_TITLE,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

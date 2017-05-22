@@ -154,7 +154,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		// "Title" on top of score pane
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
-		g.drawString("WAREHOUSE BOSS", 120, 50);
+		g.drawString(Constants.GAME_TITLE, 120, 50);
 		// Shows score at the top of the window
 		Font font = new Font("Veranda", Font.BOLD, 20);
 		g.setFont(font);
