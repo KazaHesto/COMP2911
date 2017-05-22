@@ -27,6 +27,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image player;
 	private Image box;
 	private Image cross;
+	private Image floor;
 	private double x;
 	private double y;
 	private int tempX;
@@ -48,6 +49,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.player = loadImage("/textures/ManU1.png.png");
 		this.box = loadImage("/textures/Box2.png.png");
 		this.cross = loadImage("/textures/Cross.png.png");
+		this.floor = loadImage("/textures/Floor.png");
 
 		this.timer = new Timer(16, this);
 		clearLevelMap();
@@ -104,6 +106,8 @@ public class LevelMap extends JPanel implements ActionListener {
 			return this.wall;
 		case 3:
 			return this.cross;
+		case 4:
+			return this.floor;
 		}
 		return null;
 	}
@@ -163,7 +167,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		// Shows level
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] < 4 && this.grid[row][col] != 1) {
+				if (this.grid[row][col] <= 4 && this.grid[row][col] != 1) {
 					g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
 							row * BOX_HEIGHT + SCORE_GUTTER, null);
 				}
