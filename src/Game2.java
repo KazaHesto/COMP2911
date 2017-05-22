@@ -20,7 +20,7 @@ public class Game2 extends Observable implements ActionListener {
 	private int[][] matrix;
 	private int[][] resetState;
 	private Stack<Integer> undoPlayer;
-	private Stack<int[][]> undoMatrix;
+	private Stack<ArrayList<Box>> undoBoxes;
 	private int numMoves;
 	private Player player;
 	private ArrayList<Box> boxes;
@@ -34,7 +34,7 @@ public class Game2 extends Observable implements ActionListener {
 		newLevel();
 		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
-		this.undoMatrix = new Stack<int[][]>();
+		this.undoBoxes = new Stack<ArrayList<Box>>();
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
 		// needs
@@ -104,7 +104,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.checkWin = false;
 		this.seconds = 0;
 		this.undoPlayer.clear();
-		this.undoMatrix.clear();
+		this.undoBoxes.clear();
 		setChanged();
 		notifyObservers();
 	}
@@ -196,7 +196,7 @@ public class Game2 extends Observable implements ActionListener {
 	 *         false if box is colliding with something
 	 */
 	private boolean moveBox(int row, int column, DIRECTION direction) {
-		this.undoMatrix.add(copyMatrix(this.matrix));
+		this.undoBoxes.add(getBoxes());
 		if (!isBox(row, column)) {
 			return true;
 		}
@@ -223,7 +223,7 @@ public class Game2 extends Observable implements ActionListener {
 				return true;
 			}
 		}
-		this.undoMatrix.pop();
+		this.undoBoxes.pop();
 		return false;
 	}
 
@@ -250,8 +250,8 @@ public class Game2 extends Observable implements ActionListener {
 			Integer column = this.undoPlayer.pop();
 			this.player.setPosition(row, column);
 		}
-		if (!this.undoMatrix.isEmpty()) {
-			this.matrix = this.undoMatrix.pop();
+		if (!this.undoBoxes.isEmpty()) {
+			this.boxes = this.undoBoxes.pop();
 		}
 		this.numMoves++;
 		setChanged();
