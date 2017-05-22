@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Stack;
 
@@ -17,37 +18,20 @@ public class Game2 extends Observable implements ActionListener {
 
 	// local stuff for the game
 	private int[][] matrix;
-	private int[][] originalState;
 	private int[][] resetState;
 	private Stack<Integer> undoPlayer;
 	private Stack<int[][]> undoMatrix;
 	private int numMoves;
 	private Player player;
+	private ArrayList<Box> boxes;
+	private ArrayList<Box> resetBoxes;
 	private Boolean checkWin;
 	private Timer gameTimer;
 	private int seconds;
 
 	// constructor
 	public Game2() {
-		this.matrix = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,4,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,2,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,2,4,3,0},
-			{0,0,0,3,4,4,4,2,4,3,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
-		};
-		this.originalState = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,4,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,4,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,4,4,3,0},
-			{0,0,0,3,4,4,4,4,4,3,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
-		};
-
-		this.resetState = copyMatrix(this.matrix);
-
+		newLevel();
 		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
 		this.undoMatrix = new Stack<int[][]>();
@@ -60,8 +44,41 @@ public class Game2 extends Observable implements ActionListener {
 		// linkedlist of crosses
 	}
 
+	private void newLevel() {
+		// Will eventually replace this with calls to LevelGenerator
+		this.matrix = new int[][] {
+			{0,0,0,0,0,0,0,0,0,0,0},
+			{0,4,4,4,4,4,4,4,4,0,0},
+			{0,0,0,0,4,0,4,4,0,0,0},
+			{0,0,0,0,4,0,4,4,4,3,0},
+			{0,0,0,3,4,4,4,4,4,3,0},
+			{0,0,0,0,0,0,0,0,0,0,0}
+		};
+		this.resetState = new int[][] {
+			{0,0,0,0,0,0,0,0,0,0,0},
+			{0,4,4,4,4,4,4,4,4,0,0},
+			{0,0,0,0,4,0,4,4,0,0,0},
+			{0,0,0,0,4,0,4,4,4,3,0},
+			{0,0,0,3,4,4,4,4,4,3,0},
+			{0,0,0,0,0,0,0,0,0,0,0}
+		};
+		this.boxes = new ArrayList<Box>();
+		this.boxes.add(new Box(2, 4));
+		this.boxes.add(new Box(3, 7));
+		this.boxes.add(new Box(4, 7));
+		this.resetBoxes = getBoxes();
+	}
+
 	public int[][] getMatrix() {
 		return matrix;
+	}
+
+	public ArrayList<Box> getBoxes() {
+		ArrayList<Box> boxes = new ArrayList<Box>();
+		for (Box box : this.boxes) {
+			boxes.add(new Box(box));
+		}
+		return boxes;
 	}
 	
 	public int[][] setMatrix(int[][] dataMatrix){
@@ -82,6 +99,8 @@ public class Game2 extends Observable implements ActionListener {
 		this.numMoves = 0;
 		this.player.setPosition(1, 1);
 		this.matrix = copyMatrix(this.resetState);
+		this.boxes = this.resetBoxes;
+		this.resetBoxes = getBoxes();
 		this.checkWin = false;
 		this.seconds = 0;
 		this.undoPlayer.clear();
@@ -156,7 +175,12 @@ public class Game2 extends Observable implements ActionListener {
 	 * @return
 	 */
 	private boolean isBox(int row, int column) {
-		return matrix[row][column] == BOX;
+		for (Box box : this.boxes) {
+			if (box.getRow() == row && box.getColumn() == column) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -179,32 +203,37 @@ public class Game2 extends Observable implements ActionListener {
 		if (direction == DIRECTION.UP) {
 			// Check if move is legal
 			if (!isObstructed(row - 1, column)) {
-				this.matrix[row][column] = this.originalState[row][column];
-				this.matrix[row - 1][column] = BOX;
+				getBox(row, column).setPosition(row - 1, column);
 				return true;
 			}
 		} else if (direction == DIRECTION.DOWN) {
 			if (!isObstructed(row + 1, column)) {
-				this.matrix[row][column] = this.originalState[row][column];
-				this.matrix[row + 1][column] = BOX;
+				getBox(row, column).setPosition(row + 1, column);
 				return true;
 			}
 		} else if (direction == DIRECTION.LEFT) {
 			if (!isObstructed(row, column - 1)) {
-				this.matrix[row][column] = this.originalState[row][column];
-				this.matrix[row][column - 1] = BOX;
+				getBox(row, column).setPosition(row, column - 1);
 				return true;
 			}
 
 		} else if (direction == DIRECTION.RIGHT) {
 			if (!isObstructed(row, column + 1)) {
-				this.matrix[row][column] = this.originalState[row][column];
-				this.matrix[row][column + 1] = BOX;
+				getBox(row, column).setPosition(row, column + 1);
 				return true;
 			}
 		}
 		this.undoMatrix.pop();
 		return false;
+	}
+
+	private Box getBox(int row, int column) {
+		for (Box box : this.boxes) {
+			if (box.getRow() == row && box.getColumn() == column) {
+				return box;
+			}
+		}
+		return null;
 	}
 
 	private void movePlayer(int row, int column) {
@@ -232,9 +261,9 @@ public class Game2 extends Observable implements ActionListener {
 	private void checkWin() {
 		// check if crosses are present in level
 		this.checkWin = true;
-		for (int i = 0; i < this.matrix.length; i++) {
-			for (int j = 0; j < this.matrix[i].length; j++) {
-				if (this.matrix[i][j] == CROSS) {
+		for (int row = 0; row < this.matrix.length; row++) {
+			for (int column = 0; column < this.matrix[row].length; column++) {
+				if (this.matrix[row][column] == CROSS && !isBox(row, column)) {
 					this.checkWin = false;
 				}
 			}

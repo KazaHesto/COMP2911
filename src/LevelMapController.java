@@ -17,6 +17,7 @@ public class LevelMapController implements KeyListener, Observer {
 		game.addObserver(this);
 		this.mapUI.setGrid(this.game.getMatrix());
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
+		this.mapUI.setBoxPositions(this.game.getBoxes());
 		this.game.addObserver(this);
 	}
 
@@ -70,6 +71,7 @@ public class LevelMapController implements KeyListener, Observer {
 	public void update(Observable arg0, Object arg1) {
 		this.mapUI.setGrid(this.game.getMatrix());
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
+		this.mapUI.setBoxPositions(this.game.getBoxes());
 		this.mapUI.setNumMoves(this.game.getNumMoves());
 		this.mapUI.updateTime(this.game.getTime());
 		this.mapUI.repaint();
