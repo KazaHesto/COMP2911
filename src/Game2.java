@@ -211,7 +211,7 @@ public class Game2 extends Observable implements ActionListener {
 	 * @return Returns true if there exists a box or wall, false otherwise.
 	 */
 	private boolean isObstructed(int row, int column) {
-		return this.matrix[row][column] == BOX || matrix[row][column] == WALL;
+		return isBox(row, column) || matrix[row][column] == WALL;
 	}
 
 	/**
