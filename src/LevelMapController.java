@@ -7,13 +7,11 @@ public class LevelMapController implements KeyListener, Observer {
 
 	private Game2 game;
 	private LevelMap mapUI;
-	private Player player;
 
-	public LevelMapController(Game2 game, LevelMap mapUI, Player player) {
+	public LevelMapController(Game2 game, LevelMap mapUI) {
 		super();
 		this.game = game;
 		this.mapUI = mapUI;
-		this.player = player;
 		this.game.addObserver(this);
 		initLevelMap();
 	}
@@ -36,26 +34,6 @@ public class LevelMapController implements KeyListener, Observer {
 			this.game.update('S');
 		} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
 			this.game.update('D');
-		} else if (key == KeyEvent.VK_K){
-			SaveData data = new SaveData();
-			data.matrix = game.getMatrix();
-			data.row = player.getRow();
-			data.column = player.getColumn();
-			System.out.println("Save : row = " + data.row + " column = " + data.column);
-			try {
-				ResourceManager.save(data, "1.save");
-			} catch (Exception e) {
-				System.out.println("Couldn't save: " + e.getMessage());
-			}
-		} else if (key == KeyEvent.VK_L){
-			try {
-				SaveData data = (SaveData) ResourceManager.load("1.save");
-				game.setMatrix(data.matrix);
-				System.out.println("Load : row = " + data.row + " column = " + data.column);
-				player.setPosition(data.row, data.column);
-			} catch (Exception e) {
-				System.out.println("Couldn't load save data: " + e.getMessage());
-			} 
 		}
 	}
 

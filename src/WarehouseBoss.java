@@ -61,7 +61,7 @@ public class WarehouseBoss implements ActionListener {
 		this.player = new Player(1,1);
 		player.setPosition(player.getRow(), player.getColumn());
 
-		LevelMapController controller = new LevelMapController(game, mapUI, player);
+		LevelMapController controller = new LevelMapController(game, mapUI);
 		mapUI.setController(controller);
 		game.addObserver(controller);
 		frame.getContentPane().add(mapUI);
@@ -139,10 +139,27 @@ public class WarehouseBoss implements ActionListener {
 			initGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(1))) {
-			// put the load stuff here
+			try {
+				SaveData data = (SaveData) ResourceManager.load("1.save");
+				this.game.setGame(data.matrix,data.resetState, data.row, data.column, data.direction,data.undoPlayer,
+						          data.gameTimer, data.seconds, data.boxes, data.undoBoxes, data.resetBoxes);
+			} catch (Exception ex) {
+				System.out.println("Couldn't load save data: " + ex.getMessage());
+			} 
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(2))) {
-			// Put the save stuff here
+			SaveData data = new SaveData();
+			data.matrix = this.game.getMatrix();
+			data.resetState = this.game.getResetState();
+			data.row = this.game.getPlayerRow();
+			data.column = this.game.getPlayerColumn();
+			data.direction = this.game.getPlayerDirection();
+			data.undoPlayer = this.game.getUndoPlayer();
+			data.gameTimer = this.game.getGameTimer();
+			data.seconds = this.game.getSeconds();
+			data.boxes = this.game.getBoxes();
+			data.undoBoxes = this.game.getUndoBoxes();
+			data.resetBoxes = this.game.getResetBoxes();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(4))) {
 			this.game.undoMove();

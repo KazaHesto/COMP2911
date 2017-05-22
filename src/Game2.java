@@ -66,14 +66,29 @@ public class Game2 extends Observable implements ActionListener {
 		this.boxes.add(new Box(2, 4));
 		this.boxes.add(new Box(3, 7));
 		this.boxes.add(new Box(4, 7));
-		this.resetBoxes = getBoxes();
+		this.resetBoxes = copyBoxes();
+	}
+	
+	public void setGame(int[][] matrix, int[][] resetState, int row, int column, int direction,
+						Stack<Integer> undoPlayer, Timer gameTimer, int seconds, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
+						ArrayList<Box> resetBoxes){
+		this.matrix = matrix;
+		this.resetState = resetState;
+		this.player.setPosition(row, column);
+		this.player.setDirection(direction);
+		this.undoPlayer = undoPlayer;
+		this.gameTimer = gameTimer;
+		this.seconds = seconds;
+		this.boxes = boxes;
+		this.undoBoxes = undoBoxes;
+		this.resetBoxes = resetBoxes;
 	}
 
 	public int[][] getMatrix() {
 		return matrix;
 	}
 
-	public ArrayList<Box> getBoxes() {
+	public ArrayList<Box> copyBoxes() {
 		ArrayList<Box> boxes = new ArrayList<Box>();
 		for (Box box : this.boxes) {
 			boxes.add(new Box(box));
@@ -92,6 +107,38 @@ public class Game2 extends Observable implements ActionListener {
 			copy[i] = original[i].clone();
 		}
 		return copy;
+	}
+	
+	public int[][] getResetState(){
+		return this.resetState;
+	}
+	
+	public Player getPlayer(){
+		return this.player;
+	}
+	
+	public Stack<Integer> getUndoPlayer(){
+		return this.undoPlayer;
+	}
+	
+	public Timer getGameTimer(){
+		return this.gameTimer;
+	}
+	
+	public int getSeconds(){
+		return this.seconds;
+	}
+	
+	public ArrayList<Box> getBoxes(){
+		return this.boxes;
+	}
+	
+	public Stack<ArrayList<Box>> getUndoBoxes(){
+		return this.undoBoxes;
+	}
+	
+	public ArrayList<Box> getResetBoxes(){
+		return this.resetBoxes;
 	}
 
 	// method to reset game level when R is pressed
