@@ -50,6 +50,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.cross = loadImage("/textures/Cross.png.png");
 
 		this.timer = new Timer(16, this);
+		clearLevelMap();
+	}
+
+	public void clearLevelMap() {
 		this.numMoves = 0;
 		this.seconds = 0;
 

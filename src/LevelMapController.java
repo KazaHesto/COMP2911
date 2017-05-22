@@ -14,11 +14,15 @@ public class LevelMapController implements KeyListener, Observer {
 		this.game = game;
 		this.mapUI = mapUI;
 		this.player = player;
-		game.addObserver(this);
+		this.game.addObserver(this);
+		initLevelMap();
+	}
+
+	private void initLevelMap() {
+		this.mapUI.clearLevelMap();
 		this.mapUI.setGrid(this.game.getMatrix());
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
 		this.mapUI.setBoxPositions(this.game.getBoxes());
-		this.game.addObserver(this);
 	}
 
 	@Override
@@ -81,6 +85,7 @@ public class LevelMapController implements KeyListener, Observer {
 				// next level stuff
 			} else if (option == 2) {
 				this.game.resetGame();
+				initLevelMap();
 			}
 		}
 	}
