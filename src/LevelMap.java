@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,6 +34,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Timer timer;
 	private int numMoves;
 	private int seconds;
+	private ArrayList<Box> boxes;
 
 	public LevelMap(int rows, int columns) {
 		super();
@@ -52,6 +55,7 @@ public class LevelMap extends JPanel implements ActionListener {
 
 		this.x = -1;
 		this.y = -1;
+		this.boxes = new ArrayList<Box>();
 	}
 
 	// Updates the grid shown in the ui
@@ -60,6 +64,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
+	}
+
+	public void setBoxPositions(ArrayList<Box> boxes) {
+		this.boxes = boxes;
 	}
 
 	public void setNumMoves(int numMoves) {
@@ -158,9 +166,14 @@ public class LevelMap extends JPanel implements ActionListener {
 							row * BOX_HEIGHT + SCORE_GUTTER, null);
 				}
 			}
-			g.drawImage(this.player, (int) (this.x * BOX_WIDTH),
-					(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 		}
+		// Draws boxes
+		for (Box box : this.boxes) {
+			g.drawImage(this.box, (int) (box.getColumn() * BOX_WIDTH),
+					(int) (box.getRow() * BOX_HEIGHT + SCORE_GUTTER), null);
+		}
+		g.drawImage(this.player, (int) (this.x * BOX_WIDTH),
+				(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 	}
 
 	// Sets what happens when the timer changes
