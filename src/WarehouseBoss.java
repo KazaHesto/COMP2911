@@ -83,6 +83,14 @@ public class WarehouseBoss implements ActionListener {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke("F2"));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+		menuItem = new JMenuItem("Load Game", KeyEvent.VK_L);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
+		menuItem = new JMenuItem("Save Game", KeyEvent.VK_S);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 		menu.addSeparator();
 		menuItem = new JMenuItem("Undo", KeyEvent.VK_U);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
@@ -113,12 +121,16 @@ public class WarehouseBoss implements ActionListener {
 
 	// enables game related menubar items, such as undo
 	private void gameMenuBar() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(4).setEnabled(true);
 	}
 
 	// undo gameMenuBar()
 	private void titleMenuBar() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
 	}
 
 	@Override
@@ -126,10 +138,19 @@ public class WarehouseBoss implements ActionListener {
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(0))) {
 			initGame();
 		}
+		if (e.getSource().equals(menuBar.getMenu(0).getItem(1))) {
+			// put the load stuff here
+		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(2))) {
+			// Put the save stuff here
+		}
+		if (e.getSource().equals(menuBar.getMenu(0).getItem(4))) {
 			this.game.undoMove();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(5))) {
+			// put options stuff here
+		}
+		if (e.getSource().equals(menuBar.getMenu(0).getItem(7))) {
 			System.exit(1);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(0))) {
