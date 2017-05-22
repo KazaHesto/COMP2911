@@ -1,5 +1,5 @@
 
-public class Box {
+public class Box implements java.io.Serializable {
 	private int row;
 	private int column;
 
