@@ -160,7 +160,15 @@ public class WarehouseBoss implements ActionListener {
 			data.boxes = this.game.getBoxes();
 			data.undoBoxes = this.game.getUndoBoxes();
 			data.resetBoxes = this.game.getResetBoxes();
+			
+			try {
+				ResourceManager.save(data, "1.save");
+			} catch (Exception ex) {
+				System.out.println("Couldn't save: " + ex.getMessage());
+			} 
 		}
+		
+		
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(4))) {
 			this.game.undoMove();
 		}
