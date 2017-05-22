@@ -16,11 +16,13 @@ public class LevelMapController implements KeyListener, Observer {
 		initLevelMap();
 	}
 
-	private void initLevelMap() {
+	public void initLevelMap() {
 		this.mapUI.clearLevelMap();
 		this.mapUI.setGrid(this.game.getMatrix());
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
 		this.mapUI.setBoxPositions(this.game.getBoxes());
+		this.mapUI.setNumMoves(this.game.getNumMoves());
+		this.mapUI.updateTime(this.game.getTime());
 	}
 
 	@Override

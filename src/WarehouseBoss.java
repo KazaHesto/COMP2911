@@ -18,6 +18,7 @@ public class WarehouseBoss implements ActionListener {
 	private JFrame frame;
 	private Game2 game;
 	private LevelMap mapUI;
+	private LevelMapController mapController;
 	private JMenuBar menuBar;
 	private Menu menu;
 	private Player player;
@@ -61,9 +62,9 @@ public class WarehouseBoss implements ActionListener {
 		this.player = new Player(1,1);
 		player.setPosition(player.getRow(), player.getColumn());
 
-		LevelMapController controller = new LevelMapController(game, mapUI);
-		mapUI.setController(controller);
-		game.addObserver(controller);
+		this.mapController = new LevelMapController(game, mapUI);
+		mapUI.setController(mapController);
+		game.addObserver(mapController);
 		frame.getContentPane().add(mapUI);
 		mapUI.requestFocusInWindow();
 
@@ -143,6 +144,8 @@ public class WarehouseBoss implements ActionListener {
 				SaveData data = (SaveData) ResourceManager.load("1.save");
 				this.game.setGame(data.matrix,data.resetState, data.row, data.column, data.direction,data.undoPlayer,
 						          data.gameTimer, data.seconds, data.boxes, data.undoBoxes, data.resetBoxes);
+				this.mapController.initLevelMap();
+				this.mapUI.repaint();
 			} catch (Exception ex) {
 				System.out.println("Couldn't load save data: " + ex.getMessage());
 			} 
