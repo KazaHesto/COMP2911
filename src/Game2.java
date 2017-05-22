@@ -95,26 +95,30 @@ public class Game2 extends Observable implements ActionListener {
 			this.player.setDirection(0);
 			// Move player if they are not obstructed, otherwise check for a box
 			if (!isObstructed(row - 1, column) || isBox(row - 1, column)) {
-				moveBox(row - 1, column, DIRECTION.UP);
-				movePlayer(row - 1, column);
+				if (moveBox(row - 1, column, DIRECTION.UP)) {
+					movePlayer(row - 1, column);
+				}
 			}
 		} else if (keyPress == 'A') {
 			this.player.setDirection(270);
 			if (!isObstructed(row, column - 1) || isBox(row, column - 1)) {
-				moveBox(row, column - 1, DIRECTION.LEFT);
-				movePlayer(row, column - 1);
+				if (moveBox(row, column - 1, DIRECTION.LEFT)) {
+					movePlayer(row, column - 1);
+				}
 			}
 		} else if (keyPress == 'S') {
 			this.player.setDirection(180);
 			if (!isObstructed(row + 1, column) || isBox(row + 1, column)) {
-				moveBox(row + 1, column, DIRECTION.DOWN);
-				movePlayer(row + 1, column);
+				if (moveBox(row + 1, column, DIRECTION.DOWN)) {
+					movePlayer(row + 1, column);
+				}
 			}
 		} else if (keyPress == 'D') {
 			this.player.setDirection(90);
 			if (!isObstructed(row, column + 1) || isBox(row, column + 1)) {
-				moveBox(row, column + 1, DIRECTION.RIGHT);
-				movePlayer(row, column + 1);
+				if (moveBox(row, column + 1, DIRECTION.RIGHT)) {
+					movePlayer(row, column + 1);
+				}
 			}
 		}
 		// Start the game timer on the first move
@@ -159,43 +163,46 @@ public class Game2 extends Observable implements ActionListener {
 	 *            row coordinate of box
 	 * @param direction
 	 *            direction of box to move in
-	 * @return true if successful, false if box is colliding with something
+	 * @return true if successful or no box exists at the specified location,
+	 *         false if box is colliding with something
 	 */
-	private void moveBox(int row, int column, DIRECTION direction) {
+	private boolean moveBox(int row, int column, DIRECTION direction) {
 		this.undoMatrix.add(copyMatrix(this.matrix));
 		if (!isBox(row, column)) {
-			return;
+			return true;
 		}
 		if (direction == DIRECTION.UP) {
 			// Check if move is legal
 			if (!isObstructed(row - 1, column)) {
 				this.matrix[row][column] = this.originalState[row][column];
 				this.matrix[row - 1][column] = BOX;
-				return;
+				return true;
 			}
 		} else if (direction == DIRECTION.DOWN) {
 			if (!isObstructed(row + 1, column)) {
 				this.matrix[row][column] = this.originalState[row][column];
 				this.matrix[row + 1][column] = BOX;
-				return;
+				return true;
 			}
 		} else if (direction == DIRECTION.LEFT) {
 			if (!isObstructed(row, column - 1)) {
 				this.matrix[row][column] = this.originalState[row][column];
 				this.matrix[row][column - 1] = BOX;
-				return;
+				return true;
 			}
 
 		} else if (direction == DIRECTION.RIGHT) {
 			if (!isObstructed(row, column + 1)) {
 				this.matrix[row][column] = this.originalState[row][column];
 				this.matrix[row][column + 1] = BOX;
-				return;
+				return true;
 			}
 		}
+		this.undoMatrix.pop();
+		return false;
 	}
 
-	public void movePlayer(int row, int column) {
+	private void movePlayer(int row, int column) {
 		this.undoPlayer.push(player.getColumn());
 		this.undoPlayer.push(player.getRow());
 		this.player.setPosition(row, column);
