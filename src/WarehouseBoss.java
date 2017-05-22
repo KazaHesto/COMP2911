@@ -1,3 +1,4 @@
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import java.awt.Component;
@@ -12,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class WarehouseBoss implements ActionListener {
 
@@ -45,21 +47,25 @@ public class WarehouseBoss implements ActionListener {
 		menu.setController(controller);
 		frame.getContentPane().add(menu);
 
-		titleMenuBar();
+		hideGameOptions();
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 
 	public void initGame() {
+		this.game = new Game2();
+		showGame();
+	}
+
+	private void showGame() {
 		// Clears all the items currently on the window (if there are any)
 		for (Component component : frame.getContentPane().getComponents()) {
 			frame.getContentPane().remove(component);
 		}
 
-		this.game = new Game2();
 		this.mapUI = new LevelMap(6, 11);
-		this.player = new Player(1,1);
+		this.player = new Player(1, 1);
 		player.setPosition(player.getRow(), player.getColumn());
 
 		this.mapController = new LevelMapController(game, mapUI);
@@ -68,7 +74,7 @@ public class WarehouseBoss implements ActionListener {
 		frame.getContentPane().add(mapUI);
 		mapUI.requestFocusInWindow();
 
-		gameMenuBar();
+		showGameOptions();
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -89,7 +95,7 @@ public class WarehouseBoss implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		menuItem = new JMenuItem("Save Game", KeyEvent.VK_S);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		menu.addSeparator();
@@ -121,17 +127,66 @@ public class WarehouseBoss implements ActionListener {
 	}
 
 	// enables game related menubar items, such as undo
-	private void gameMenuBar() {
-		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
+	private void showGameOptions() {
 		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(true);
 	}
 
 	// undo gameMenuBar()
-	private void titleMenuBar() {
-		this.menuBar.getMenu(0).getItem(1).setEnabled(false);
+	private void hideGameOptions() {
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
+	}
+
+	private void saveGame() {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "save");
+		chooser.setFileFilter(filter);
+
+		int returnVal = chooser.showSaveDialog(null);
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			System.out.println("Failed to save");
+			return;
+		}
+
+		SaveData data = new SaveData();
+		data.matrix = this.game.getMatrix();
+		data.resetState = this.game.getResetState();
+		data.row = this.game.getPlayerRow();
+		data.column = this.game.getPlayerColumn();
+		data.direction = this.game.getPlayerDirection();
+		data.undoPlayer = this.game.getUndoPlayer();
+		data.gameTimer = this.game.getGameTimer();
+		data.seconds = this.game.getSeconds();
+		data.boxes = this.game.getBoxes();
+		data.undoBoxes = this.game.getUndoBoxes();
+		data.resetBoxes = this.game.getResetBoxes();
+
+		try {
+			ResourceManager.save(data, chooser.getSelectedFile());
+		} catch (Exception ex) {
+			System.out.println("Couldn't save: " + ex.getMessage());
+		}
+	}
+
+	private void loadGame() {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "save");
+		chooser.setFileFilter(filter);
+
+		int returnVal = chooser.showOpenDialog(null);
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			System.out.println("Failed to load");
+			return;
+		}
+		try {
+			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
+			this.game = new Game2(data.matrix, data.resetState, data.row, data.column, data.direction, data.undoPlayer,
+					data.gameTimer, data.seconds, data.boxes, data.undoBoxes, data.resetBoxes);
+			showGame();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -140,38 +195,11 @@ public class WarehouseBoss implements ActionListener {
 			initGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(1))) {
-			try {
-				SaveData data = (SaveData) ResourceManager.load("1.save");
-				this.game.setGame(data.matrix,data.resetState, data.row, data.column, data.direction,data.undoPlayer,
-						          data.gameTimer, data.seconds, data.boxes, data.undoBoxes, data.resetBoxes);
-				this.mapController.initLevelMap();
-				this.mapUI.repaint();
-			} catch (Exception ex) {
-				System.out.println("Couldn't load save data: " + ex.getMessage());
-			} 
+			loadGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(2))) {
-			SaveData data = new SaveData();
-			data.matrix = this.game.getMatrix();
-			data.resetState = this.game.getResetState();
-			data.row = this.game.getPlayerRow();
-			data.column = this.game.getPlayerColumn();
-			data.direction = this.game.getPlayerDirection();
-			data.undoPlayer = this.game.getUndoPlayer();
-			data.gameTimer = this.game.getGameTimer();
-			data.seconds = this.game.getSeconds();
-			data.boxes = this.game.getBoxes();
-			data.undoBoxes = this.game.getUndoBoxes();
-			data.resetBoxes = this.game.getResetBoxes();
-			
-			try {
-				ResourceManager.save(data, "1.save");
-			} catch (Exception ex) {
-				System.out.println("Couldn't save: " + ex.getMessage());
-			} 
+			saveGame();
 		}
-		
-		
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(4))) {
 			this.game.undoMove();
 		}
@@ -200,9 +228,9 @@ public class WarehouseBoss implements ActionListener {
 		}
 		WarehouseBoss ex = new WarehouseBoss();
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	ex.createWindow();
-            }
-        });
+			public void run() {
+				ex.createWindow();
+			}
+		});
 	}
 }
