@@ -102,8 +102,6 @@ public class LevelMap extends JPanel implements ActionListener {
 		switch (z) {
 		case 0:
 			return this.wall;
-		case 2:
-			return this.box;
 		case 3:
 			return this.cross;
 		}
@@ -173,8 +171,8 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		// Draws boxes
 		for (Box box : this.boxes) {
-			g.drawImage(this.box, (int) (box.getColumn() * BOX_WIDTH),
-					(int) (box.getRow() * BOX_HEIGHT + SCORE_GUTTER), null);
+			g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
+					box.getRow() * BOX_HEIGHT + SCORE_GUTTER, null);
 		}
 		g.drawImage(this.player, (int) (this.x * BOX_WIDTH),
 				(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
