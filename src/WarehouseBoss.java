@@ -23,7 +23,6 @@ public class WarehouseBoss implements ActionListener {
 	private LevelMapController mapController;
 	private JMenuBar menuBar;
 	private Menu menu;
-	private Player player;
 
 	public void createWindow() {
 		this.frame = new JFrame();
@@ -65,8 +64,6 @@ public class WarehouseBoss implements ActionListener {
 		}
 
 		this.mapUI = new LevelMap(6, 11);
-		this.player = new Player(1, 1);
-		player.setPosition(player.getRow(), player.getColumn());
 
 		this.mapController = new LevelMapController(game, mapUI);
 		mapUI.setController(mapController);
@@ -149,23 +146,12 @@ public class WarehouseBoss implements ActionListener {
 			return;
 		}
 
-		SaveData data = new SaveData();
-		data.matrix = this.game.getMatrix();
-		data.resetState = this.game.getResetState();
-		data.row = this.game.getPlayerRow();
-		data.column = this.game.getPlayerColumn();
-		data.direction = this.game.getPlayerDirection();
-		data.undoPlayer = this.game.getUndoPlayer();
-		data.gameTimer = this.game.getGameTimer();
-		data.seconds = this.game.getSeconds();
-		data.boxes = this.game.getBoxes();
-		data.undoBoxes = this.game.getUndoBoxes();
-		data.resetBoxes = this.game.getResetBoxes();
+		SaveData data = this.game.getState();
 
 		try {
 			ResourceManager.save(data, chooser.getSelectedFile());
-		} catch (Exception ex) {
-			System.out.println("Couldn't save: " + ex.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -182,7 +168,7 @@ public class WarehouseBoss implements ActionListener {
 		try {
 			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
 			this.game = new Game2(data.matrix, data.resetState, data.row, data.column, data.direction, data.undoPlayer,
-					data.gameTimer, data.seconds, data.boxes, data.undoBoxes, data.resetBoxes);
+					data.seconds, data.numMoves, data.boxes, data.undoBoxes, data.resetBoxes);
 			showGame();
 		} catch (Exception e) {
 			e.printStackTrace();

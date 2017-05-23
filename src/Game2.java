@@ -44,15 +44,16 @@ public class Game2 extends Observable implements ActionListener {
 	}
 
 	public Game2(int[][] matrix, int[][] resetState, int row, int column, int direction, Stack<Integer> undoPlayer,
-			Timer gameTimer, int seconds, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
+			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
 			ArrayList<Box> resetBoxes) {
 		this.matrix = matrix;
 		this.resetState = resetState;
 		this.player = new Player(row, column);
 		this.player.setDirection(direction);
 		this.undoPlayer = undoPlayer;
-		this.gameTimer = gameTimer;
+		this.gameTimer = new Timer(1000, this);
 		this.seconds = seconds;
+		this.numMoves = numMoves;
 		this.boxes = boxes;
 		this.undoBoxes = undoBoxes;
 		this.resetBoxes = resetBoxes;
@@ -337,17 +338,14 @@ public class Game2 extends Observable implements ActionListener {
 		return this.numMoves;
 	}
 
-	public void updateMoves(int update) {
-		this.numMoves = update;
-	}
-
-	public int getTime() {
-		return this.seconds;
+	public SaveData getState() {
+		return new SaveData(this.matrix, this.resetState, getPlayerRow(), getPlayerColumn(), getPlayerDirection(),
+				this.undoPlayer, this.seconds, this.numMoves, this.boxes, this.undoBoxes, this.resetBoxes);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		seconds++;
+		this.seconds++;
 		setChanged();
 		notifyObservers();
 	}

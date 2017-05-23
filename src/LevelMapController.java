@@ -22,7 +22,7 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
 		this.mapUI.setBoxPositions(this.game.getBoxes());
 		this.mapUI.setNumMoves(this.game.getNumMoves());
-		this.mapUI.updateTime(this.game.getTime());
+		this.mapUI.updateTime(this.game.getSeconds());
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI.setPlayerPosition(this.game.getPlayerColumn(), this.game.getPlayerRow());
 		this.mapUI.setBoxPositions(this.game.getBoxes());
 		this.mapUI.setNumMoves(this.game.getNumMoves());
-		this.mapUI.updateTime(this.game.getTime());
+		this.mapUI.updateTime(this.game.getSeconds());
 		this.mapUI.repaint();
 		if (this.game.isWin()) {
 			int option = this.mapUI.showWin();
