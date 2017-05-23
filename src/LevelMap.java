@@ -26,7 +26,9 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image wall;
 	private Image player;
 	private Image box;
+	private Image boxCross;
 	private Image boxSide;
+	private Image boxSideCross;
 	private Image cross;
 	private Image floor;
 	private Image wallSide;
@@ -54,6 +56,8 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.player = loadImage("/textures/Man.png");
 		this.boxSide = loadImage("/textures/BoxSide.png");
 		this.box = loadImage("/textures/BoxTop.png");
+		this.boxSideCross = loadImage("/textures/BoxSideCross.png");
+		this.boxCross = loadImage("/textures/BoxTopCross.png");
 		this.cross = loadImage("/textures/Cross.png");
 		this.floor = loadImage("/textures/Floor.png");
 		this.wallSide = loadImage("/textures/WallSide.png");
@@ -194,14 +198,22 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		// Draws box sides
 		for (Box box : this.boxes) {
-			g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+			if (this.grid[box.getRow()][box.getColumn()] == 3) {
+				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+			} else {
+				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+			}
 		}
 
 		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
 
 		// Draws box tops
 		for (Box box : this.boxes) {
-			g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+			if (this.grid[box.getRow()][box.getColumn()] == 3) {
+				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+			} else {
+				g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);	
+			}
 		}
 
 		// top wall layer
