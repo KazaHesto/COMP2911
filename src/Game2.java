@@ -56,6 +56,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.boxes = boxes;
 		this.undoBoxes = undoBoxes;
 		this.resetBoxes = resetBoxes;
+		this.checkWin = false;
 	}
 
 	private void newLevel() {
