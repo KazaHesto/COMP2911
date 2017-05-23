@@ -30,6 +30,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image cross;
 	private Image floor;
 	private Image wallSide;
+	private Image wallSideCross;
 	private Image halfWallTop;
 	private double x;
 	private double y;
@@ -56,6 +57,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.cross = loadImage("/textures/Cross.png.png");
 		this.floor = loadImage("/textures/Floor.png");
 		this.wallSide = loadImage("/textures/WallSide.png");
+		this.wallSideCross = loadImage("/textures/WallSideCross.png");
 		this.halfWallTop = loadImage("/textures/HalfWallTop.png");
 
 		this.timer = new Timer(16, this);
@@ -179,20 +181,20 @@ public class LevelMap extends JPanel implements ActionListener {
 						g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
 					}
 					if (this.grid[row][col] == 3 && row != 0 && this.grid[row - 1][col] == 0) {
-						g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
+						g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
 					}
 					if (this.grid[row][col] == 4) {
-						g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.75) * BOX_HEIGHT + SCORE_GUTTER), null);
+						g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row+0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 					}
 					if (this.grid[row][col] == 3) {
-						g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.75) * BOX_HEIGHT + SCORE_GUTTER), null);
+						g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row+0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 					}
 				}
 			}
 		}
 		// Draws box sides
 		for (Box box : this.boxes) {
-			g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.92) * BOX_HEIGHT + SCORE_GUTTER), null);
+			g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 		}
 
 		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), null);
@@ -207,7 +209,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		// Draws box tops
 		for (Box box : this.boxes) {
-			g.drawImage(this.box, box.getColumn() * BOX_WIDTH, box.getRow() * BOX_HEIGHT + SCORE_GUTTER, null);
+			g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.2) * BOX_HEIGHT + SCORE_GUTTER), null);
 		}
 	}
 
