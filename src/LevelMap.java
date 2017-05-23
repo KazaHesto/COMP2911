@@ -26,9 +26,11 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image wall;
 	private Image player;
 	private Image box;
+	private Image boxSide;
 	private Image cross;
 	private Image floor;
 	private Image wallSide;
+	private Image halfWallTop;
 	private double x;
 	private double y;
 	private int tempX;
@@ -49,10 +51,12 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.wall = loadImage("/textures/WallTop.png");
 		this.player = loadImage("/textures/ManU1.png.png");
 		this.player = loadImage("/textures/Man.png");
-		this.box = loadImage("/textures/BoxSide.png");
+		this.boxSide = loadImage("/textures/BoxSide.png");
+		this.box = loadImage("/textures/BoxTop.png");
 		this.cross = loadImage("/textures/Cross.png.png");
 		this.floor = loadImage("/textures/Floor.png");
 		this.wallSide = loadImage("/textures/WallSide.png");
+		this.halfWallTop = loadImage("/textures/HalfWallTop.png");
 
 		this.timer = new Timer(16, this);
 		clearLevelMap();
@@ -167,41 +171,44 @@ public class LevelMap extends JPanel implements ActionListener {
 		g.drawString("Move count: " + this.numMoves, 5, 80);
 		g.drawString("Timer: " + this.seconds, 5, 110);
 
-		// Shows level
-		for (int row = this.grid.length - 1; row >= 0; row--) {
+		// Floor and side wall layer
+		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] <= 4 && this.grid[row][col] != 1) {
-					g.drawImage(changeImage(this.grid[row][col]), col * BOX_WIDTH,
-								row * BOX_HEIGHT + SCORE_GUTTER, null);
-					if (this.grid[row][col] == 0 && row < this.rows - 2 && this.grid[row+1][col] != 0) {
-						g.drawImage(this.wallSide, col * BOX_WIDTH,
-								(int) (row * BOX_HEIGHT + 0.5 * BOX_HEIGHT + SCORE_GUTTER), null);
+					if (this.grid[row][col] == 4 && row != 0 && this.grid[row - 1][col] == 0) {
+						g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
 					}
-				/*	if (this.grid[row][col] == 4 && row != 0 && this.grid[row-1][col] == 0) {
-						g.drawImage(this.wallSide, col * BOX_WIDTH,
-								(int) (row * BOX_HEIGHT - 0.5*BOX_HEIGHT + SCORE_GUTTER), null);
+					if (this.grid[row][col] == 3 && row != 0 && this.grid[row - 1][col] == 0) {
+						g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
 					}
-					if (this.grid[row][col] == 3 && row != 0 && this.grid[row-1][col] == 0) {
-						g.drawImage(this.wallSide, col * BOX_WIDTH,
-								(int) (row * BOX_HEIGHT - 0.5*BOX_HEIGHT + SCORE_GUTTER), null);
-					}*/
+					if (this.grid[row][col] == 4) {
+						g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.75) * BOX_HEIGHT + SCORE_GUTTER), null);
+					}
+					if (this.grid[row][col] == 3) {
+						g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.75) * BOX_HEIGHT + SCORE_GUTTER), null);
+					}
 				}
 			}
 		}
-		// Draws boxes
+		// Draws box sides
 		for (Box box : this.boxes) {
-			g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
-					box.getRow() * BOX_HEIGHT + SCORE_GUTTER, null);
+			g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.92) * BOX_HEIGHT + SCORE_GUTTER), null);
 		}
-	//	g.drawImage(this.player, (int) (this.x * BOX_WIDTH),
-	//			(int) (this.y * BOX_HEIGHT - 0.5 * BOX_HEIGHT + SCORE_GUTTER), null);
-		g.drawImage(this.player, (int) (this.x * BOX_WIDTH),
-				(int) (this.y * BOX_HEIGHT + SCORE_GUTTER), null);
 
-	/*	if (this.grid[(int) this.y][(int) this.x] == 0 && (int) this.y != 0 && this.grid[(int) this.y-1][(int) this.x] == 4) {
-			g.drawImage(this.wall, (int) this.x * BOX_WIDTH,
-					(int) ((int) this.y * BOX_HEIGHT - 0.5*BOX_HEIGHT + SCORE_GUTTER), null);
-		}*/
+		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), null);
+
+		// top wall layer
+		for (int row = 0; row < this.grid.length; row++) {
+			for (int col = 0; col < this.grid[row].length; col++) {
+				if (this.grid[row][col] == 0) {
+					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, null);
+				}
+			}
+		}
+		// Draws box tops
+		for (Box box : this.boxes) {
+			g.drawImage(this.box, box.getColumn() * BOX_WIDTH, box.getRow() * BOX_HEIGHT + SCORE_GUTTER, null);
+		}
 	}
 
 	// Sets what happens when the timer changes
