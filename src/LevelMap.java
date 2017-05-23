@@ -54,7 +54,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.player = loadImage("/textures/Man.png");
 		this.boxSide = loadImage("/textures/BoxSide.png");
 		this.box = loadImage("/textures/BoxTop.png");
-		this.cross = loadImage("/textures/Cross.png.png");
+		this.cross = loadImage("/textures/Cross.png");
 		this.floor = loadImage("/textures/Floor.png");
 		this.wallSide = loadImage("/textures/WallSide.png");
 		this.wallSideCross = loadImage("/textures/WallSideCross.png");
@@ -197,7 +197,12 @@ public class LevelMap extends JPanel implements ActionListener {
 			g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 		}
 
-		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), null);
+		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+
+		// Draws box tops
+		for (Box box : this.boxes) {
+			g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		}
 
 		// top wall layer
 		for (int row = 0; row < this.grid.length; row++) {
@@ -206,10 +211,6 @@ public class LevelMap extends JPanel implements ActionListener {
 					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, null);
 				}
 			}
-		}
-		// Draws box tops
-		for (Box box : this.boxes) {
-			g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.2) * BOX_HEIGHT + SCORE_GUTTER), null);
 		}
 	}
 
