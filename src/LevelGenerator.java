@@ -2,10 +2,6 @@ import java.util.Random;
 
 public class LevelGenerator {
 
-	private enum Side {
-		TOP, BOTTOM, LEFT, RIGHT
-	}
-
 	private int[][][] templates = {
 			{{5,5,5,5,5},
 			{5,4,4,4,5},
@@ -177,8 +173,24 @@ public class LevelGenerator {
 	}
 
 	private boolean isCompatible(int[][] level, int[][] template) {
-		// TODO Auto-generated method stub
-		return true;
+		for (int i = 0; i < level.length; i++) {
+			for (int j = 0; j < level[i].length; j++) {
+				if (level[i][j] == 0) {
+					for (int k = 0; k < 3; k++) {
+						if (level[i + k][j - 1] != template[k][0] && template[k][0] != 5) {
+							return false;
+						}
+					}
+					for (int k = 0; k < 3; k++) {
+						if (level[i - 1][j + k] != template[0][k] && template[0][k] != 5) {
+							return false;
+						}
+					}
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private int[][] getRandomTemplate() {
@@ -225,48 +237,6 @@ public class LevelGenerator {
 			}
 		}
 		return rotated;
-	}
-
-	private int[] getEdge(int[][] matrix, Side side) {
-		switch (side) {
-		case TOP:
-			return matrix[0].clone();
-		case BOTTOM:
-			return matrix[matrix.length - 1].clone();
-		case LEFT:
-			int[] edge1 = new int[matrix.length];
-			for (int i = 0; i < matrix.length; i++) {
-				edge1[i] = matrix[i][0];
-			}
-			return edge1;
-		case RIGHT:
-			int[] edge2 = new int[matrix.length];
-			for (int i = 0; i < matrix.length; i++) {
-				edge2[i] = matrix[i][matrix[i].length];
-			}
-			return edge2;
-		}
-		return null;
-	}
-
-	private boolean isMatching(int[] edge1, int[] edge2) {
-		if (edge1 == null || edge2 == null) {
-			return true;
-		}
-		for (int i = 0; i < edge1.length; i++) {
-			if (edge1[i] != edge2[1]) {
-				if (edge1[i] != 5 && edge2[1] != 5) {
-					for (int j = 0; j < edge1.length; j++) {
-						System.out.println(edge1[i]);
-					}
-					for (int j = 0; j < edge2.length; j++) {
-						System.out.println(edge2[i]);
-					}
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 	private void printMatrix(int[][] matrix) {
