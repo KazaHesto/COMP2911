@@ -288,6 +288,9 @@ public class Game2 extends Observable implements ActionListener {
 
 	// logic to undo move
 	public void undoMove() {
+		if(this.player.getRow() != 1 || this.player.getColumn() != 1){
+			this.numMoves++;
+		}
 		if (!this.undoPlayer.empty()) {
 			Integer row = this.undoPlayer.pop();
 			Integer column = this.undoPlayer.pop();
@@ -296,7 +299,6 @@ public class Game2 extends Observable implements ActionListener {
 		if (!this.undoBoxes.isEmpty()) {
 			this.boxes = this.undoBoxes.pop();
 		}
-		this.numMoves++;
 		setChanged();
 		notifyObservers();
 	}
