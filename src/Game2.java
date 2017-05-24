@@ -43,13 +43,12 @@ public class Game2 extends Observable implements ActionListener {
 		// linkedlist of crosses
 	}
 
-	public Game2(int[][] matrix, int[][] resetState, int row, int column, int direction, Stack<Integer> undoPlayer,
+	public Game2(int[][] matrix, int[][] resetState, Player player, Stack<Integer> undoPlayer,
 			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
 			ArrayList<Box> resetBoxes) {
 		this.matrix = matrix;
 		this.resetState = resetState;
-		this.player = new Player(row, column);
-		this.player.setDirection(direction);
+		this.player = player;
 		this.undoPlayer = undoPlayer;
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = seconds;
@@ -339,7 +338,7 @@ public class Game2 extends Observable implements ActionListener {
 	}
 
 	public SaveData getState() {
-		return new SaveData(this.matrix, this.resetState, getPlayerRow(), getPlayerColumn(), getPlayerDirection(),
+		return new SaveData(this.matrix, this.resetState, this.player,
 				this.undoPlayer, this.seconds, this.numMoves, this.boxes, this.undoBoxes, this.resetBoxes);
 	}
 

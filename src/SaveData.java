@@ -10,9 +10,7 @@ public class SaveData implements java.io.Serializable {
 	public int[][] matrix;
 	public int[][] originalState;
 	public int[][] resetState;
-	public int row;
-	public int column;
-	public int direction;
+	public Player player;
 	public Stack<Integer> undoPlayer;
 	public Stack<int[][]> undoMatrix;
 	public int seconds;
@@ -21,15 +19,13 @@ public class SaveData implements java.io.Serializable {
 	public Stack<ArrayList<Box>> undoBoxes;
 	public ArrayList<Box> resetBoxes;
 
-	public SaveData(int[][] matrix, int[][] resetState, int row, int column, int direction, Stack<Integer> undoPlayer,
+	public SaveData(int[][] matrix, int[][] resetState, Player player, Stack<Integer> undoPlayer,
 			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
 			ArrayList<Box> resetBoxes) {
 		super();
 		this.matrix = matrix;
 		this.resetState = resetState;
-		this.row = row;
-		this.column = column;
-		this.direction = direction;
+		this.player = player;
 		this.undoPlayer = undoPlayer;
 		this.seconds = seconds;
 		this.numMoves = numMoves;
