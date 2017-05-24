@@ -78,7 +78,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.matrix = gen.generateLevel(row - 2, column - 2);
 		this.resetState = copyMatrix(this.matrix);
 		this.boxes = new ArrayList<Box>();
-//		this.boxes.add(new Box(2, 4));
+		this.boxes.add(new Box(2, 4));
 //		this.boxes.add(new Box(3, 7));
 //		this.boxes.add(new Box(4, 7));
 		this.resetBoxes = getBoxes();

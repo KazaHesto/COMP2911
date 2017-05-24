@@ -1,15 +1,19 @@
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 public class LevelGenerator {
 
 	private int[][][] templates = {
+			// Tweaked (added conditions) because this made unreachable holes in the wall
 			{{5,5,5,5,5},
-			{5,4,4,4,5},
-			{5,4,4,4,5},
+			{4,4,4,4,5},
+			{4,4,4,4,5},
 			{5,4,4,4,5},
 			{5,5,5,5,5}},
 			
-			{{5,5,5,5,5},
+			// Tweaked (added conditions) because this made unreachable holes in the wall
+			{{5,5,4,4,5},
 			{5,1,4,4,5},
 			{5,4,4,4,5},
 			{5,4,4,4,5},
@@ -21,17 +25,19 @@ public class LevelGenerator {
 			{5,4,4,4,5},
 			{5,5,5,5,5}},
 			
+			// Tweaked (added conditions) because this made unreachable holes in the wall
 			{{5,5,5,5,5},
 			{5,1,1,1,5},
-			{5,4,4,4,5},
+			{4,4,4,4,5},
 			{5,4,4,4,5},
 			{5,5,5,5,5}},
 			
+			// Tweaked (added conditions) because this made unreachable holes in the wall
 			{{5,5,5,5,5},
 			{5,1,1,1,5},
 			{5,1,4,4,5},
 			{5,1,4,4,5},
-			{5,5,5,5,5}},
+			{5,5,4,4,5}},
 			
 			{{5,5,4,5,5},
 			{5,1,4,4,5},
@@ -105,6 +111,10 @@ public class LevelGenerator {
 			{5,4,4,4,5},
 			{5,4,4,5,5}}};
 
+	private int[][] level;
+	private int[] topConditions;
+	private int[] leftConditions;
+
 	/**
 	 * Generates level
 	 * 
@@ -117,7 +127,10 @@ public class LevelGenerator {
 	 * @return Returns a level grid
 	 */
 	public int[][] generateLevel(int rows, int columns) {
-		int[][] level = new int[rows + 2][columns + 2];
+		level = new int[rows + 2][columns + 2];
+		topConditions = new int[columns + 2];
+		leftConditions = new int[rows + 2];
+		// Creates a border of wall around the level
 		for (int i = 0; i < level.length; i++) {
 			for (int j = 0; j < level[i].length; j++) {
 				if (i == 0 || i == level.length - 1 || j == 0 || j == level[i].length - 1) {
@@ -127,6 +140,7 @@ public class LevelGenerator {
 		}
 		int[][] template = null;
 
+		// Each template is 3x3, so there are (row/3)*(column/3) templates to complete one level
 		for (int i = rows / 3; i > 0; i--) {
 			for (int j = columns / 3; j > 0; j--) {
 				template = getRandomTemplate();
@@ -135,10 +149,53 @@ public class LevelGenerator {
 				}
 			}
 		}
+		if (isShallow()) {
+			level = generateLevel(rows, columns);
+		}
 		// Temporary so that checkwin doesn't keep popping up when moving in the
 		// level.
-		level[0][0] = Constants.CROSS;
+		level[3][5] = Constants.CROSS;
 		return level;
+	}
+
+	/**
+	 * Returns an array with the first floor tile's coordinates
+	 * @return array with the first floor tile's coordinates
+	 */
+	private int[] getFirstFloor() {
+		int[] coord = new int[2];
+		
+		int i, j;
+		for (i = 0; i < level.length; i++) {
+			for (j = 0; j < level[i].length; j++) {
+				if (level[i][j] == Constants.FLOOR) {
+					coord[0] = i;
+					coord[1] = j;
+				}
+			}
+		}
+		
+		return coord;
+	}
+
+	private boolean isShallow() {
+		return false;
+	/*	Stack<int[]> toDo = new Stack<int[]>();
+		ArrayList<int[]> seen = new ArrayList<int[]>();
+
+		toDo.add(getFirstFloor());
+		int[] curr = null;
+		// Run a DFS to check if job locations are reachable.
+		while (!toDo.isEmpty()) {
+			curr = toDo.pop();
+			seen.add(curr);
+			for (String neighbour: map.getNeighbours(curr)) {
+				if (!seen.contains(neighbour)) {
+					toDo.push(neighbour);
+				}
+			}
+		}
+		return true;*/
 	}
 
 	/**
@@ -155,15 +212,23 @@ public class LevelGenerator {
 			return false;
 		}
 		if (isCompatible(level, template)) {
-			for (int i = 0; i < level.length; i++) {
-				for (int j = 0; j < level[i].length; j++) {
+			for (int i = 1; i <= level.length - 4; i+=3) {
+				for (int j = 1; j <= level[i].length - 4; j+=3) {
 					if (level[i][j] == 0) {
+						// Add template to level
 						for (int k = 0; k < 3; k++) {
 							for (int l = 0; l < 3; l++) {
 								int temp = template[k + 1][l + 1];
 								level[i + k][j + l] = temp;
 							}
 						}
+						// Add template to conditions
+						for (int k = 0; k < 5; k++) {
+							topConditions[j - 1 + k] = template[4][k];
+							leftConditions[i - 1 + k] = template[k][4];
+						}
+						System.out.println("=======================");
+						printMatrix(level);
 						return true;
 					}
 				}
@@ -173,19 +238,42 @@ public class LevelGenerator {
 	}
 
 	private boolean isCompatible(int[][] level, int[][] template) {
-		for (int i = 0; i < level.length; i++) {
-			for (int j = 0; j < level[i].length; j++) {
+		for (int i = 1; i <= level.length - 4; i+=3) {
+			for (int j = 1; j <= level[i].length - 4; j+=3) {
 				if (level[i][j] == 0) {
 					for (int k = 0; k < 3; k++) {
-						if (level[i + k][j - 1] != template[k][0] && template[k][0] != 5) {
+						// Checking if existing level meets template left requirements
+						if (level[i + k][j - 1] != template[k+1][0] && template[k+1][0] != 5) {
+							System.out.println("existing left fail " + k + ": " + level[i + k][j - 1]);
+							return false;
+						}
+						// Checking if template meets existing left requirements
+						if (leftConditions[i + k] != template[k + 1][1] && leftConditions[i + k] != 5 && leftConditions[i + k] != 0) {
+							System.out.println("temp left fail");
+							return false;
+						}
+						// Checking if existing level meets template left requirements
+						if (level[i - 1][j + k] != template[0][k+1] && template[0][k+1] != 5) {
+							System.out.println("existing top fail " + k + ": " + level[i - 1][j + k]);
+							return false;
+						}
+						// Checking if template meets existing left requirements
+						if (topConditions[j + k] != template[1][k + 1] && topConditions[j + k] != 5 && topConditions[j + k] != 0) {
+							System.out.println("temp top fail");
+							return false;
+						}
+						// Checks right conditions if the right-most column
+						if (j == level[i].length - 4 && template[k+1][4] != Constants.WALL && template[k+1][0] != 5) {
+							System.out.println("existing left fail " + k + ": " + level[i + k][j - 1]);
+							return false;
+						}
+						// Checks top conditions if the bottom-most row
+						if (i == level.length - 4 && template[4][k+1] != Constants.WALL && template[0][k+1] != 5) {
+							System.out.println("existing top fail " + k + ": " + level[i - 1][j + k]);
 							return false;
 						}
 					}
-					for (int k = 0; k < 3; k++) {
-						if (level[i - 1][j + k] != template[0][k] && template[0][k] != 5) {
-							return false;
-						}
-					}
+					System.out.println("Compatible");
 					return true;
 				}
 			}
@@ -246,5 +334,12 @@ public class LevelGenerator {
 			}
 			System.out.println();
 		}
+	}
+
+	private void printArray(int[] array) {
+		for (int i = 0; i < array.length; i++) {
+			System.out.print(array[i] + " ");
+		}
+		System.out.println();
 	}
 }
