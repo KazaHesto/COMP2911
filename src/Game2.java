@@ -12,9 +12,6 @@ public class Game2 extends Observable implements ActionListener {
 		UP, DOWN, LEFT, RIGHT
 	}
 
-	private final int WALL = 0;
-	private final int CROSS = 3;
-
 	// local stuff for the game
 	private int[][] matrix;
 	private int[][] resetState;
@@ -29,8 +26,8 @@ public class Game2 extends Observable implements ActionListener {
 	private int seconds;
 
 	// constructor
-	public Game2() {
-		newLevel();
+	public Game2(int row, int column) {
+		newLevel(row, column);
 		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
 		this.undoBoxes = new Stack<ArrayList<Box>>();
@@ -60,28 +57,31 @@ public class Game2 extends Observable implements ActionListener {
 		this.checkWin = false;
 	}
 
-	private void newLevel() {
+	private void newLevel(int row, int column) {
+		LevelGenerator gen = new LevelGenerator();
 		// Will eventually replace this with calls to LevelGenerator
-		this.matrix = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,4,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,4,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,4,4,3,0},
-			{0,0,0,3,4,4,4,4,4,3,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
+	/*	this.matrix = new int[][] {
+			{1,1,1,1,1,1,1,1,1,1,1},
+			{1,4,4,4,4,4,4,4,4,1,1},
+			{1,1,1,1,4,1,4,4,1,1,1},
+			{1,1,1,1,4,1,4,4,4,3,1},
+			{1,1,1,3,4,4,4,4,4,3,1},
+			{1,1,1,1,1,1,1,1,1,1,1}
 		};
 		this.resetState = new int[][] {
-			{0,0,0,0,0,0,0,0,0,0,0},
-			{0,4,4,4,4,4,4,4,4,0,0},
-			{0,0,0,0,4,0,4,4,0,0,0},
-			{0,0,0,0,4,0,4,4,4,3,0},
-			{0,0,0,3,4,4,4,4,4,3,0},
-			{0,0,0,0,0,0,0,0,0,0,0}
-		};
+			{1,1,1,1,1,1,1,1,1,1,1},
+			{1,4,4,4,4,4,4,4,4,1,1},
+			{1,1,1,1,4,1,4,4,1,1,1},
+			{1,1,1,1,4,1,4,4,4,3,1},
+			{1,1,1,3,4,4,4,4,4,3,1},
+			{1,1,1,1,1,1,1,1,1,1,1}
+		};*/
+		this.matrix = gen.generateLevel(row - 2, column - 2);
+		this.resetState = copyMatrix(this.matrix);
 		this.boxes = new ArrayList<Box>();
-		this.boxes.add(new Box(2, 4));
-		this.boxes.add(new Box(3, 7));
-		this.boxes.add(new Box(4, 7));
+//		this.boxes.add(new Box(2, 4));
+//		this.boxes.add(new Box(3, 7));
+//		this.boxes.add(new Box(4, 7));
 		this.resetBoxes = getBoxes();
 	}
 
@@ -208,7 +208,7 @@ public class Game2 extends Observable implements ActionListener {
 	 * @return Returns true if there exists a box or wall, false otherwise.
 	 */
 	private boolean isObstructed(int row, int column) {
-		return isBox(row, column) || matrix[row][column] == WALL;
+		return isBox(row, column) || matrix[row][column] == Constants.WALL;
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.checkWin = true;
 		for (int row = 0; row < this.matrix.length; row++) {
 			for (int column = 0; column < this.matrix[row].length; column++) {
-				if (this.matrix[row][column] == CROSS && !isBox(row, column)) {
+				if (this.matrix[row][column] == Constants.CROSS && !isBox(row, column)) {
 					this.checkWin = false;
 				}
 			}

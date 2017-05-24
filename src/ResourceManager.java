@@ -10,7 +10,6 @@ public class ResourceManager {
 	public static void save(Serializable data, File file) throws Exception {
 		String filePath = file.getAbsolutePath();
 		if (!filePath.endsWith(".save")) {
-		System.out.println(filePath);
 			filePath = filePath.concat(".save");
 		}
 		try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get(filePath)))) {
@@ -19,7 +18,6 @@ public class ResourceManager {
 	}
 
 	public static Object load(File file) throws Exception {
-		System.out.println(file.getAbsolutePath());
 		try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Paths.get(file.getAbsolutePath())))) {
 			return ois.readObject();
 		}

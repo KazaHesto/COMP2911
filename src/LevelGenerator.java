@@ -6,12 +6,6 @@ public class LevelGenerator {
 		TOP, BOTTOM, LEFT, RIGHT
 	}
 
-	private final int WALL = 1;
-//	private final int PLAYER = 1;
-	private final int BOX = 2;
-	private final int CROSS = 3;
-	private final int EMPTY = 4;
-
 	private int[][][] templates = {
 			{{5,5,5,5,5},
 			{5,4,4,4,5},
@@ -117,55 +111,74 @@ public class LevelGenerator {
 
 	/**
 	 * Generates level
-	 * @param rows Number of rows
+	 * 
+	 * @param rows
+	 *            Number of rows
 	 * @pre rows % 3 == 0
-	 * @param columns Number of columns
+	 * @param columns
+	 *            Number of columns
 	 * @pre columns % 3 == 0
 	 * @return Returns a level grid
 	 */
 	public int[][] generateLevel(int rows, int columns) {
-		int[][] level = new int[rows][columns];
-		int[][] template;
+		int[][] level = new int[rows + 2][columns + 2];
+		for (int i = 0; i < level.length; i++) {
+			for (int j = 0; j < level[i].length; j++) {
+				if (i == 0 || i == level.length - 1 || j == 0 || j == level[i].length - 1) {
+					level[i][j] = Constants.WALL;
+				}
+			}
+		}
+		int[][] template = null;
 
 		for (int i = rows / 3; i > 0; i--) {
 			for (int j = columns / 3; j > 0; j--) {
 				template = getRandomTemplate();
-				level = addTemplate(level, template);
-			/*	// top row
-				if (i == 0) {
-					for (int k = 0; k < template[0].length; k++) {
-						if (template[0][k] != 5) {
-							
-						}
-					}
-				} else if (i == rows / 3) {
-					
+				while (!addTemplate(level, template)) {
+					template = getRandomTemplate();
 				}
-				// first column
-				if (j == 0) {
-					
-				} else if (j == columns / 3) {
-					
-				}*/
 			}
 		}
+		// Temporary so that checkwin doesn't keep popping up when moving in the
+		// level.
+		level[0][0] = Constants.CROSS;
 		return level;
 	}
 
-	private int[][] addTemplate(int[][] level, int[][]template) {
-		for (int i = 0; i < level.length; i++) {
-			for (int j = 0; j < level[i].length; j++) {
-				if (level[i][j] == 0) {
-					for (int k = 0; k < 2; k++) {
-						for (int l = 0; l < 2; l++) {
-							level[i + k][j + l] = template[k - 1][l - 1];
-							break;
+	/**
+	 * Adds specified template to level
+	 * 
+	 * @param level
+	 *            Level to ad template to.
+	 * @param template
+	 *            Template to add to level.
+	 * @return true if successful, false otherwise.
+	 */
+	private boolean addTemplate(int[][] level, int[][] template) {
+		if (template == null) {
+			return false;
+		}
+		if (isCompatible(level, template)) {
+			for (int i = 0; i < level.length; i++) {
+				for (int j = 0; j < level[i].length; j++) {
+					if (level[i][j] == 0) {
+						for (int k = 0; k < 3; k++) {
+							for (int l = 0; l < 3; l++) {
+								int temp = template[k + 1][l + 1];
+								level[i + k][j + l] = temp;
+							}
 						}
+						return true;
 					}
 				}
 			}
 		}
-		return level;
+		return false;
+	}
+
+	private boolean isCompatible(int[][] level, int[][] template) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	private int[][] getRandomTemplate() {
@@ -176,28 +189,30 @@ public class LevelGenerator {
 		while (numFlips != 0 || numRotates != 0) {
 			if (numFlips != 0) {
 				template = flipMatrix(template);
-				numFlips++;
+				numFlips--;
 			}
 			if (numRotates != 0) {
 				template = rotateMatrix(template);
-				numRotates++;
+				numRotates--;
 			}
 		}
 		return template;
 	}
 
 	private int[][] copyMatrix(int[][] original) {
-		int[][] copy = new int[original.length][];
+		int[][] copy = new int[original.length][original[1].length];
 		for (int i = 0; i < original.length; i++) {
-			copy[i] = original[i].clone();
+			for (int j = 0; j < original[i].length; j++) {
+				copy[i][j] = original[i][j];
+			}
 		}
 		return copy;
 	}
 
 	private int[][] flipMatrix(int[][] original) {
-		int[][] flipped = new int[original.length][];
-		for (int i = 1; i < original.length; i++) {
-			flipped[i] = original[original.length - i].clone();
+		int[][] flipped = new int[original.length][original[1].length];
+		for (int i = 0; i < original.length; i++) {
+			flipped[i] = original[original.length - 1 - i].clone();
 		}
 		return flipped;
 	}
@@ -205,8 +220,8 @@ public class LevelGenerator {
 	private int[][] rotateMatrix(int[][] original) {
 		int[][] rotated = new int[original.length][original.length];
 		for (int i = 0; i < original.length; i++) {
-			for (int j = 1; j < original.length; j++) {
-				rotated[j][i] = rotated[i][original.length - j];
+			for (int j = 0; j < original.length; j++) {
+				rotated[j][i] = original[i][original.length - 1 - j];
 			}
 		}
 		return rotated;
@@ -234,7 +249,7 @@ public class LevelGenerator {
 		return null;
 	}
 
-	private boolean isMatching (int[] edge1, int[] edge2) {
+	private boolean isMatching(int[] edge1, int[] edge2) {
 		if (edge1 == null || edge2 == null) {
 			return true;
 		}
