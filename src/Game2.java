@@ -24,15 +24,19 @@ public class Game2 extends Observable implements ActionListener {
 	private Boolean checkWin;
 	private Timer gameTimer;
 	private int seconds;
+	private int row;
+	private int column;
 
 	// constructor
 	public Game2(int row, int column) {
-		newLevel(row, column);
+		this.row = row;
+		this.column = column;
 		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
 		this.undoBoxes = new Stack<ArrayList<Box>>();
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
+		newLevel();
 		// needs
 		// map - adj matrix
 		// player
@@ -56,7 +60,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.checkWin = false;
 	}
 
-	private void newLevel(int row, int column) {
+	public void newLevel() {
 		LevelGenerator gen = new LevelGenerator();
 		// Will eventually replace this with calls to LevelGenerator
 	/*	this.matrix = new int[][] {
@@ -75,12 +79,12 @@ public class Game2 extends Observable implements ActionListener {
 			{1,1,1,3,4,4,4,4,4,3,1},
 			{1,1,1,1,1,1,1,1,1,1,1}
 		};*/
-		this.matrix = gen.generateLevel(row - 2, column - 2);
+		this.matrix = gen.generateLevel(this.row - 2, this.column - 2);
 		this.resetState = copyMatrix(this.matrix);
 		this.boxes = new ArrayList<Box>();
 		this.boxes.add(new Box(2, 4));
-//		this.boxes.add(new Box(3, 7));
-//		this.boxes.add(new Box(4, 7));
+		this.boxes.add(new Box(3, 7));
+		this.boxes.add(new Box(4, 7));
 		this.resetBoxes = getBoxes();
 	}
 

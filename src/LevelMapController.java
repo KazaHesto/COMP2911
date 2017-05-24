@@ -58,7 +58,8 @@ public class LevelMapController implements KeyListener, Observer {
 		if (this.game.isWin()) {
 			int option = this.mapUI.showWin();
 			if (option == 1) {
-				// next level stuff
+				this.game.newLevel();
+				this.game.resetGame();
 			} else if (option == 2) {
 				this.game.resetGame();
 				initLevelMap();
