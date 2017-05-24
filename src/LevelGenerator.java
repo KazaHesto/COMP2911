@@ -159,43 +159,68 @@ public class LevelGenerator {
 	}
 
 	/**
-	 * Returns an array with the first floor tile's coordinates
-	 * @return array with the first floor tile's coordinates
+	 * Returns the first floor tile's coordinates
+	 * @return first floor tile's coordinates, null if not found
 	 */
-	private int[] getFirstFloor() {
-		int[] coord = new int[2];
-		
-		int i, j;
-		for (i = 0; i < level.length; i++) {
-			for (j = 0; j < level[i].length; j++) {
+	private Coordinate getFirstFloor() {
+		for (int i = 0; i < level.length; i++) {
+			for (int j = 0; j < level[i].length; j++) {
 				if (level[i][j] == Constants.FLOOR) {
-					coord[0] = i;
-					coord[1] = j;
+					Coordinate coord = new Coordinate(i, j);
+					return coord;
 				}
 			}
 		}
-		
-		return coord;
+		return null;
 	}
 
 	private boolean isShallow() {
-		return false;
-	/*	Stack<int[]> toDo = new Stack<int[]>();
-		ArrayList<int[]> seen = new ArrayList<int[]>();
+	//	return false;
+		Stack<Coordinate> toDo = new Stack<Coordinate>();
+		ArrayList<Coordinate> seen = new ArrayList<Coordinate>();
 
 		toDo.add(getFirstFloor());
-		int[] curr = null;
+		Coordinate curr = null;
 		// Run a DFS to check if job locations are reachable.
 		while (!toDo.isEmpty()) {
 			curr = toDo.pop();
 			seen.add(curr);
-			for (String neighbour: map.getNeighbours(curr)) {
+			for (Coordinate neighbour: getFloorNeighbours(curr)) {
 				if (!seen.contains(neighbour)) {
 					toDo.push(neighbour);
 				}
 			}
 		}
-		return true;*/
+		// hopefully prevent cases where over half the map is inaccessible
+		if (seen.size() < (this.level.length * this.level[1].length / 2)) {
+			System.out.println("Shallow =======================");
+			return true;
+		}
+		return false;
+	}
+
+	private ArrayList<Coordinate> getFloorNeighbours(Coordinate coord) {
+		ArrayList<Coordinate> neighbourList = new ArrayList<Coordinate>();
+		int row = coord.getRow();
+		int column = coord.getColumn();
+
+		if (this.level[row - 1][column] == Constants.FLOOR) {
+			Coordinate neighbour = new Coordinate(row - 1, column);
+			neighbourList.add(neighbour);
+		}
+		if (this.level[row + 1][column] == Constants.FLOOR) {
+			Coordinate neighbour = new Coordinate(row + 1, column);
+			neighbourList.add(neighbour);
+		}
+		if (this.level[row][column - 1] == Constants.FLOOR) {
+			Coordinate neighbour = new Coordinate(row, column - 1);
+			neighbourList.add(neighbour);
+		}
+		if (this.level[row][column + 1] == Constants.FLOOR) {
+			Coordinate neighbour = new Coordinate(row, column + 1);
+			neighbourList.add(neighbour);
+		}
+		return neighbourList;
 	}
 
 	/**
@@ -227,8 +252,8 @@ public class LevelGenerator {
 							topConditions[j - 1 + k] = template[4][k];
 							leftConditions[i - 1 + k] = template[k][4];
 						}
-						System.out.println("=======================");
-						printMatrix(level);
+				//		System.out.println("=======================");
+				//		printMatrix(level);
 						return true;
 					}
 				}
