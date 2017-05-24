@@ -1,5 +1,5 @@
 
-public class Player {
+public class Player implements java.io.Serializable{
 	private int row;
 	private int column;
 	private int direction;

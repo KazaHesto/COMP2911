@@ -64,7 +64,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.wallSideCross = loadImage("/textures/WallSideCross.png");
 		this.halfWallTop = loadImage("/textures/HalfWallTop.png");
 
-		this.timer = new Timer(16, this);
+		this.timer = new Timer(5, this);
 		clearLevelMap();
 	}
 
@@ -196,25 +196,20 @@ public class LevelMap extends JPanel implements ActionListener {
 				}
 			}
 		}
-		// Draws box sides
+		// Draws box
 		for (Box box : this.boxes) {
 			if (this.grid[box.getRow()][box.getColumn()] == 3) {
 				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+
+				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
 			} else {
 				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+
+				g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);	
 			}
 		}
 
 		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
-
-		// Draws box tops
-		for (Box box : this.boxes) {
-			if (this.grid[box.getRow()][box.getColumn()] == 3) {
-				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
-			} else {
-				g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);	
-			}
-		}
 
 		// top wall layer
 		for (int row = 0; row < this.grid.length; row++) {
