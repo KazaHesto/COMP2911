@@ -23,6 +23,8 @@ public class WarehouseBoss implements ActionListener {
 	private LevelMapController mapController;
 	private JMenuBar menuBar;
 	private Menu menu;
+	private int row;
+	private int column;
 
 	public void createWindow() {
 		this.frame = new JFrame();
@@ -31,6 +33,8 @@ public class WarehouseBoss implements ActionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuBar = createMenuBar();
 		frame.setJMenuBar(menuBar);
+		this.row = 11;
+		this.column = 14;
 
 		showMenu();
 	}
@@ -53,7 +57,7 @@ public class WarehouseBoss implements ActionListener {
 	}
 
 	public void initGame() {
-		this.game = new Game2();
+		this.game = new Game2(this.row, this.column);
 		showGame();
 	}
 
@@ -63,7 +67,7 @@ public class WarehouseBoss implements ActionListener {
 			frame.getContentPane().remove(component);
 		}
 
-		this.mapUI = new LevelMap(6, 11);
+		this.mapUI = new LevelMap(this.row, this.column);
 
 		this.mapController = new LevelMapController(game, mapUI);
 		mapUI.setController(mapController);
@@ -175,6 +179,19 @@ public class WarehouseBoss implements ActionListener {
 		}
 	}
 
+	private void showOptionsPane() {
+		String[] options = { "11x14", "8x11" };
+		String s = (String) JOptionPane.showInputDialog(null, "Choose the size of level:", "Options",
+				JOptionPane.PLAIN_MESSAGE, null, options, this.row + "x" + this.column);
+		if (s == options[0]) {
+			this.row = 11;
+			this.column = 14;
+		} else if (s == options[1]) {
+			this.row = 8;
+			this.column = 11;
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(0))) {
@@ -190,7 +207,7 @@ public class WarehouseBoss implements ActionListener {
 			this.game.undoMove();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(5))) {
-			// put options stuff here
+			showOptionsPane();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(7))) {
 			System.exit(1);

@@ -180,32 +180,36 @@ public class LevelMap extends JPanel implements ActionListener {
 		// Floor and side wall layer
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] <= 4 && this.grid[row][col] != 1) {
-					if (this.grid[row][col] == 4 && row != 0 && this.grid[row - 1][col] == 0) {
-						g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
-					}
-					if (this.grid[row][col] == 3 && row != 0 && this.grid[row - 1][col] == 0) {
-						g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
-					}
-					if (this.grid[row][col] == 4) {
-						g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row+0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
-					}
-					if (this.grid[row][col] == 3) {
-						g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row+0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
-					}
+				if (this.grid[row][col] == Constants.FLOOR && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
+					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
+				}
+				if (this.grid[row][col] == Constants.CROSS && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
+					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
+				}
+				if (this.grid[row][col] == Constants.FLOOR) {
+					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+				}
+				if (this.grid[row][col] == Constants.CROSS) {
+					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 				}
 			}
 		}
 		// Draws box
+
 		for (Box box : this.boxes) {
-			if (this.grid[box.getRow()][box.getColumn()] == 3) {
-				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
+				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 
-				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+
 			} else {
-				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH, (int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
 
-				g.drawImage(this.box, box.getColumn() * BOX_WIDTH, (int) ((box.getRow()+0.4) * BOX_HEIGHT + SCORE_GUTTER), null);	
+				g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
 			}
 		}
 
@@ -214,7 +218,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		// top wall layer
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] == 0) {
+				if (this.grid[row][col] == Constants.WALL) {
 					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, null);
 				}
 			}
