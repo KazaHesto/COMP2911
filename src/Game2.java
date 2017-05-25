@@ -113,32 +113,8 @@ public class Game2 extends Observable implements ActionListener {
 		return copy;
 	}
 
-	public int[][] getResetState() {
-		return this.resetState;
-	}
-
-	public Player getPlayer() {
-		return this.player;
-	}
-
-	public Stack<Integer> getUndoPlayer() {
-		return this.undoPlayer;
-	}
-
-	public Timer getGameTimer() {
-		return this.gameTimer;
-	}
-
 	public int getSeconds() {
 		return this.seconds;
-	}
-
-	public Stack<ArrayList<Box>> getUndoBoxes() {
-		return this.undoBoxes;
-	}
-
-	public ArrayList<Box> getResetBoxes() {
-		return this.resetBoxes;
 	}
 
 	// method to reset game level when R is pressed

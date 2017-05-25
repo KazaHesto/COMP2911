@@ -27,12 +27,11 @@ public class Coordinate {
 	}
 
 	@Override
-    public boolean equals(Object obj) {
+	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
 		}
-		Coordinate coordinate =  (Coordinate) obj;
-
+		Coordinate coordinate = (Coordinate) obj;
 		if (coordinate.getRow() == this.row && coordinate.getColumn() == this.column) {
 			return true;
 		}
