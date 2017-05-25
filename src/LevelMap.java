@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -15,7 +16,8 @@ import javax.swing.Timer;
 
 public class LevelMap extends JPanel implements ActionListener {
 
-	private final int BOX_HEIGHT = 64;
+	private final int BOX_HEIGHT = 48;
+	private final int BOX_SIDE_HEIGHT = 64;
 	private final int BOX_WIDTH = 64;
 	private final int SCORE_GUTTER = 120;
 
@@ -169,7 +171,8 @@ public class LevelMap extends JPanel implements ActionListener {
 		// "Title" on top of score pane
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
-		g.drawString(Constants.GAME_TITLE, 120, 50);
+		FontMetrics metrics = g.getFontMetrics();
+		g.drawString(Constants.GAME_TITLE, this.columns * BOX_WIDTH / 2 - metrics.stringWidth(Constants.GAME_TITLE) / 2, 50);
 		// Shows score at the top of the window
 		Font font = new Font("Veranda", Font.BOLD, 20);
 		g.setFont(font);
@@ -180,46 +183,51 @@ public class LevelMap extends JPanel implements ActionListener {
 		// Floor and side wall layer
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] == Constants.FLOOR && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
-					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
-				}
 				if (this.grid[row][col] == Constants.CROSS && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
-					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), null);
+					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 				}
 				if (this.grid[row][col] == Constants.FLOOR) {
-					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 				}
 				if (this.grid[row][col] == Constants.CROSS) {
-					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+				}
+				if (this.grid[row][col] == Constants.FLOOR && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
+					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 				}
 			}
 		}
-		// Draws box
 
+		// Draws box side
 		for (Box box : this.boxes) {
 			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
 				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
-
-				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
-
+						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
-
-				g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
 
-		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		// Draw the player
+		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+
+		// Draws box top
+		for (Box box : this.boxes) {
+			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
+				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+			} else {
+				g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+			}
+		}
 
 		// top wall layer
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] == Constants.WALL) {
-					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, null);
+					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH, BOX_HEIGHT, null);
 				}
 			}
 		}
