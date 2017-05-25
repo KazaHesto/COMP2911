@@ -22,6 +22,10 @@ public class Player implements java.io.Serializable{
 		this.row = row;
 		this.column = column;
 	}
+	
+	public int getDirection(){
+		return this.direction;
+	}
 
 	public void setDirection(int direction) {
 		this.direction = direction;

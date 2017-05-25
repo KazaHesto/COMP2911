@@ -24,7 +24,10 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int[][] grid;
 	private LevelMapController controller;
 	private Image wall;
-	private Image player;
+	private Image playerForward;
+	private Image playerBackward;
+	private Image playerLeft;
+	private Image playerRight;
 	private Image box;
 	private Image boxCross;
 	private Image boxSide;
@@ -44,6 +47,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int seconds;
 	private ArrayList<Box> boxes;
 	private ArrayList<Berry> berries;
+	private int playerDirection;
 
 	public LevelMap(int rows, int columns) {
 		super();
@@ -54,8 +58,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		setVisible(true);
 
 		this.wall = loadImage("/textures/WallTop.png");
-		this.player = loadImage("/textures/ManU1.png.png");
-		this.player = loadImage("/textures/Man.png");
+		this.playerBackward = loadImage("/textures/ManD1.png.png");
+		this.playerForward = loadImage("/textures/Man.png");
+		this.playerRight = loadImage("/textures/ManR1.png.png");
+		this.playerLeft = loadImage("/textures/ManL1.png.png");
 		this.boxSide = loadImage("/textures/BoxSide.png");
 		this.box = loadImage("/textures/BoxTop.png");
 		this.boxSideCross = loadImage("/textures/BoxSideCross.png");
@@ -87,6 +93,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
+	}
+	
+	public void setDirection(int playerDirection){
+		this.playerDirection = playerDirection;
 	}
 
 	public void setBoxPositions(ArrayList<Box> boxes) {
@@ -226,8 +236,16 @@ public class LevelMap extends JPanel implements ActionListener {
 						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
 			}
 		}
-
-		g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		
+		if(playerDirection == 0){
+			g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		} else if (playerDirection == 90){
+			g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		} else if (playerDirection == 180){
+			g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		} else if (playerDirection == 270){
+			g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+		}
 
 		// top wall layer
 		for (int row = 0; row < this.grid.length; row++) {
