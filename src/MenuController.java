@@ -17,13 +17,13 @@ public class MenuController implements MouseListener {
 	public void mouseClicked(MouseEvent arg0) {
 		int mx = arg0.getX();
 		int my = arg0.getY();
-		if (mx >= 295 && mx <= 395) {
+		if (mx >= 295 && mx <= 435) {
 			if (my >= 100 && my <= 150) {
 				this.window.initGame();
 			}
 		}
 
-		if (mx >= 295 && mx <= 395) {
+		if (mx >= 295 && mx <= 435) {
 			if (my >= 200 && my <= 250) {
 //				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
 				this.window.initTutorial();
@@ -32,8 +32,14 @@ public class MenuController implements MouseListener {
 			}
 		}
 
-		if (mx >= 295 && mx <= 395) {
+		if (mx >= 295 && mx <= 435) {
 			if (my >= 300 && my <= 350) {
+				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		
+		if(mx >= 295 && mx <= 435){
+			if(my >= 400 && my <= 450){
 				System.exit(1);
 			}
 		}

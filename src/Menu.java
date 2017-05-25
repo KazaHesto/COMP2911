@@ -11,9 +11,10 @@ public class Menu extends JPanel {
 
 	private MenuController controller;
 
-	public Rectangle playButton = new Rectangle(175 + 120, 100, 100, 50);
-	public Rectangle helpButton = new Rectangle(175 + 120, 200, 100, 50);
-	public Rectangle quitButton = new Rectangle(175 + 120, 300, 100, 50);
+	public Rectangle playButton = new Rectangle(175 + 120, 100, 140, 50);
+	public Rectangle tutorialButton = new Rectangle(175 + 120, 200, 140, 50);
+	public Rectangle helpButton = new Rectangle(175 + 120, 300, 140, 50);
+	public Rectangle quitButton = new Rectangle(175 + 120, 400, 140, 50);
 
 	public void setController(MenuController controller) {
 		this.controller = controller;
@@ -35,11 +36,13 @@ public class Menu extends JPanel {
 		g.drawString(Constants.GAME_TITLE, 120, 50);
 		Font fnt1 = new Font("ariel", Font.BOLD, 30);
 		g.setFont(fnt1);
-		g.drawString("Play", playButton.x + 19, playButton.y + 35);
+		g.drawString("Play", playButton.x + 40, playButton.y + 35);
 		g2D.draw(playButton);
-		g.drawString("Help", helpButton.x + 19, helpButton.y + 35);
+		g.drawString("Tutorial", tutorialButton.x + 15, tutorialButton.y + 35);
+		g2D.draw(tutorialButton);
+		g.drawString("Help", helpButton.x + 40, helpButton.y + 35);
 		g2D.draw(helpButton);
-		g.drawString("Quit", quitButton.x + 19, quitButton.y + 35);
+		g.drawString("Quit", quitButton.x + 40, quitButton.y + 35);
 		g2D.draw(quitButton);
 	}
 }
