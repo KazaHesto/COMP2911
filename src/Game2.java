@@ -138,6 +138,10 @@ public class Game2 extends Observable implements ActionListener {
 		return this.seconds;
 	}
 
+	public void pauseTimer() {
+		this.gameTimer.stop();
+	}
+
 	// method to reset game level when R is pressed
 	public void resetGame() {
 		this.numMoves = 0;

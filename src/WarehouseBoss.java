@@ -146,6 +146,7 @@ public class WarehouseBoss implements ActionListener {
 	}
 
 	private void saveGame() {
+		this.game.pauseTimer();
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "save");
 		chooser.setFileFilter(filter);
@@ -157,15 +158,17 @@ public class WarehouseBoss implements ActionListener {
 		}
 
 		SaveData data = this.game.getState();
-
 		try {
 			ResourceManager.save(data, chooser.getSelectedFile());
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			
 		}
 	}
 
 	private void loadGame() {
+		this.game.pauseTimer();
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "save");
 		chooser.setFileFilter(filter);
