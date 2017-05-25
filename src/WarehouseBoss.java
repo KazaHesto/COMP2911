@@ -199,6 +199,7 @@ public class WarehouseBoss implements ActionListener {
 			this.row = 8;
 			this.column = 11;
 		}
+		initGame();
 	}
 
 	@Override
