@@ -14,7 +14,6 @@ public class Menu extends JPanel {
 	public Rectangle playButton = new Rectangle(175 + 120, 100, 100, 50);
 	public Rectangle helpButton = new Rectangle(175 + 120, 200, 100, 50);
 	public Rectangle quitButton = new Rectangle(175 + 120, 300, 100, 50);
-	public Rectangle multiButton = new Rectangle(175 + 113, 400, 120, 50);
 
 	public void setController(MenuController controller) {
 		this.controller = controller;
@@ -42,7 +41,5 @@ public class Menu extends JPanel {
 		g2D.draw(helpButton);
 		g.drawString("Quit", quitButton.x + 19, quitButton.y + 35);
 		g2D.draw(quitButton);
-		g.drawString("Co-Op", multiButton.x + 10, multiButton.y + 35);
-		g2D.draw(multiButton);
 	}
 }
