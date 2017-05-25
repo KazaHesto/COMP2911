@@ -218,7 +218,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		// For some reason this is needed on Windows?
-		g.clearRect(0, 0, this.columns * BOX_WIDTH, /* this.rows * BOX_HEIGHT */ +SCORE_GUTTER);
+		g.clearRect(0, 0, this.columns * BOX_WIDTH, SCORE_GUTTER);
 		// "Title" on top of score pane
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
