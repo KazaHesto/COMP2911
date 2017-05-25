@@ -34,6 +34,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image wallSide;
 	private Image wallSideCross;
 	private Image halfWallTop;
+	private Image berry;
 	private double x;
 	private double y;
 	private int tempX;
@@ -42,6 +43,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int numMoves;
 	private int seconds;
 	private ArrayList<Box> boxes;
+	private ArrayList<Berry> berries;
 
 	public LevelMap(int rows, int columns) {
 		super();
@@ -63,6 +65,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.wallSide = loadImage("/textures/WallSide.png");
 		this.wallSideCross = loadImage("/textures/WallSideCross.png");
 		this.halfWallTop = loadImage("/textures/HalfWallTop.png");
+		this.berry = loadImage("/textures/Berry.png");
 
 		this.timer = new Timer(5, this);
 		clearLevelMap();
@@ -75,6 +78,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.x = -1;
 		this.y = -1;
 		this.boxes = new ArrayList<Box>();
+		this.berries = new ArrayList<Berry>();
 	}
 
 	// Updates the grid shown in the ui
@@ -87,6 +91,10 @@ public class LevelMap extends JPanel implements ActionListener {
 
 	public void setBoxPositions(ArrayList<Box> boxes) {
 		this.boxes = boxes;
+	}
+
+	public void setBerryPositions(ArrayList<Berry> berries){
+		this.berries = berries;
 	}
 
 	public void setNumMoves(int numMoves) {
@@ -194,6 +202,12 @@ public class LevelMap extends JPanel implements ActionListener {
 				}
 			}
 		}
+		
+		for(Berry berry : this.berries){
+			g.drawImage(this.berry, berry.getColumn() * BOX_WIDTH,
+					(int) ((berry.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+		}
+		
 		// Draws box
 
 		for (Box box : this.boxes) {
