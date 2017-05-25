@@ -231,18 +231,23 @@ public class LevelMap extends JPanel implements ActionListener {
 						(int) ((box.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
-		
-if(playerDirection == 0){
-	g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
-		} else if (playerDirection == 90){
-			g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
-		} else if (playerDirection == 180){
-			g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
-		} else if (playerDirection == 270){
-			g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), null);
+
+		if (playerDirection == 0) {
+			g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH),
+					(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+		} else if (playerDirection == 90) {
+			g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH),
+					(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+		} else if (playerDirection == 180) {
+			g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH),
+					(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+		} else if (playerDirection == 270) {
+			g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT,
+					null);
 		}
 		// Draw the player
-	//	g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+		// g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y +
+		// 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 
 		// Draws box top
 		for (Box box : this.boxes) {
