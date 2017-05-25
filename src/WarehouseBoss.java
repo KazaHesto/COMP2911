@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class WarehouseBoss implements ActionListener {
 
 	private JFrame frame;
-	private Game2 game;
+	private Game game;
 	private LevelMap mapUI;
 	private LevelMapController mapController;
 	private JMenuBar menuBar;
@@ -57,7 +57,7 @@ public class WarehouseBoss implements ActionListener {
 	}
 
 	public void initGame() {
-		this.game = new Game2(this.row, this.column);
+		this.game = new Game(this.row, this.column);
 		showGame();
 	}
 
@@ -162,8 +162,6 @@ public class WarehouseBoss implements ActionListener {
 			ResourceManager.save(data, chooser.getSelectedFile());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			
 		}
 	}
 
@@ -180,8 +178,7 @@ public class WarehouseBoss implements ActionListener {
 		}
 		try {
 			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
-			this.game = new Game2(data.matrix, data.resetState, data.player, data.undoPlayer,
-					data.seconds, data.numMoves, data.boxes, data.undoBoxes, data.resetBoxes, data.berries, data.berryState, data.berryCount);
+			this.game = new Game(data);
 			showGame();
 		} catch (Exception e) {
 			e.printStackTrace();

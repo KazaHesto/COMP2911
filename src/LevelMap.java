@@ -107,12 +107,12 @@ public class LevelMap extends JPanel implements ActionListener {
 			this.grid[i] = grid[i].clone();
 		}
 	}
-	
-	public void setDirection(int playerDirection){
+
+	public void setDirection(int playerDirection) {
 		this.playerDirection = playerDirection;
 	}
-	
-	public void setIsBox(boolean isBox){
+
+	public void setIsBox(boolean isBox) {
 		this.isBox = isBox;
 	}
 
@@ -120,7 +120,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.boxes = boxes;
 	}
 
-	public void setBerryPositions(ArrayList<Berry> berries){
+	public void setBerryPositions(ArrayList<Berry> berries) {
 		this.berries = berries;
 	}
 
@@ -190,6 +190,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		return 0;
 	}
 
+	public void updateTime(int update) {
+		this.seconds = update;
+	}
+
 	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
@@ -200,12 +204,13 @@ public class LevelMap extends JPanel implements ActionListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		// For some reason this is needed on Windows?
-		g.clearRect(0, 0, this.columns * BOX_WIDTH, /*this.rows * BOX_HEIGHT*/ + SCORE_GUTTER);
+		g.clearRect(0, 0, this.columns * BOX_WIDTH, /* this.rows * BOX_HEIGHT */ +SCORE_GUTTER);
 		// "Title" on top of score pane
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
 		FontMetrics metrics = g.getFontMetrics();
-		g.drawString(Constants.GAME_TITLE, this.columns * BOX_WIDTH / 2 - metrics.stringWidth(Constants.GAME_TITLE) / 2, 50);
+		g.drawString(Constants.GAME_TITLE, this.columns * BOX_WIDTH / 2 - metrics.stringWidth(Constants.GAME_TITLE) / 2,
+				50);
 		// Shows score at the top of the window
 		Font font = new Font("Veranda", Font.BOLD, 20);
 		g.setFont(font);
@@ -217,21 +222,25 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] == Constants.CROSS && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
-					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+							BOX_HEIGHT, null);
 				}
 				if (this.grid[row][col] == Constants.FLOOR && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
-					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+							BOX_SIDE_HEIGHT, null);
 				}
 				if (this.grid[row][col] == Constants.FLOOR) {
-					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+							BOX_HEIGHT, null);
 				}
 				if (this.grid[row][col] == Constants.CROSS) {
-					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+							BOX_HEIGHT, null);
 				}
 			}
 		}
 
-		for(Berry berry : this.berries){
+		for (Berry berry : this.berries) {
 			g.drawImage(this.berry, berry.getColumn() * BOX_WIDTH,
 					(int) ((berry.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 		}
@@ -248,7 +257,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 
 		if (playerDirection == 0) {
-			if(isBox == true){
+			if (isBox == true) {
 				g.drawImage(this.playerPushForward, (int) (this.x * BOX_WIDTH),
 						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
@@ -256,7 +265,7 @@ public class LevelMap extends JPanel implements ActionListener {
 						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 90) {
-			if(isBox == true){
+			if (isBox == true) {
 				g.drawImage(this.playerPushRight, (int) (this.x * BOX_WIDTH),
 						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
@@ -264,7 +273,7 @@ public class LevelMap extends JPanel implements ActionListener {
 						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 180) {
-			if(isBox == true){
+			if (isBox == true) {
 				g.drawImage(this.playerPushBackward, (int) (this.x * BOX_WIDTH),
 						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
@@ -272,17 +281,14 @@ public class LevelMap extends JPanel implements ActionListener {
 						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 270) {
-			if(isBox == true){
-				g.drawImage(this.playerPushLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT,
-						null);
+			if (isBox == true) {
+				g.drawImage(this.playerPushLeft, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
-				g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT,
-						null);
+				g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
-		// Draw the player
-		// g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y +
-		// 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 
 		// Draws box top
 		for (Box box : this.boxes) {
@@ -294,23 +300,22 @@ public class LevelMap extends JPanel implements ActionListener {
 						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			}
 		}
-		
-		
 
 		// top wall layer and cross glow effect
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] == Constants.WALL) {
-					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH, BOX_HEIGHT, null);
+					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH,
+							BOX_HEIGHT, null);
 				}
 				if (this.grid[row][col] == Constants.CROSS) {
-					g.drawImage(this.crossGlow, col * BOX_WIDTH, (int) ((row + 0.9-1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+					g.drawImage(this.crossGlow, col * BOX_WIDTH, (int) ((row + 0.9 - 1) * BOX_HEIGHT + SCORE_GUTTER),
+							BOX_WIDTH, BOX_HEIGHT, null);
 				}
 			}
 		}
 	}
 
-	// Sets what happens when the timer changes
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (!fuzzyMatch(this.tempX, this.x)) {
@@ -325,9 +330,5 @@ public class LevelMap extends JPanel implements ActionListener {
 			this.y = this.tempY;
 		}
 		repaint();
-	}
-
-	public void updateTime(int update) {
-		this.seconds = update;
 	}
 }

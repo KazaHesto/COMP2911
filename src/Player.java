@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Player implements java.io.Serializable{
+public class Player implements Serializable{
 	private int row;
 	private int column;
 	private int direction;
@@ -44,15 +45,11 @@ public class Player implements java.io.Serializable{
 		this.direction = direction;
 	}
 	
-	public void setIsBox(Boolean isBox){
-		this.isBox = isBox; 
-	}
-
-	public int getdirection() {
-		return this.direction;
-	}
-	
 	public boolean getIsBox(){
 		return this.isBox;
+	}
+	
+	public void setIsBox(Boolean isBox){
+		this.isBox = isBox; 
 	}
 }

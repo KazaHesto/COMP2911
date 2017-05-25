@@ -1,29 +1,30 @@
+import java.io.Serializable;
 
-public class Berry implements java.io.Serializable {
+public class Berry implements Serializable {
 	private int row;
 	private int column;
-	
-	public Berry(int row, int column){
+
+	public Berry(int row, int column) {
 		super();
 		this.row = row;
 		this.column = column;
 	}
-	
+
 	public Berry(Berry berry) {
 		super();
 		this.row = berry.getRow();
 		this.column = berry.getColumn();
 	}
-	
-	public int getRow(){
+
+	public int getRow() {
 		return this.row;
 	}
-	
-	public int getColumn(){
+
+	public int getColumn() {
 		return this.column;
 	}
-	
-	public void setPosition(int row, int column){
+
+	public void setPosition(int row, int column) {
 		this.row = row;
 		this.column = column;
 	}

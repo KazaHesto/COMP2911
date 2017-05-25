@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import javax.swing.Timer;
 
-public class Game2 extends Observable implements ActionListener {
+public class Game extends Observable implements ActionListener {
 
 	public enum DIRECTION {
 		UP, DOWN, LEFT, RIGHT
@@ -33,7 +33,7 @@ public class Game2 extends Observable implements ActionListener {
 	private int berryCount;
 
 	// constructor
-	public Game2(int row, int column) {
+	public Game(int row, int column) {
 		this.row = row;
 		this.column = column;
 		this.undoPlayer = new Stack<Integer>();
@@ -41,66 +41,39 @@ public class Game2 extends Observable implements ActionListener {
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
 		newLevel();
-		// needs
-		// map - adj matrix
-		// player
-		// linkedlist of boxes
-		// linkedlist of crosses
 	}
 
-	public Game2(int[][] matrix, int[][] resetState, Player player, Stack<Integer> undoPlayer,
-			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
-			ArrayList<Box> resetBoxes, ArrayList<Berry> berries, boolean berryState, int berryCount) {
-		this.matrix = matrix;
-		this.resetState = resetState;
-		this.player = player;
-		this.undoPlayer = undoPlayer;
+	public Game(SaveData data) {
+		this.matrix = data.matrix;
+		this.resetState = data.resetState;
+		this.player = data.player;
+		this.resetPlayer = data.resetPlayer;
+		this.undoPlayer = data.undoPlayer;
 		this.gameTimer = new Timer(1000, this);
-		this.seconds = seconds;
-		this.numMoves = numMoves;
-		this.boxes = boxes;
-		this.berries = berries;
-		this.undoBoxes = undoBoxes;
-		this.resetBoxes = resetBoxes;
+		this.seconds = data.seconds;
+		this.numMoves = data.numMoves;
+		this.boxes = data.boxes;
+		this.berries = data.berries;
+		this.undoBoxes = data.undoBoxes;
+		this.resetBoxes = data.resetBoxes;
 		this.checkWin = false;
-		this.berryState = berryState;
-		this.berryCount = berryCount;
+		this.berryState = data.berryState;
+		this.berryCount = data.berryCount;
 	}
 
 	public void newLevel() {
 		LevelGenerator gen = new LevelGenerator();
-		// Will eventually replace this with calls to LevelGenerator
-	/*	this.matrix = new int[][] {
-			{1,1,1,1,1,1,1,1,1,1,1},
-			{1,4,4,4,4,4,4,4,4,1,1},
-			{1,1,1,1,4,1,4,4,1,1,1},
-			{1,1,1,1,4,1,4,4,4,3,1},
-			{1,1,1,3,4,4,4,4,4,3,1},
-			{1,1,1,1,1,1,1,1,1,1,1}
-		};
-		this.resetState = new int[][] {
-			{1,1,1,1,1,1,1,1,1,1,1},
-			{1,4,4,4,4,4,4,4,4,1,1},
-			{1,1,1,1,4,1,4,4,1,1,1},
-			{1,1,1,1,4,1,4,4,4,3,1},
-			{1,1,1,3,4,4,4,4,4,3,1},
-			{1,1,1,1,1,1,1,1,1,1,1}
-		};*/
 		this.matrix = gen.generateLevel(this.row - 2, this.column - 2);
 		this.resetState = copyMatrix(this.matrix);
 		this.player = new Player(gen.getPlayer());
 		this.resetPlayer = new Player(this.player);
-		System.out.println(this.player.getRow() + " " + this.player.getColumn());
 		this.boxes = new ArrayList<Box>();
 		for (Coordinate box : gen.getBox()) {
 			this.boxes.add(new Box(box.getRow(), box.getColumn()));
 		}
-	//	this.boxes.add(new Box(2, 4));
-	//	this.boxes.add(new Box(3, 7));
-	//	this.boxes.add(new Box(4, 7));
 		this.resetBoxes = getBoxes();
 		this.berries = new ArrayList<Berry>();
-		this.berries.add(new Berry(5,6));
+		this.berries.add(new Berry(5, 6));
 		this.resetBerries = getBerries();
 		this.berryState = false;
 		this.berryCount = 0;
@@ -118,10 +91,10 @@ public class Game2 extends Observable implements ActionListener {
 		}
 		return boxes;
 	}
-	
-	public ArrayList<Berry> getBerries(){
+
+	public ArrayList<Berry> getBerries() {
 		ArrayList<Berry> berries = new ArrayList<Berry>();
-		for(Berry berry : this.berries){
+		for (Berry berry : this.berries) {
 			berries.add(new Berry(berry));
 		}
 		return berries;
@@ -172,7 +145,7 @@ public class Game2 extends Observable implements ActionListener {
 			// Move player if they are not obstructed, otherwise check for a box
 			if (!isObstructed(row - 1, column) || isBox(row - 1, column)) {
 				if (moveBox(row - 1, column, DIRECTION.UP)) {
-					if(removeBerry(row - 1,column)){
+					if (removeBerry(row - 1, column)) {
 						movePlayer(row - 1, column);
 					}
 				}
@@ -182,7 +155,7 @@ public class Game2 extends Observable implements ActionListener {
 			this.player.setIsBox(false);
 			if (!isObstructed(row, column - 1) || isBox(row, column - 1)) {
 				if (moveBox(row, column - 1, DIRECTION.LEFT)) {
-					if(removeBerry(row,column - 1)){
+					if (removeBerry(row, column - 1)) {
 						movePlayer(row, column - 1);
 					}
 				}
@@ -192,7 +165,7 @@ public class Game2 extends Observable implements ActionListener {
 			this.player.setIsBox(false);
 			if (!isObstructed(row + 1, column) || isBox(row + 1, column)) {
 				if (moveBox(row + 1, column, DIRECTION.DOWN)) {
-					if(removeBerry(row + 1,column)){
+					if (removeBerry(row + 1, column)) {
 						movePlayer(row + 1, column);
 					}
 				}
@@ -202,7 +175,7 @@ public class Game2 extends Observable implements ActionListener {
 			this.player.setIsBox(false);
 			if (!isObstructed(row, column + 1) || isBox(row, column + 1)) {
 				if (moveBox(row, column + 1, DIRECTION.RIGHT)) {
-					if(removeBerry(row,column + 1)){
+					if (removeBerry(row, column + 1)) {
 						movePlayer(row, column + 1);
 					}
 				}
@@ -245,10 +218,10 @@ public class Game2 extends Observable implements ActionListener {
 		}
 		return false;
 	}
-	
-	private boolean isBerry(int row, int column){
-		for(Berry berry : this.berries) {
-			if(berry.getRow() == row && berry.getColumn() == column){
+
+	private boolean isBerry(int row, int column) {
+		for (Berry berry : this.berries) {
+			if (berry.getRow() == row && berry.getColumn() == column) {
 				return true;
 			}
 		}
@@ -308,17 +281,16 @@ public class Game2 extends Observable implements ActionListener {
 		}
 		return null;
 	}
-	
-	private int getBerry(int row, int column){
+
+	private int getBerry(int row, int column) {
 		int index = 0;
-		for(Berry berry : this.berries){
-			if(berry.getRow() == row && berry.getColumn() == column){
-				movePlayer(row,column);
+		for (Berry berry : this.berries) {
+			if (berry.getRow() == row && berry.getColumn() == column) {
+				movePlayer(row, column);
 				return index;
 			}
 			index++;
 		}
-		System.out.println("Berries!");
 		return -1;
 	}
 
@@ -328,13 +300,13 @@ public class Game2 extends Observable implements ActionListener {
 		this.player.setPosition(row, column);
 		this.numMoves++;
 	}
-	
-	private boolean removeBerry(int row, int column){
-		if(!isBerry(row, column)){
+
+	private boolean removeBerry(int row, int column) {
+		if (!isBerry(row, column)) {
 			return true;
 		}
 		this.berryState = true;
-		berries.remove(getBerry(row,column));
+		berries.remove(getBerry(row, column));
 		return false;
 	}
 
@@ -380,10 +352,10 @@ public class Game2 extends Observable implements ActionListener {
 	}
 
 	public int getPlayerDirection() {
-		return this.player.getdirection();
+		return this.player.getDirection();
 	}
-	
-	public boolean getPlayerIsBox(){
+
+	public boolean getPlayerIsBox() {
 		return this.player.getIsBox();
 	}
 
@@ -392,17 +364,18 @@ public class Game2 extends Observable implements ActionListener {
 	}
 
 	public SaveData getState() {
-		return new SaveData(this.matrix, this.resetState, this.player,
-				this.undoPlayer, this.seconds, this.numMoves, this.boxes, this.undoBoxes, this.resetBoxes, this.berries, this.berryState, this.berryCount);
+		return new SaveData(this.matrix, this.resetState, this.player, this.resetPlayer, this.undoPlayer, this.seconds,
+				this.numMoves, this.boxes, this.undoBoxes, this.resetBoxes, this.berries, this.berryState,
+				this.berryCount);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.seconds++;
-		if(this.berryState){
+		if (this.berryState) {
 			this.berryCount++;
 			this.seconds--;
-			if(berryCount == 3){
+			if (berryCount == 3) {
 				berryCount = 0;
 				this.berryState = false;
 			}

@@ -1,9 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import javax.swing.Timer;
-
-public class SaveData implements java.io.Serializable {
+public class SaveData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,6 +10,7 @@ public class SaveData implements java.io.Serializable {
 	public int[][] originalState;
 	public int[][] resetState;
 	public Player player;
+	public Player resetPlayer;
 	public Stack<Integer> undoPlayer;
 	public Stack<int[][]> undoMatrix;
 	public int seconds;
@@ -22,9 +22,9 @@ public class SaveData implements java.io.Serializable {
 	public boolean berryState;
 	public int berryCount;
 
-	public SaveData(int[][] matrix, int[][] resetState, Player player, Stack<Integer> undoPlayer,
-			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
-			ArrayList<Box> resetBoxes, ArrayList<Berry> berries, boolean berryState, int berryCount) {
+	public SaveData(int[][] matrix, int[][] resetState, Player player, Player resetPlayer, Stack<Integer> undoPlayer,
+			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes, ArrayList<Box> resetBoxes,
+			ArrayList<Berry> berries, boolean berryState, int berryCount) {
 		super();
 		this.matrix = matrix;
 		this.resetState = resetState;

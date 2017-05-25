@@ -5,10 +5,10 @@ import java.util.Observer;
 
 public class LevelMapController implements KeyListener, Observer {
 
-	private Game2 game;
+	private Game game;
 	private LevelMap mapUI;
 
-	public LevelMapController(Game2 game, LevelMap mapUI) {
+	public LevelMapController(Game game, LevelMap mapUI) {
 		super();
 		this.game = game;
 		this.mapUI = mapUI;

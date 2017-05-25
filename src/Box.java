@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Box implements java.io.Serializable {
+public class Box implements Serializable {
 	private int row;
 	private int column;
 
