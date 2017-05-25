@@ -30,6 +30,10 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image playerBackward;
 	private Image playerLeft;
 	private Image playerRight;
+	private Image playerPushForward;
+	private Image playerPushBackward;
+	private Image playerPushLeft;
+	private Image playerPushRight;
 	private Image box;
 	private Image boxCross;
 	private Image boxSide;
@@ -51,6 +55,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private ArrayList<Box> boxes;
 	private ArrayList<Berry> berries;
 	private int playerDirection;
+	private boolean isBox;
 
 	public LevelMap(int rows, int columns) {
 		super();
@@ -65,6 +70,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.playerForward = loadImage("/textures/Man.png");
 		this.playerRight = loadImage("/textures/Manright.png");
 		this.playerLeft = loadImage("/textures/Manleft.png");
+		this.playerPushForward = loadImage("/textures/pushingForward.png");
+		this.playerPushBackward = loadImage("/textures/pushingBackward.png");
+		this.playerPushLeft = loadImage("/textures/pushLeft.png");
+		this.playerPushRight = loadImage("/textures/pushingRight.png");
 		this.boxSide = loadImage("/textures/BoxSide.png");
 		this.box = loadImage("/textures/BoxTop.png");
 		this.boxSideCross = loadImage("/textures/BoxSideCross.png");
@@ -101,6 +110,10 @@ public class LevelMap extends JPanel implements ActionListener {
 	
 	public void setDirection(int playerDirection){
 		this.playerDirection = playerDirection;
+	}
+	
+	public void setIsBox(boolean isBox){
+		this.isBox = isBox;
 	}
 
 	public void setBoxPositions(ArrayList<Box> boxes) {
@@ -235,17 +248,37 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 
 		if (playerDirection == 0) {
-			g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH),
-					(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			if(isBox == true){
+				g.drawImage(this.playerPushForward, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			} else {
+				g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			}
 		} else if (playerDirection == 90) {
-			g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH),
-					(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			if(isBox == true){
+				g.drawImage(this.playerPushRight, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			} else {
+				g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			}
 		} else if (playerDirection == 180) {
-			g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH),
-					(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			if(isBox == true){
+				g.drawImage(this.playerPushBackward, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			} else {
+				g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH),
+						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			}
 		} else if (playerDirection == 270) {
-			g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT,
-					null);
+			if(isBox == true){
+				g.drawImage(this.playerPushLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT,
+						null);
+			} else {
+				g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH), (int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT,
+						null);
+			}
 		}
 		// Draw the player
 		// g.drawImage(this.player, (int) (this.x * BOX_WIDTH), (int) ((this.y +

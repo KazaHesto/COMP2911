@@ -98,6 +98,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.resetBerries = getBerries();
 		this.berryState = false;
 		this.berryCount = 0;
+		this.player.setIsBox(false);
 	}
 
 	public int[][] getMatrix() {
@@ -149,6 +150,7 @@ public class Game2 extends Observable implements ActionListener {
 		this.seconds = 0;
 		this.undoPlayer.clear();
 		this.undoBoxes.clear();
+		this.player.setIsBox(false);
 		setChanged();
 		notifyObservers();
 	}
@@ -161,6 +163,7 @@ public class Game2 extends Observable implements ActionListener {
 		if (keyPress == 'W') {
 			// Set direction player is facing
 			this.player.setDirection(0);
+			this.player.setIsBox(false);
 			// Move player if they are not obstructed, otherwise check for a box
 			if (!isObstructed(row - 1, column) || isBox(row - 1, column)) {
 				if (moveBox(row - 1, column, DIRECTION.UP)) {
@@ -171,6 +174,7 @@ public class Game2 extends Observable implements ActionListener {
 			}
 		} else if (keyPress == 'A') {
 			this.player.setDirection(270);
+			this.player.setIsBox(false);
 			if (!isObstructed(row, column - 1) || isBox(row, column - 1)) {
 				if (moveBox(row, column - 1, DIRECTION.LEFT)) {
 					if(removeBerry(row,column - 1)){
@@ -180,6 +184,7 @@ public class Game2 extends Observable implements ActionListener {
 			}
 		} else if (keyPress == 'S') {
 			this.player.setDirection(180);
+			this.player.setIsBox(false);
 			if (!isObstructed(row + 1, column) || isBox(row + 1, column)) {
 				if (moveBox(row + 1, column, DIRECTION.DOWN)) {
 					if(removeBerry(row + 1,column)){
@@ -189,6 +194,7 @@ public class Game2 extends Observable implements ActionListener {
 			}
 		} else if (keyPress == 'D') {
 			this.player.setDirection(90);
+			this.player.setIsBox(false);
 			if (!isObstructed(row, column + 1) || isBox(row, column + 1)) {
 				if (moveBox(row, column + 1, DIRECTION.RIGHT)) {
 					if(removeBerry(row,column + 1)){
@@ -261,6 +267,7 @@ public class Game2 extends Observable implements ActionListener {
 		if (!isBox(row, column)) {
 			return true;
 		}
+		this.player.setIsBox(true);
 		if (direction == DIRECTION.UP) {
 			// Check if move is legal
 			if (!isObstructed(row - 1, column)) {
@@ -373,6 +380,10 @@ public class Game2 extends Observable implements ActionListener {
 
 	public int getPlayerDirection() {
 		return this.player.getdirection();
+	}
+	
+	public boolean getPlayerIsBox(){
+		return this.player.getIsBox();
 	}
 
 	public int getNumMoves() {
