@@ -172,7 +172,7 @@ public class WarehouseBoss implements ActionListener {
 		try {
 			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
 			this.game = new Game2(data.matrix, data.resetState, data.player, data.undoPlayer,
-					data.seconds, data.numMoves, data.boxes, data.undoBoxes, data.resetBoxes);
+					data.seconds, data.numMoves, data.boxes, data.undoBoxes, data.resetBoxes, data.berries, data.berryState, data.berryCount);
 			showGame();
 		} catch (Exception e) {
 			e.printStackTrace();

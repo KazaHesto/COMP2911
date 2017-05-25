@@ -18,10 +18,13 @@ public class SaveData implements java.io.Serializable {
 	public ArrayList<Box> boxes;
 	public Stack<ArrayList<Box>> undoBoxes;
 	public ArrayList<Box> resetBoxes;
+	public ArrayList<Berry> berries;
+	public boolean berryState;
+	public int berryCount;
 
 	public SaveData(int[][] matrix, int[][] resetState, Player player, Stack<Integer> undoPlayer,
 			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes,
-			ArrayList<Box> resetBoxes) {
+			ArrayList<Box> resetBoxes, ArrayList<Berry> berries, boolean berryState, int berryCount) {
 		super();
 		this.matrix = matrix;
 		this.resetState = resetState;
@@ -32,5 +35,8 @@ public class SaveData implements java.io.Serializable {
 		this.boxes = boxes;
 		this.undoBoxes = undoBoxes;
 		this.resetBoxes = resetBoxes;
+		this.berries = berries;
+		this.berryState = berryState;
+		this.berryCount = berryCount;
 	}
 }
