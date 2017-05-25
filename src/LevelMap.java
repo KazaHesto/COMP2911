@@ -190,7 +190,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	}
 	
 	public int showTutWin() {
-		String[] choices = {"Try Again", "Start Game", "Quit Game"};
+		String[] choices = {"Practise", "Start Game", "Quit Game"};
 		int choice = JOptionPane.showOptionDialog(null, "Congradulations, Tutorial Complete!", "",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
 		if (choice == JOptionPane.CANCEL_OPTION) {

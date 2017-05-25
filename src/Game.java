@@ -59,6 +59,17 @@ public class Game extends Observable implements ActionListener {
 		this.undoBoxes = new Stack<ArrayList<Box>>();
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
+		this.boxes = new ArrayList<Box>();
+		this.boxes.add(new Box(2, 4));
+		this.boxes.add(new Box(3, 7));
+		this.boxes.add(new Box(4, 7));
+		this.resetBoxes = getBoxes();
+		this.berries = new ArrayList<Berry>();
+		this.resetBoxes = getBoxes();
+		this.berries.add(new Berry(1,6));
+		this.resetBerries = getBerries();
+		this.berryState = false;
+		this.berryCount = 0;
 		newTutLevel(matrix);
 	}
 
@@ -102,20 +113,11 @@ public class Game extends Observable implements ActionListener {
 	public void newTutLevel(int[][] matrix){
 		this.matrix = matrix;
 		this.resetState = copyMatrix(matrix);
-		this.boxes = new ArrayList<Box>();
-		this.berries = new ArrayList<Berry>();
-		this.boxes.add(new Box(2, 4));
-		this.boxes.add(new Box(3, 7));
-		this.boxes.add(new Box(4, 7));
-		this.resetBoxes = getBoxes();
 		this.player.setIsBox(false);
 	}
 	
-	public void addBerry(){
-		this.berries.add(new Berry(1,6));
-		this.resetBerries = getBerries();
-		this.berryState = false;
-		this.berryCount = 0;
+	public ArrayList<Berry> getBerryList(){
+		return this.berries;
 	}
 
 	public int[][] getMatrix() {
