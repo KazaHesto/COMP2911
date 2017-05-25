@@ -3,17 +3,21 @@ import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JOptionPane;
+
 public class LevelMapController implements KeyListener, Observer {
 
 	private Game game;
 	private LevelMap mapUI;
 	private WarehouseBoss window;
+	private boolean tutorialCheck;
 
 	public LevelMapController(Game game, LevelMap mapUI, WarehouseBoss window) {
 		super();
 		this.game = game;
 		this.mapUI = mapUI;
 		this.window = window;
+		this.tutorialCheck = false;
 		this.game.addObserver(this);
 		initLevelMap();
 	}
@@ -41,6 +45,22 @@ public class LevelMapController implements KeyListener, Observer {
 			this.game.update('S');
 		} else if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
 			this.game.update('D');
+			if(this.game.getGameState() == this.game.isTutorial()){
+				if(!tutorialCheck){
+						int[][] matrix = new int[][] {
+							{1,1,1,1,1,1,1,1,1,1,1},
+							{1,4,4,4,4,4,4,1,4,1,1},
+							{1,1,1,1,4,4,4,1,1,1,1},
+							{1,1,1,1,4,4,4,1,4,3,1},
+							{1,1,1,3,4,4,4,1,4,3,1},
+							{1,1,1,1,1,1,1,1,1,1,1}
+						};
+					this.game.newTutLevel(matrix);
+					JOptionPane.showMessageDialog(null, "Walk into box to move it in said direction", "Tutorial",
+							JOptionPane.INFORMATION_MESSAGE);
+					tutorialCheck = true;
+				}
+			}
 		}
 	}
 
@@ -63,6 +83,13 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI.setDirection(this.game.getPlayerDirection());
 		this.mapUI.setIsBox(this.game.getPlayerIsBox());
 		this.mapUI.repaint();
+		
+		if(this.game.getGameState() == this.game.isTutorial()){
+			if(this.game.isBox(4,3)){
+				this.game.addBerry();
+			}
+		}
+		
 		if (this.game.isWin()) {
 			if(this.game.getGameState() == this.game.isGame()){
 				int option = this.mapUI.showWin();

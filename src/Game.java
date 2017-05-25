@@ -108,11 +108,14 @@ public class Game extends Observable implements ActionListener {
 		this.boxes.add(new Box(3, 7));
 		this.boxes.add(new Box(4, 7));
 		this.resetBoxes = getBoxes();
-		this.berries.add(new Berry(5,6));
+		this.player.setIsBox(false);
+	}
+	
+	public void addBerry(){
+		this.berries.add(new Berry(1,6));
 		this.resetBerries = getBerries();
 		this.berryState = false;
 		this.berryCount = 0;
-		this.player.setIsBox(false);
 	}
 
 	public int[][] getMatrix() {
@@ -249,7 +252,7 @@ public class Game extends Observable implements ActionListener {
 	 * @param row
 	 * @return
 	 */
-	private boolean isBox(int row, int column) {
+	public boolean isBox(int row, int column) {
 		for (Box box : this.boxes) {
 			if (box.getRow() == row && box.getColumn() == column) {
 				return true;
