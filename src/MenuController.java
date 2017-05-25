@@ -25,7 +25,8 @@ public class MenuController implements MouseListener {
 
 		if (mx >= 295 && mx <= 395) {
 			if (my >= 200 && my <= 250) {
-				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
+//				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
+				this.window.initTutorial();
 			}
 		}
 

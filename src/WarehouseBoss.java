@@ -58,18 +58,33 @@ public class WarehouseBoss implements ActionListener {
 
 	public void initGame() {
 		this.game = new Game(this.row, this.column);
-		showGame();
+		showGame(this.row, this.column);
+	}
+	
+	public void initTutorial() {
+		int[][] matrix = new int[][] {
+			{1,1,1,1,1,1,1,1,1,1,1},
+			{1,4,4,4,4,4,4,4,4,1,1},
+			{1,1,1,1,4,1,4,4,1,1,1},
+			{1,1,1,1,4,1,4,4,4,3,1},
+			{1,1,1,3,4,4,4,4,4,3,1},
+			{1,1,1,1,1,1,1,1,1,1,1}
+		};
+		int row = 6;
+		int column = 11;
+		this.game = new Game(row, column, matrix);
+		showGame(row,column);
 	}
 
-	private void showGame() {
+	private void showGame(int row, int column) {
 		// Clears all the items currently on the window (if there are any)
 		for (Component component : frame.getContentPane().getComponents()) {
 			frame.getContentPane().remove(component);
 		}
 
-		this.mapUI = new LevelMap(this.row, this.column);
+		this.mapUI = new LevelMap(row, column);
 
-		this.mapController = new LevelMapController(game, mapUI);
+		this.mapController = new LevelMapController(game, mapUI, this);
 		mapUI.setController(mapController);
 		game.addObserver(mapController);
 		frame.getContentPane().add(mapUI);
@@ -181,7 +196,7 @@ public class WarehouseBoss implements ActionListener {
 		try {
 			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
 			this.game = new Game(data);
-			showGame();
+			showGame(this.row, this.column);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -175,9 +175,8 @@ public class LevelMap extends JPanel implements ActionListener {
 	}
 
 	public int showWin() {
-		// Windows guidelines suggest sentence-case for buttons,
-		// Mac suggests title-case, no idea what Linux guidelines suggest.
-		String[] choices = { "Next level", "Reset", "Quit game" };
+
+		String[] choices = { "Next Level", "Reset", "Quit Game" };
 		int choice = JOptionPane.showOptionDialog(null, "Do you want to continue?", "",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
 		if (choice == JOptionPane.CANCEL_OPTION) {
@@ -188,6 +187,21 @@ public class LevelMap extends JPanel implements ActionListener {
 			return 2;
 		}
 		return 0;
+	}
+	
+	public int showTutWin() {
+		String[] choices = {"Try Again", "Start Game", "Quit Game"};
+		int choice = JOptionPane.showOptionDialog(null, "Congradulations, Tutorial Complete!", "",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+		if (choice == JOptionPane.CANCEL_OPTION) {
+			System.exit(1);
+		} else if (choice == JOptionPane.YES_OPTION) {
+			return 1;
+		} else if (choice == JOptionPane.NO_OPTION) {
+			return 2;
+		}
+		return 0;
+		
 	}
 
 	public void updateTime(int update) {

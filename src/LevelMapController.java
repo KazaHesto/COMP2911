@@ -7,11 +7,13 @@ public class LevelMapController implements KeyListener, Observer {
 
 	private Game game;
 	private LevelMap mapUI;
+	private WarehouseBoss window;
 
-	public LevelMapController(Game game, LevelMap mapUI) {
+	public LevelMapController(Game game, LevelMap mapUI, WarehouseBoss window) {
 		super();
 		this.game = game;
 		this.mapUI = mapUI;
+		this.window = window;
 		this.game.addObserver(this);
 		initLevelMap();
 	}
@@ -62,15 +64,26 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI.setIsBox(this.game.getPlayerIsBox());
 		this.mapUI.repaint();
 		if (this.game.isWin()) {
-			int option = this.mapUI.showWin();
-			if (option == 1) {
-				this.game.newLevel();
-				this.game.resetGame();
-				initLevelMap();
-			} else if (option == 2) {
-				this.game.resetGame();
-				initLevelMap();
+			if(this.game.getGameState() == this.game.isGame()){
+				int option = this.mapUI.showWin();
+				if (option == 1) {
+					this.game.newLevel();
+					this.game.resetGame();
+					initLevelMap();
+				} else if (option == 2) {
+					this.game.resetGame();
+					initLevelMap();
+				}
+			} else  if (this.game.getGameState() == this.game.isTutorial()){
+				int option = this.mapUI.showTutWin();
+				if (option == 1) {
+					this.game.resetGame();
+					initLevelMap();
+				} else if (option == 2) {
+					this.window.initGame();
+				}
 			}
+
 		}
 	}
 }
