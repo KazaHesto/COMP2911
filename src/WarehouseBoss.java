@@ -166,7 +166,9 @@ public class WarehouseBoss implements ActionListener {
 	}
 
 	private void loadGame() {
-		this.game.pauseTimer();
+		if (this.game != null) {
+			this.game.pauseTimer();
+		}
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "save");
 		chooser.setFileFilter(filter);
