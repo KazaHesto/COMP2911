@@ -35,6 +35,7 @@ public class LevelMap extends JPanel implements ActionListener {
 	private Image boxSide;
 	private Image boxSideCross;
 	private Image cross;
+	private Image crossGlow;
 	private Image floor;
 	private Image wallSide;
 	private Image wallSideCross;
@@ -69,6 +70,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.boxSideCross = loadImage("/textures/BoxSideCross.png");
 		this.boxCross = loadImage("/textures/BoxTopCross.png");
 		this.cross = loadImage("/textures/Cross.png");
+		this.crossGlow = loadImage("/textures/CrossGlow.png");
 		this.floor = loadImage("/textures/Floor.png");
 		this.wallSide = loadImage("/textures/WallSide.png");
 		this.wallSideCross = loadImage("/textures/WallSideCross.png");
@@ -204,21 +206,21 @@ public class LevelMap extends JPanel implements ActionListener {
 				if (this.grid[row][col] == Constants.CROSS && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
 					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 				}
-				if (this.grid[row][col] == Constants.FLOOR) {
-					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
-				}
-				if (this.grid[row][col] == Constants.CROSS) {
-					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
-				}
 				if (this.grid[row][col] == Constants.FLOOR && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
 					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				}
+				if (this.grid[row][col] == Constants.FLOOR) {
+					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+				}
+				if (this.grid[row][col] == Constants.CROSS) {
+					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 				}
 			}
 		}
 
 		for(Berry berry : this.berries){
 			g.drawImage(this.berry, berry.getColumn() * BOX_WIDTH,
-					(int) ((berry.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), null);
+					(int) ((berry.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 		}
 
 		// Draws box side
@@ -262,11 +264,14 @@ public class LevelMap extends JPanel implements ActionListener {
 		
 		
 
-		// top wall layer
+		// top wall layer and cross glow effect
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
 				if (this.grid[row][col] == Constants.WALL) {
 					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH, BOX_HEIGHT, null);
+				}
+				if (this.grid[row][col] == Constants.CROSS) {
+					g.drawImage(this.crossGlow, col * BOX_WIDTH, (int) ((row + 0.9-1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 				}
 			}
 		}
