@@ -109,6 +109,10 @@ public class WarehouseBoss implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		menu.addSeparator();
+		menuItem = new JMenuItem("Exit to Titlescreen", KeyEvent.VK_T);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke("F7"));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 		menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
@@ -131,12 +135,14 @@ public class WarehouseBoss implements ActionListener {
 	private void showGameOptions() {
 		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
 	}
 
 	// undo gameMenuBar()
 	private void hideGameOptions() {
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(7).setEnabled(false);
 	}
 
 	private void saveGame() {
@@ -210,6 +216,9 @@ public class WarehouseBoss implements ActionListener {
 			showOptionsPane();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(7))) {
+			showMenu();
+		}
+		if (e.getSource().equals(menuBar.getMenu(0).getItem(8))) {
 			System.exit(1);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(0))) {
