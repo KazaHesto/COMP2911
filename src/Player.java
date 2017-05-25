@@ -11,6 +11,18 @@ public class Player implements java.io.Serializable{
 		this.column = column;
 	}
 
+	public Player(Coordinate coordinates) {
+		super();
+		this.row = coordinates.getRow();
+		this.column = coordinates.getColumn();
+	}
+
+	public Player(Player player) {
+		super();
+		this.row = player.getRow();
+		this.column = player.getColumn();
+	}
+
 	public int getRow() {
 		return this.row;
 	}

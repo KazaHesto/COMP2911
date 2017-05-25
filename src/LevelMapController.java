@@ -66,6 +66,7 @@ public class LevelMapController implements KeyListener, Observer {
 			if (option == 1) {
 				this.game.newLevel();
 				this.game.resetGame();
+				initLevelMap();
 			} else if (option == 2) {
 				this.game.resetGame();
 				initLevelMap();

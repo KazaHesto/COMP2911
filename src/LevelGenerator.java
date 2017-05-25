@@ -114,6 +114,7 @@ public class LevelGenerator {
 	private int[][] level;
 	private int[] topConditions;
 	private int[] leftConditions;
+	private ArrayList<Coordinate> boxes;
 
 	/**
 	 * Generates level
@@ -130,6 +131,7 @@ public class LevelGenerator {
 		level = new int[rows + 2][columns + 2];
 		topConditions = new int[columns + 2];
 		leftConditions = new int[rows + 2];
+		boxes = new ArrayList<Coordinate>();
 		// Creates a border of wall around the level
 		for (int i = 0; i < level.length; i++) {
 			for (int j = 0; j < level[i].length; j++) {
@@ -152,10 +154,41 @@ public class LevelGenerator {
 		if (isShallow()) {
 			level = generateLevel(rows, columns);
 		}
-		// Temporary so that checkwin doesn't keep popping up when moving in the
-		// level.
-		level[3][5] = Constants.CROSS;
+
+		// This is given the size excluding the outer walls because the
+		// pathtracer doesn't take it into account
+		PathTracer path = new PathTracer(columns, rows);
+		int[][] pathedMatrix = path.makePath(columns, rows);
+
+		mergeMatrix(pathedMatrix);
+
 		return level;
+	}
+
+	public Coordinate getPlayer() {
+		return getFirstFloor();
+	}
+
+	public ArrayList<Coordinate> getBox() {
+		return boxes;
+	}
+
+	private void mergeMatrix(int[][] pathedMatrix) {
+		for (int i = 0; i < pathedMatrix.length; i++) {
+			for (int j = 0; j < pathedMatrix[i].length; j++) {
+				if (pathedMatrix[i][j] != Constants.WALL) {
+					// the coordinates below have + 1 because pathtracer doesn't
+					// take into account the outer wall
+					this.level[i + 1][j + 1] = Constants.FLOOR;
+					if (pathedMatrix[i][j] == Constants.BOX) {
+						boxes.add(new Coordinate(i + 1, j + 1));
+					}
+					if (pathedMatrix[i][j] == Constants.CROSS) {
+						this.level[i+1][j+1] = Constants.CROSS;
+					}
+				}
+			}
+		}
 	}
 
 	/**

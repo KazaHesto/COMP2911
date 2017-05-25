@@ -19,6 +19,7 @@ public class Game2 extends Observable implements ActionListener {
 	private Stack<ArrayList<Box>> undoBoxes;
 	private int numMoves;
 	private Player player;
+	private Player resetPlayer;
 	private ArrayList<Box> boxes;
 	private ArrayList<Box> resetBoxes;
 	private ArrayList<Berry> berries;
@@ -35,7 +36,6 @@ public class Game2 extends Observable implements ActionListener {
 	public Game2(int row, int column) {
 		this.row = row;
 		this.column = column;
-		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
 		this.undoBoxes = new Stack<ArrayList<Box>>();
 		this.gameTimer = new Timer(1000, this);
@@ -88,10 +88,16 @@ public class Game2 extends Observable implements ActionListener {
 		};*/
 		this.matrix = gen.generateLevel(this.row - 2, this.column - 2);
 		this.resetState = copyMatrix(this.matrix);
+		this.player = new Player(gen.getPlayer());
+		this.resetPlayer = new Player(this.player);
+		System.out.println(this.player.getRow() + " " + this.player.getColumn());
 		this.boxes = new ArrayList<Box>();
-		this.boxes.add(new Box(2, 4));
-		this.boxes.add(new Box(3, 7));
-		this.boxes.add(new Box(4, 7));
+		for (Coordinate box : gen.getBox()) {
+			this.boxes.add(new Box(box.getRow(), box.getColumn()));
+		}
+	//	this.boxes.add(new Box(2, 4));
+	//	this.boxes.add(new Box(3, 7));
+	//	this.boxes.add(new Box(4, 7));
 		this.resetBoxes = getBoxes();
 		this.berries = new ArrayList<Berry>();
 		this.berries.add(new Berry(5,6));
@@ -121,11 +127,6 @@ public class Game2 extends Observable implements ActionListener {
 		return berries;
 	}
 
-	public int[][] setMatrix(int[][] dataMatrix) {
-		this.matrix = dataMatrix;
-		return this.matrix;
-	}
-
 	private int[][] copyMatrix(int[][] original) {
 		int[][] copy = new int[original.length][];
 		for (int i = 0; i < original.length; i++) {
@@ -145,7 +146,7 @@ public class Game2 extends Observable implements ActionListener {
 	// method to reset game level when R is pressed
 	public void resetGame() {
 		this.numMoves = 0;
-		this.player.setPosition(1, 1);
+		this.player = new Player(this.resetPlayer);
 		this.matrix = copyMatrix(this.resetState);
 		this.boxes = this.resetBoxes;
 		this.berries = this.resetBerries;
@@ -339,15 +340,11 @@ public class Game2 extends Observable implements ActionListener {
 
 	// logic to undo move
 	public void undoMove() {
-		if(this.player.getRow() != 1 || this.player.getColumn() != 1){
+		if (!this.undoPlayer.empty() && !this.undoBoxes.isEmpty()) {
 			this.numMoves++;
-		}
-		if (!this.undoPlayer.empty()) {
 			Integer row = this.undoPlayer.pop();
 			Integer column = this.undoPlayer.pop();
 			this.player.setPosition(row, column);
-		}
-		if (!this.undoBoxes.isEmpty()) {
 			this.boxes = this.undoBoxes.pop();
 		}
 		setChanged();
