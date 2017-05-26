@@ -182,6 +182,7 @@ public class Game extends Observable implements ActionListener {
 		this.matrix = copyMatrix(this.resetState);
 		this.boxes = this.resetBoxes;
 		this.berries = this.resetBerries;
+		this.resetBerries = getBerries();
 		this.resetBoxes = getBoxes();
 		this.checkWin = false;
 		this.seconds = 0;
