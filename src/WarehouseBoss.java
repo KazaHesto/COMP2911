@@ -40,6 +40,8 @@ public class WarehouseBoss implements ActionListener, Observer {
 		frame.setJMenuBar(menuBar);
 		this.row = 11;
 		this.column = 14;
+		Resources resources = new Resources();
+		frame.setIconImage(resources.getImage(Resources.PLAYER_PUSH_RIGHT));
 		showMenu();
 	}
 
