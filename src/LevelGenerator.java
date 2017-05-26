@@ -114,6 +114,7 @@ public class LevelGenerator {
 	private int[][] level;
 	private int[] topConditions;
 	private int[] leftConditions;
+	private ArrayList<Coordinate> seen;
 	private ArrayList<Coordinate> boxes;
 
 	/**
@@ -136,7 +137,7 @@ public class LevelGenerator {
 		for (int i = 0; i < level.length; i++) {
 			for (int j = 0; j < level[i].length; j++) {
 				if (i == 0 || i == level.length - 1 || j == 0 || j == level[i].length - 1) {
-					level[i][j] = Constants.WALL;
+					level[i][j] = Resources.WALL;
 				}
 			}
 		}
@@ -155,14 +156,13 @@ public class LevelGenerator {
 		if (isShallow()) {
 			level = generateLevel(rows, columns);
 		}
-
-		// This is given the size excluding the outer walls because the
-		// pathtracer doesn't take it into account
-		PathTracer path = new PathTracer(columns, rows);
-		int[][] pathedMatrix = path.makePath(columns, rows);
-
-		mergeMatrix(pathedMatrix);
-
+		// Temporary so that checkwin doesn't keep popping up when moving in the
+		// level.
+		//level[3][5] = Resources.CROSS;
+		
+		placeCross();
+//		placeCross();
+//		placeCross();
 		return level;
 	}
 
@@ -174,33 +174,14 @@ public class LevelGenerator {
 		return boxes;
 	}
 
-	private void mergeMatrix(int[][] pathedMatrix) {
-		for (int i = 0; i < pathedMatrix.length; i++) {
-			for (int j = 0; j < pathedMatrix[i].length; j++) {
-				if (pathedMatrix[i][j] != Constants.WALL) {
-					// the coordinates below have + 1 because pathtracer doesn't
-					// take into account the outer wall
-					this.level[i + 1][j + 1] = Constants.FLOOR;
-					if (pathedMatrix[i][j] == Constants.BOX) {
-						boxes.add(new Coordinate(i + 1, j + 1));
-					}
-					if (pathedMatrix[i][j] == Constants.CROSS) {
-						this.level[i + 1][j + 1] = Constants.CROSS;
-					}
-				}
-			}
-		}
-	}
-
 	/**
 	 * Returns the first floor tile's coordinates
-	 * 
 	 * @return first floor tile's coordinates, null if not found
 	 */
 	private Coordinate getFirstFloor() {
 		for (int i = 0; i < level.length; i++) {
 			for (int j = 0; j < level[i].length; j++) {
-				if (level[i][j] == Constants.FLOOR) {
+				if (level[i][j] == Resources.FLOOR) {
 					Coordinate coord = new Coordinate(i, j);
 					return coord;
 				}
@@ -211,7 +192,7 @@ public class LevelGenerator {
 
 	private boolean isShallow() {
 		Stack<Coordinate> toDo = new Stack<Coordinate>();
-		ArrayList<Coordinate> seen = new ArrayList<Coordinate>();
+		this.seen = new ArrayList<Coordinate>();
 
 		toDo.add(getFirstFloor());
 		Coordinate curr = null;
@@ -236,19 +217,19 @@ public class LevelGenerator {
 		int row = coord.getRow();
 		int column = coord.getColumn();
 
-		if (this.level[row - 1][column] == Constants.FLOOR) {
+		if (this.level[row - 1][column] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row - 1, column);
 			neighbourList.add(neighbour);
 		}
-		if (this.level[row + 1][column] == Constants.FLOOR) {
+		if (this.level[row + 1][column] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row + 1, column);
 			neighbourList.add(neighbour);
 		}
-		if (this.level[row][column - 1] == Constants.FLOOR) {
+		if (this.level[row][column - 1] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row, column - 1);
 			neighbourList.add(neighbour);
 		}
-		if (this.level[row][column + 1] == Constants.FLOOR) {
+		if (this.level[row][column + 1] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row, column + 1);
 			neighbourList.add(neighbour);
 		}
@@ -318,12 +299,12 @@ public class LevelGenerator {
 							return false;
 						}
 						// Checks right conditions if the right-most column
-						if (j == level[i].length - 4 && template[k + 1][4] != Constants.WALL
+						if (j == level[i].length - 4 && template[k + 1][4] != Resources.WALL
 								&& template[k + 1][0] != 5) {
 							return false;
 						}
 						// Checks top conditions if the bottom-most row
-						if (i == level.length - 4 && template[4][k + 1] != Constants.WALL && template[0][k + 1] != 5) {
+						if (i == level.length - 4 && template[4][k + 1] != Resources.WALL && template[0][k + 1] != 5) {
 							return false;
 						}
 					}
@@ -378,6 +359,67 @@ public class LevelGenerator {
 			}
 		}
 		return rotated;
+	}
+
+	private void placeCross() {
+		Random rand = new Random();
+		Coordinate cross = this.seen.get(rand.nextInt(this.seen.size()));
+		Coordinate box = backTrack(cross);
+		this.boxes.add(box);
+		for (int i = 0; i < this.level.length; i++) {
+			for (int j = 0; j < this.level[i].length; j++) {
+				if (i == cross.getRow() && j == cross.getColumn()) {
+					this.level[i][j] = Resources.CROSS;
+				}
+			}
+		}
+	}
+
+	private Coordinate backTrack(Coordinate cross) {
+		Random rand = new Random();
+		ArrayList<Coordinate> neighbours = getFloorNeighbours(cross);
+		Coordinate box = new Coordinate(cross);
+		Coordinate player = neighbours.get(rand.nextInt(neighbours.size()));
+		Coordinate temp = new Coordinate(player);
+		
+		for (int i = 0; i < 20; i++) {
+			neighbours = getFloorNeighbours(box);
+			temp = neighbours.get(rand.nextInt(neighbours.size()));
+			while (!isAccessible(player, temp, box)) {
+				temp = neighbours.get(rand.nextInt(neighbours.size()));
+			}
+			box = player;
+			player = temp;
+			System.out.println(player.getRow() + " " + player.getColumn());
+		}
+		return box;
+	}
+
+	private boolean isAccessible(Coordinate start, Coordinate end, Coordinate obstruction) {
+		Stack<Coordinate> toDo = new Stack<Coordinate>();
+		ArrayList<Coordinate> seen = new ArrayList<Coordinate>();
+
+		toDo.add(start);
+		Coordinate curr = null;
+		// Run a DFS to check if job locations are reachable.
+		while (!toDo.isEmpty()) {
+			curr = toDo.pop();
+			seen.add(curr);
+			if (curr.equals(end)) {
+				return true;
+			}
+			for (Coordinate neighbour: getFloorNeighbours(curr)) {
+				if (obstruction != null) {
+					if (neighbour.equals(obstruction)) {
+						continue;
+					}
+				}
+				if (!seen.contains(neighbour)) {
+					toDo.push(neighbour);
+				}
+			}
+		}
+		return false;
 	}
 
 	private void printMatrix(int[][] matrix) {
