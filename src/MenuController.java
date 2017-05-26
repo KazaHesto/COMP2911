@@ -4,24 +4,38 @@ import java.awt.event.MouseListener;
 import javax.swing.JOptionPane;
 
 public class MenuController implements MouseListener {
-
+	// declaring variables
+	
+	// a Menu instance
 	private Menu menu;
+	// a WarehouseBoss instance
 	private WarehouseBoss window;
 
 	/**
-	 * constructor for the menu controller
-	 * @param menu -> renders the main menu
-	 * @param window -> the jframe
+	 * constructor
+	 * 
+	 * @param 	menu		renders the main menu
+	 * @param 	window		the jframe
 	 */
 	public MenuController(Menu menu, WarehouseBoss window) {
+		// initialise variables
 		this.menu = menu;
 		this.window = window;
 	}
 
+	/**
+	 * override: mouseClicked() -> decides what to do based on mouse input
+	 * 
+	 * @param	arg0	a MouseEvent instance
+	 * @return	-
+	 * @throws	-
+	 */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		// get coordinates of mouse click
 		int mx = arg0.getX();
 		int my = arg0.getY();
+		// do stuff based on input
 		if (mx >= 400 && mx <= 600) {
 			if (my >= 100 && my <= 170) {
 				this.window.initGame();
