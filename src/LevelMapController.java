@@ -62,7 +62,7 @@ public class LevelMapController implements KeyListener, Observer {
 		this.mapUI.setIsBox(this.game.getPlayerIsBox());
 		this.mapUI.repaint();
 
-		if (this.game.isWin()) {
+		if (this.game.isWin() && !this.game.isTutorial()) {
 			int option = this.mapUI.showWin();
 			if (option == 1) {
 				this.game.newLevel();

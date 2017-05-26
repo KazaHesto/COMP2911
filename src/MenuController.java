@@ -25,10 +25,7 @@ public class MenuController implements MouseListener {
 
 		if (mx >= 295 && mx <= 435) {
 			if (my >= 200 && my <= 250) {
-//				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
 				this.window.initTutorial();
-				JOptionPane.showMessageDialog(null, "Use WASD to move Player. But for now press D", "Tutorial",
-						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 
@@ -37,7 +34,7 @@ public class MenuController implements MouseListener {
 				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
-		
+
 		if(mx >= 295 && mx <= 435){
 			if(my >= 400 && my <= 450){
 				System.exit(1);
