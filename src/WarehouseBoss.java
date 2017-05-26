@@ -62,7 +62,17 @@ public class WarehouseBoss implements ActionListener {
 	}
 	
 	public void initTutorial() {
-		
+		int[][] matrix = new int[][] {
+			{1,1,1,1,1,1,1,1,1,1,1},
+			{1,4,4,1,4,1,4,1,4,1,1},
+			{1,1,1,1,4,1,1,1,1,1,1},
+			{1,1,1,1,4,4,4,1,4,3,1},
+			{1,1,1,3,4,4,4,1,4,3,1},
+			{1,1,1,1,1,1,1,1,1,1,1}
+		};
+		SaveData start = new SaveData(matrix, null, player, null, null, 0, 0, null, null, null, null, false, 0);
+		this.game = new Game(start);
+		showGame(row,column);
 	}
 
 	private void showGame(int row, int column) {
