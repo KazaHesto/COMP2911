@@ -260,7 +260,7 @@ public class Game extends Observable implements ActionListener {
 	 * @return Returns true if there exists a box or wall, false otherwise.
 	 */
 	private boolean isObstructed(int row, int column) {
-		return isBox(row, column) || matrix[row][column] == Constants.WALL;
+		return isBox(row, column) || matrix[row][column] == Resources.WALL;
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class Game extends Observable implements ActionListener {
 		this.checkWin = true;
 		for (int row = 0; row < this.matrix.length; row++) {
 			for (int column = 0; column < this.matrix[row].length; column++) {
-				if (this.matrix[row][column] == Constants.CROSS && !isBox(row, column)) {
+				if (this.matrix[row][column] == Resources.CROSS && !isBox(row, column)) {
 					this.checkWin = false;
 				}
 			}

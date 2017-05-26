@@ -1,10 +1,13 @@
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -27,18 +30,31 @@ public class WarehouseBoss implements ActionListener, Observer {
 	private Menu menu;
 	private int row;
 	private int column;
+	private Image wall;
 
 	public void createWindow() {
+		this.wall = loadImage("/textures/WallTop.png");
 		this.frame = new JFrame();
 		frame.setResizable(false);
-		frame.setTitle(Constants.GAME_TITLE);
+		frame.setTitle(Resources.GAME_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuBar = createMenuBar();
 		frame.setJMenuBar(menuBar);
 		this.row = 11;
 		this.column = 14;
+		frame.setIconImage(this.wall);
 
 		showMenu();
+	}
+
+	// Reads images from file system
+	private Image loadImage(String path) {
+		try {
+			return ImageIO.read(getClass().getResource(path));
+		} catch (IOException e) {
+			System.out.println("File not found");
+		}
+		return null;
 	}
 
 	private void showMenu() {
@@ -251,11 +267,11 @@ public class WarehouseBoss implements ActionListener, Observer {
 			System.exit(1);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(0))) {
-			JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, Constants.HELP_TITLE,
+			JOptionPane.showMessageDialog(null, Resources.HELP_TEXT, Resources.HELP_TITLE,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(1))) {
-			JOptionPane.showMessageDialog(null, Constants.ABOUT_TEXT, Constants.ABOUT_TITLE,
+			JOptionPane.showMessageDialog(null, Resources.ABOUT_TEXT, Resources.ABOUT_TITLE,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

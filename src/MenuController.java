@@ -1,4 +1,3 @@
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -16,29 +15,19 @@ public class MenuController implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		
 		int mx = arg0.getX();
 		int my = arg0.getY();
-		if (mx >= 150 && mx <= 290) {
-			if (my >= 150 && my <= 250) {
+		if (mx >= 400 && mx <= 600) {
+			if (my >= 100 && my <= 170) {
 				this.window.initGame();
 			}
-		}
-
-		if (mx >= 425 && mx <= 565) {
-			if (my >= 150 && my <= 250) {
+			if (my >= 200 && my <= 270) {
 				this.window.initTutorial();
 			}
-		}
-
-		if (mx >= 150 && mx <= 290) {
-			if (my >= 300 && my <= 400) {
-				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
+			if (my >= 300 && my <= 370) {
+				JOptionPane.showMessageDialog(null, Resources.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
-
-		if(mx >= 425 && mx <= 565){
-			if(my >= 300 && my <= 400){
+			if(my >= 400 && my <= 470){
 				System.exit(1);
 			}
 		}
