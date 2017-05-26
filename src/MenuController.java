@@ -8,6 +8,11 @@ public class MenuController implements MouseListener {
 	private Menu menu;
 	private WarehouseBoss window;
 
+	/**
+	 * constructor for the menu controller
+	 * @param menu -> renders the main menu
+	 * @param window -> the jframe
+	 */
 	public MenuController(Menu menu, WarehouseBoss window) {
 		this.menu = menu;
 		this.window = window;
@@ -17,29 +22,17 @@ public class MenuController implements MouseListener {
 	public void mouseClicked(MouseEvent arg0) {
 		int mx = arg0.getX();
 		int my = arg0.getY();
-		if (mx >= 295 && mx <= 435) {
-			if (my >= 100 && my <= 150) {
+		if (mx >= 400 && mx <= 600) {
+			if (my >= 100 && my <= 170) {
 				this.window.initGame();
 			}
-		}
-
-		if (mx >= 295 && mx <= 435) {
-			if (my >= 200 && my <= 250) {
-//				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
+			if (my >= 200 && my <= 270) {
 				this.window.initTutorial();
-				JOptionPane.showMessageDialog(null, "Use WASD to move Player. But for now press D", "Tutorial",
-						JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
-
-		if (mx >= 295 && mx <= 435) {
-			if (my >= 300 && my <= 350) {
-				JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
+			if (my >= 300 && my <= 370) {
+				JOptionPane.showMessageDialog(null, Resources.HELP_TEXT, "Help", JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
-		
-		if(mx >= 295 && mx <= 435){
-			if(my >= 400 && my <= 450){
+			if(my >= 400 && my <= 470){
 				System.exit(1);
 			}
 		}

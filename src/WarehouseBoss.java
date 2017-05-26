@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -15,7 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class WarehouseBoss implements ActionListener {
+public class WarehouseBoss implements ActionListener, Observer {
 
 	private JFrame frame;
 	private Game game;
@@ -26,18 +28,24 @@ public class WarehouseBoss implements ActionListener {
 	private int row;
 	private int column;
 
+	/**
+	 * creates the jframe window and shows the main menu
+	 */
 	public void createWindow() {
 		this.frame = new JFrame();
 		frame.setResizable(false);
-		frame.setTitle(Constants.GAME_TITLE);
+		frame.setTitle(Resources.GAME_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuBar = createMenuBar();
 		frame.setJMenuBar(menuBar);
 		this.row = 11;
 		this.column = 14;
-
 		showMenu();
 	}
+
+	/**
+	 * shows the main menu
+	 */
 
 	private void showMenu() {
 		// Clears all the items currently on the window (if there are any)
@@ -55,26 +63,35 @@ public class WarehouseBoss implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-
+	
+	/**
+	 * initialises the game
+	 */
 	public void initGame() {
 		this.game = new Game(this.row, this.column);
 		showGame(this.row, this.column);
+		showGameOptions();
 	}
 	
+	/**
+	 * initalises the tutorial
+	 */
 	public void initTutorial() {
-		int[][] matrix = new int[][] {
-			{1,1,1,1,1,1,1,1,1,1,1},
-			{1,4,4,1,4,1,4,1,4,1,1},
-			{1,1,1,1,4,1,1,1,1,1,1},
-			{1,1,1,1,4,4,4,1,4,3,1},
-			{1,1,1,3,4,4,4,1,4,3,1},
-			{1,1,1,1,1,1,1,1,1,1,1}
-		};
-		int row = 6;
-		int column = 11;
-		this.game = new Game(row, column, matrix);
-		showGame(row,column);
+		this.game = new Game(-1, -1);
+		this.game.startTut();
+		Tutorial tutorial = new Tutorial(this.game);
+		game.addObserver(tutorial);
+		tutorial.addObserver(this);
+		showGame(6, 11);
+		showTutorialOptions();
+		tutorial.ititialPrompt();
 	}
+	
+	/**
+	 * makes a new levelmap and a level map to be rendered and sets a levelmap controller
+	 * @param row -> size of the game matrix
+	 * @param column -> size of the game matrix
+	 */
 
 	private void showGame(int row, int column) {
 		// Clears all the items currently on the window (if there are any)
@@ -90,12 +107,15 @@ public class WarehouseBoss implements ActionListener {
 		frame.getContentPane().add(mapUI);
 		mapUI.requestFocusInWindow();
 
-		showGameOptions();
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-
+	
+	/**
+	 * creates the menu bar at the top of the window
+	 * @return return the menu bar object
+	 */
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 
@@ -146,20 +166,42 @@ public class WarehouseBoss implements ActionListener {
 		return menuBar;
 	}
 
-	// enables game related menubar items, such as undo
+	/**
+	 * enables game related menubar items, such as undo
+	 */
 	private void showGameOptions() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(5).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
 	}
 
-	// undo gameMenuBar()
-	private void hideGameOptions() {
+	/**
+	 * disable tutorial options in menu bar
+	 */
+	private void showTutorialOptions() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
-		this.menuBar.getMenu(0).getItem(7).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(5).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
 	}
 
+	/**
+	 * undo gameMenuBar()
+	 */
+	private void hideGameOptions() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(5).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(7).setEnabled(false);
+	}
+	
+	/**
+	 * pauses the timer when the save window opens and saves game state as a saveData object
+	 */
 	private void saveGame() {
 		this.game.pauseTimer();
 		JFileChooser chooser = new JFileChooser();
@@ -179,6 +221,10 @@ public class WarehouseBoss implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * opens load game window and sets gamestate according to saved data
+	 */
 
 	private void loadGame() {
 		if (this.game != null) {
@@ -197,10 +243,15 @@ public class WarehouseBoss implements ActionListener {
 			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
 			this.game = new Game(data);
 			showGame(this.row, this.column);
+			showGameOptions();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * option to change the game window
+	 */
 
 	private void showOptionsPane() {
 		String[] options = { "11x14", "8x11" };
@@ -222,20 +273,10 @@ public class WarehouseBoss implements ActionListener {
 			initGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(1))) {
-			if(this.game.getGameState() == this.game.isTutorial()){
-				JOptionPane.showMessageDialog(null, "You can not Load during the Tutorial!", "Warning",
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				loadGame();
-			}
+			loadGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(2))) {
-			if(this.game.getGameState() == this.game.isTutorial()){
-				JOptionPane.showMessageDialog(null, "You can not Save during the Tutorial!", "Warning",
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				saveGame();
-			}
+			saveGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(4))) {
 			this.game.undoMove();
@@ -250,15 +291,28 @@ public class WarehouseBoss implements ActionListener {
 			System.exit(1);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(0))) {
-			JOptionPane.showMessageDialog(null, Constants.HELP_TEXT, Constants.HELP_TITLE,
+			JOptionPane.showMessageDialog(null, Resources.HELP_TEXT, Resources.HELP_TITLE,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(1))) {
-			JOptionPane.showMessageDialog(null, Constants.ABOUT_TEXT, Constants.ABOUT_TITLE,
+			JOptionPane.showMessageDialog(null, Resources.ABOUT_TEXT, Resources.ABOUT_TITLE,
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+		if ((int) arg == 1) {
+			this.game.resetGame();
+			this.mapController.initLevelMap();
+		} else if ((int) arg == 2) {
+			initGame();
+		}
+	}
+	/**
+	 * the main function
+	 * @param args -> no argumnets taken in
+	 */
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

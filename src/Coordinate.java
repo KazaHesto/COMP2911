@@ -24,6 +24,19 @@ public class Coordinate {
 	}
 
 	/**
+	 * constructor
+	 * 
+	 * @param coordinate coordinate to take values from
+	 */
+	public Coordinate(Coordinate coordinate) {
+		super();
+		// initialising the row component of this class
+		this.row = coordinate.getRow();
+		// initialising the column component of this class
+		this.column = coordinate.getColumn();
+	}
+
+	/**
 	 * getter: getRow() -> returns the row of the Object
 	 * @param	-
 	 * @return	this.row		returns the row coordinate

@@ -3,13 +3,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -23,28 +20,9 @@ public class LevelMap extends JPanel implements ActionListener {
 
 	private int rows;
 	private int columns;
+	private Resources resources;
 	private int[][] grid;
 	private LevelMapController controller;
-	private Image wall;
-	private Image playerForward;
-	private Image playerBackward;
-	private Image playerLeft;
-	private Image playerRight;
-	private Image playerPushForward;
-	private Image playerPushBackward;
-	private Image playerPushLeft;
-	private Image playerPushRight;
-	private Image box;
-	private Image boxCross;
-	private Image boxSide;
-	private Image boxSideCross;
-	private Image cross;
-	private Image crossGlow;
-	private Image floor;
-	private Image wallSide;
-	private Image wallSideCross;
-	private Image halfWallTop;
-	private Image berry;
 	private double x;
 	private double y;
 	private int tempX;
@@ -57,39 +35,26 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int playerDirection;
 	private boolean isBox;
 
+	/**
+	 * Constructor for levelMap. Sets all the Images.
+	 * @param rows -> rows for the map matrix
+	 * @param columns -> columns for the map matrix
+	 */
 	public LevelMap(int rows, int columns) {
 		super();
 		this.rows = rows;
 		this.columns = columns;
+		this.resources = new Resources();
 		setSize(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
 		setFocusable(true);
 		setVisible(true);
-
-		this.wall = loadImage("/textures/WallTop.png");
-		this.playerBackward = loadImage("/textures/Mandown.png");
-		this.playerForward = loadImage("/textures/ManPushUp.png");
-		this.playerRight = loadImage("/textures/ManRight.png");
-		this.playerLeft = loadImage("/textures/ManLeft.png");
-		this.playerPushForward = loadImage("/textures/ManPushUp.png");
-		this.playerPushBackward = loadImage("/textures/ManPushDown.png");
-		this.playerPushLeft = loadImage("/textures/ManPushLeft.png");
-		this.playerPushRight = loadImage("/textures/ManPushRight.png");
-		this.boxSide = loadImage("/textures/BoxSide.png");
-		this.box = loadImage("/textures/BoxTop.png");
-		this.boxSideCross = loadImage("/textures/BoxSideCross.png");
-		this.boxCross = loadImage("/textures/BoxTopCross.png");
-		this.cross = loadImage("/textures/Cross.png");
-		this.crossGlow = loadImage("/textures/CrossGlow.png");
-		this.floor = loadImage("/textures/Floor.png");
-		this.wallSide = loadImage("/textures/WallSide.png");
-		this.wallSideCross = loadImage("/textures/WallSideCross.png");
-		this.halfWallTop = loadImage("/textures/HalfWallTop.png");
-		this.berry = loadImage("/textures/Berry.png");
-
 		this.timer = new Timer(5, this);
 		clearLevelMap();
 	}
-
+	
+	/**
+	 * Clears the level Map
+	 */
 	public void clearLevelMap() {
 		this.numMoves = 0;
 		this.seconds = 0;
@@ -100,34 +65,62 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.berries = new ArrayList<Berry>();
 	}
 
-	// Updates the grid shown in the ui
+	/**
+	 * Set the grid matrix for the game.
+	 * @param grid -> input matrix for the game
+	 */
 	public void setGrid(int[][] grid) {
 		this.grid = new int[grid.length][];
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
 	}
-
+	
+	/**
+	 * Sets the direction of the player in levelMapController
+	 * @param playerDirection -> gets the direction the player is in
+	 */
 	public void setDirection(int playerDirection) {
 		this.playerDirection = playerDirection;
 	}
-
+	
+	/**
+	 * Sets if the player is colliding with a box for box moving animations
+	 * @param isBox -> sets if the player is colliding with box or not
+	 */
 	public void setIsBox(boolean isBox) {
 		this.isBox = isBox;
 	}
-
+	
+	/**
+	 * set the positions for the box in levelMapController
+	 * @param boxes -> sets all the positions of the boxes
+	 */
 	public void setBoxPositions(ArrayList<Box> boxes) {
 		this.boxes = boxes;
 	}
-
+	
+	/**
+	 * set the positions for the berries in levelMapController
+	 * @param berries -> set all the positions of the berries
+	 */
 	public void setBerryPositions(ArrayList<Berry> berries) {
 		this.berries = berries;
 	}
 
+	/**
+	 * set the number of moves the player has made in levelMapController
+	 * @param numMoves -> number of moves the player has made
+	 */
 	public void setNumMoves(int numMoves) {
 		this.numMoves = numMoves;
 	}
-
+	
+	/**
+	 * set the position of the player in levelMapController
+	 * @param x -> the x cooridinate
+	 * @param y -> the y cooridinate
+	 */
 	public void setPlayerPosition(int x, int y) {
 		if (this.x == -1 && this.y == -1) {
 			this.x = x;
@@ -141,41 +134,31 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 	}
 
-	// Adds keylistener
+	/**
+	 * Set KeyListener for levelMapController
+	 * @param controller -> the levelMap controller
+	 */
 	public void setController(LevelMapController controller) {
 		this.controller = controller;
 		this.addKeyListener(this.controller);
 	}
-
-	// Decides what image to show at each tile
-	private Image changeImage(int z) {
-		switch (z) {
-		case 0:
-			return this.wall;
-		case 3:
-			return this.cross;
-		case 4:
-			return this.floor;
-		}
-		return null;
-	}
-
-	// Reads images from file system
-	private Image loadImage(String path) {
-		try {
-			return ImageIO.read(getClass().getResource(path));
-		} catch (IOException e) {
-			System.out.println("File not found");
-		}
-		return null;
-	}
-
+	
+	/**
+	 * General function that compares two numbers
+	 * @param a 
+	 * @param b
+	 * @return -> checking if two numbers are less than 0.01
+	 */
 	private boolean fuzzyMatch(double a, double b) {
 		return Math.abs(a - b) < 0.01;
 	}
+	
+	/**
+	 * Shows the winning window.
+	 * @return -> returns what button is pressed.
+	 */
 
 	public int showWin() {
-
 		String[] choices = { "Next Level", "Reset", "Quit Game" };
 		int choice = JOptionPane.showOptionDialog(null, "Do you want to continue?", "",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
@@ -188,6 +171,11 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 		return 0;
 	}
+	
+	/**
+	 * Shows the winning window for tutorial level
+	 * @return
+	 */
 	
 	public int showTutWin() {
 		String[] choices = {"Practise", "Start Game", "Quit Game"};
@@ -203,18 +191,36 @@ public class LevelMap extends JPanel implements ActionListener {
 		return 0;
 		
 	}
-
+	
+	/**
+	 * update the time
+	 * @param update -> number of seconds passed in game.
+	 */
 	public void updateTime(int update) {
 		this.seconds = update;
 	}
+	
+	/**
+	 * check if the player is colliding with box
+	 * @param row -> row coordinate
+	 * @param column -> column coordinate
+	 * @return -> true if it collides and false otherwise
+	 */
+	private boolean isBox(int row, int column) {
+		for (Box box : this.boxes) {
+			if (box.getRow() == row && box.getColumn() == column) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	// Sets the size of this JPanel
+
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 	}
 
-	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
 		// For some reason this is needed on Windows?
@@ -223,7 +229,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		Font fnt0 = new Font("ariel", Font.BOLD, 50);
 		g.setFont(fnt0);
 		FontMetrics metrics = g.getFontMetrics();
-		g.drawString(Constants.GAME_TITLE, this.columns * BOX_WIDTH / 2 - metrics.stringWidth(Constants.GAME_TITLE) / 2,
+		g.drawString(Resources.GAME_TITLE, this.columns * BOX_WIDTH / 2 - metrics.stringWidth(Resources.GAME_TITLE) / 2,
 				50);
 		// Shows score at the top of the window
 		Font font = new Font("Veranda", Font.BOLD, 20);
@@ -235,95 +241,98 @@ public class LevelMap extends JPanel implements ActionListener {
 		// Floor and side wall layer
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] == Constants.CROSS && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
-					g.drawImage(this.wallSideCross, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+				if (this.grid[row][col] == Resources.CROSS && row != 0 && this.grid[row - 1][col] == Resources.WALL) {
+					g.drawImage(this.resources.getImage(Resources.WALL_SIDE_CROSS), col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
 							BOX_HEIGHT, null);
 				}
-				if (this.grid[row][col] == Constants.FLOOR && row != 0 && this.grid[row - 1][col] == Constants.WALL) {
-					g.drawImage(this.wallSide, col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+				if (this.grid[row][col] == Resources.FLOOR && row != 0 && this.grid[row - 1][col] == Resources.WALL) {
+					g.drawImage(this.resources.getImage(Resources.WALL_SIDE), col * BOX_WIDTH, (int) (row * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
 							BOX_SIDE_HEIGHT, null);
 				}
-				if (this.grid[row][col] == Constants.FLOOR) {
-					g.drawImage(this.floor, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+				if (this.grid[row][col] == Resources.FLOOR) {
+					g.drawImage(this.resources.getImage(Resources.FLOOR_TILE), col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
 							BOX_HEIGHT, null);
 				}
-				if (this.grid[row][col] == Constants.CROSS) {
-					g.drawImage(this.cross, col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
+				if (this.grid[row][col] == Resources.CROSS) {
+					g.drawImage(this.resources.getImage(Resources.CROSS_TILE), col * BOX_WIDTH, (int) ((row + 0.9) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH,
 							BOX_HEIGHT, null);
 				}
 			}
 		}
 
-		for (Berry berry : this.berries) {
-			g.drawImage(this.berry, berry.getColumn() * BOX_WIDTH,
-					(int) ((berry.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
-		}
-
 		// Draws box side
 		for (Box box : this.boxes) {
-			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
-				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.7) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			if (this.grid[box.getRow()][box.getColumn()] == Resources.CROSS) {
+				g.drawImage(this.resources.getImage(Resources.BOX_CROSS_SIDE), box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.5) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
-				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.7) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.BOX_SIDE), box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.5) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+			}
+		}
+
+		for (Berry berry : this.berries) {
+			if (!isBox(berry.getRow(), berry.getColumn())) {
+				g.drawImage(this.resources.getImage(Resources.BERRY_TILE), berry.getColumn() * BOX_WIDTH,
+					(int) ((berry.getRow() + 0.8) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+		
 			}
 		}
 
 		if (playerDirection == 0) {
 			if (isBox == true) {
-				g.drawImage(this.playerPushForward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_UP), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
-				g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_UP), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 90) {
 			if (isBox == true) {
-				g.drawImage(this.playerPushRight, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_RIGHT), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
-				g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_RIGHT), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 180) {
 			if (isBox == true) {
-				g.drawImage(this.playerPushBackward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_DOWN), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
-				g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_DOWN), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 270) {
 			if (isBox == true) {
-				g.drawImage(this.playerPushLeft, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_LEFT), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
-				g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.PLAYER_LEFT), (int) (this.x * BOX_WIDTH),
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
 
 		// Draws box top
 		for (Box box : this.boxes) {
-			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
-				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+			if (this.grid[box.getRow()][box.getColumn()] == Resources.CROSS) {
+				g.drawImage(this.resources.getImage(Resources.BOX_CROSS_TOP), box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			} else {
-				g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+				g.drawImage(this.resources.getImage(Resources.BOX_TOP), box.getColumn() * BOX_WIDTH,
+						(int) ((box.getRow() + 0.1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			}
 		}
 
 		// top wall layer and cross glow effect
 		for (int row = 0; row < this.grid.length; row++) {
 			for (int col = 0; col < this.grid[row].length; col++) {
-				if (this.grid[row][col] == Constants.WALL) {
-					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH,
+				if (this.grid[row][col] == Resources.WALL) {
+					g.drawImage(this.resources.getImage(Resources.WALL_TOP), col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH,
 							BOX_HEIGHT, null);
 				}
-				if (this.grid[row][col] == Constants.CROSS) {
-					g.drawImage(this.crossGlow, col * BOX_WIDTH, (int) ((row + 0.9 - 1) * BOX_HEIGHT + SCORE_GUTTER),
+				if (this.grid[row][col] == Resources.CROSS && !isBox(row, col)) {
+					g.drawImage(this.resources.getImage(Resources.CROSS_ARROW), col * BOX_WIDTH, (int) ((row + 0.9 - 1) * BOX_HEIGHT + SCORE_GUTTER),
 							BOX_WIDTH, BOX_HEIGHT, null);
 				}
 			}

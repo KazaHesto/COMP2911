@@ -22,6 +22,22 @@ public class SaveData implements Serializable {
 	public boolean berryState;
 	public int berryCount;
 
+	/**
+	 * constructor to set all the save data
+	 * @param matrix -> the game matrix
+	 * @param resetState -> the original state of game matrix
+	 * @param player -> the player object 
+	 * @param resetPlayer -> the original state of the player object
+	 * @param undoPlayer -> all the moves made
+	 * @param seconds -> the in game time
+	 * @param numMoves -> number of moves made by player
+	 * @param boxes -> the boxes in the game
+	 * @param undoBoxes -> moves the boxes have made
+	 * @param resetBoxes -> the original state of the boexes
+	 * @param berries -> the berries in the game
+	 * @param berryState -> the original position of the berries
+	 * @param berryCount -> the number of berries left
+	 */
 	public SaveData(int[][] matrix, int[][] resetState, Player player, Player resetPlayer, Stack<Integer> undoPlayer,
 			int seconds, int numMoves, ArrayList<Box> boxes, Stack<ArrayList<Box>> undoBoxes, ArrayList<Box> resetBoxes,
 			ArrayList<Berry> berries, boolean berryState, int berryCount) {
