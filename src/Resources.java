@@ -53,11 +53,6 @@ public class Resources {
 	public static final int HELP_BUTTON = 22;
 	public static final int QUIT_BUTTON = 23;
 
-	public static final int UP = 1;
-	public static final int DOWN = 2;
-	public static final int LEFT = 3;
-	public static final int RIGHT = 4;
-
 	private final Image playerUp;
 	private final Image playerDown;
 	private final Image playerLeft;
