@@ -1,13 +1,10 @@
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import java.awt.Component;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -30,10 +27,11 @@ public class WarehouseBoss implements ActionListener, Observer {
 	private Menu menu;
 	private int row;
 	private int column;
-	private Image wall;
 
+	/**
+	 * creates the jframe window and shows the main menu
+	 */
 	public void createWindow() {
-		this.wall = loadImage("/textures/WallTop.png");
 		this.frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle(Resources.GAME_TITLE);
@@ -42,20 +40,12 @@ public class WarehouseBoss implements ActionListener, Observer {
 		frame.setJMenuBar(menuBar);
 		this.row = 11;
 		this.column = 14;
-		frame.setIconImage(this.wall);
-
 		showMenu();
 	}
 
-	// Reads images from file system
-	private Image loadImage(String path) {
-		try {
-			return ImageIO.read(getClass().getResource(path));
-		} catch (IOException e) {
-			System.out.println("File not found");
-		}
-		return null;
-	}
+	/**
+	 * shows the main menu
+	 */
 
 	private void showMenu() {
 		// Clears all the items currently on the window (if there are any)
@@ -73,13 +63,19 @@ public class WarehouseBoss implements ActionListener, Observer {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-
+	
+	/**
+	 * initialises the game
+	 */
 	public void initGame() {
 		this.game = new Game(this.row, this.column);
 		showGame(this.row, this.column);
 		showGameOptions();
 	}
 	
+	/**
+	 * initalises the tutorial
+	 */
 	public void initTutorial() {
 		this.game = new Game(-1, -1);
 		this.game.startTut();
@@ -90,6 +86,12 @@ public class WarehouseBoss implements ActionListener, Observer {
 		showTutorialOptions();
 		tutorial.ititialPrompt();
 	}
+	
+	/**
+	 * makes a new levelmap and a level map to be rendered and sets a levelmap controller
+	 * @param row -> size of the game matrix
+	 * @param column -> size of the game matrix
+	 */
 
 	private void showGame(int row, int column) {
 		// Clears all the items currently on the window (if there are any)
@@ -109,7 +111,11 @@ public class WarehouseBoss implements ActionListener, Observer {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-
+	
+	/**
+	 * creates the menu bar at the top of the window
+	 * @return return the menu bar object
+	 */
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 
@@ -160,7 +166,9 @@ public class WarehouseBoss implements ActionListener, Observer {
 		return menuBar;
 	}
 
-	// enables game related menubar items, such as undo
+	/**
+	 * enables game related menubar items, such as undo
+	 */
 	private void showGameOptions() {
 		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
@@ -169,6 +177,9 @@ public class WarehouseBoss implements ActionListener, Observer {
 		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
 	}
 
+	/**
+	 * disable tutorial options in menu bar
+	 */
 	private void showTutorialOptions() {
 		this.menuBar.getMenu(0).getItem(1).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
@@ -177,7 +188,9 @@ public class WarehouseBoss implements ActionListener, Observer {
 		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
 	}
 
-	// undo gameMenuBar()
+	/**
+	 * undo gameMenuBar()
+	 */
 	private void hideGameOptions() {
 		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
@@ -185,7 +198,10 @@ public class WarehouseBoss implements ActionListener, Observer {
 		this.menuBar.getMenu(0).getItem(5).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(7).setEnabled(false);
 	}
-
+	
+	/**
+	 * pauses the timer when the save window opens and saves game state as a saveData object
+	 */
 	private void saveGame() {
 		this.game.pauseTimer();
 		JFileChooser chooser = new JFileChooser();
@@ -205,6 +221,10 @@ public class WarehouseBoss implements ActionListener, Observer {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * opens load game window and sets gamestate according to saved data
+	 */
 
 	private void loadGame() {
 		if (this.game != null) {
@@ -228,6 +248,10 @@ public class WarehouseBoss implements ActionListener, Observer {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * option to change the game window
+	 */
 
 	private void showOptionsPane() {
 		String[] options = { "11x14", "8x11" };
@@ -285,7 +309,10 @@ public class WarehouseBoss implements ActionListener, Observer {
 			initGame();
 		}
 	}
-
+	/**
+	 * the main function
+	 * @param args -> no argumnets taken in
+	 */
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

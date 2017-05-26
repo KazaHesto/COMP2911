@@ -34,7 +34,12 @@ public class Game extends Observable implements ActionListener {
 	private boolean isTutorial;
 	private boolean generateBerry;
 
-	// constructor
+	/**
+	 * Constructor for game
+	 * @param row -> row size of the game matrix
+	 * @param column -> column size of the game matrix
+	 */
+	
 	public Game(int row, int column) {
 		this.isTutorial = false;
 		this.row = row;
@@ -47,6 +52,11 @@ public class Game extends Observable implements ActionListener {
 			newLevel();
 		}
 	}
+	
+	/**
+	 * loads game state for save/load feature
+	 * @param data -> from save file
+	 */
 
 	public Game(SaveData data) {
 		this.isTutorial = false;
@@ -66,7 +76,10 @@ public class Game extends Observable implements ActionListener {
 		this.berryState = data.berryState;
 		this.berryCount = data.berryCount;
 	}
-
+	
+	/**
+	 * generates level, sets player, boxes and berries
+	 */
 	public void newLevel() {
 		LevelGenerator gen = new LevelGenerator();
 		this.matrix = gen.generateLevel(this.row - 2, this.column - 2);
@@ -79,9 +92,6 @@ public class Game extends Observable implements ActionListener {
 		}
 		this.resetBoxes = getBoxes();
 		this.berries = new ArrayList<Berry>();
-//		this.berries.add(new Berry(5, 6));
-//		System.out.println(2 + (int) (Math.random() * ((this.column - 6) + 1)));
-//		System.out.println(2 + (int) (Math.random() * ((this.row - 6) + 1)));
 		this.generateBerry = false;
 		while(!generateBerry){
 			int berryRow = 2 + (int) (Math.random() * ((this.row - 6) + 1));
@@ -125,19 +135,35 @@ public class Game extends Observable implements ActionListener {
 		this.berryState = false;
 		this.berryCount = 0;
 	}
-
+	/**
+	 * sets getter for matrix
+	 * @return -> returns the game matrix
+	 */
 	public int[][] getMatrix() {
 		return matrix;
 	}
-
+	
+	/**
+	 * used to load the tut level
+	 * @param matrix
+	 */
 	public void changeMap(int[][] matrix) {
 		this.matrix = matrix;
 		this.resetState = copyMatrix(matrix);
 	}
-
+	
+	/**
+	 * checks if the game is in tutorial mode
+	 * @return
+	 */
 	public boolean isTutorial() {
 		return isTutorial;
 	}
+	
+	/**
+	 * get all the locations of the boxes
+	 * @return -> returns the arraylist of all the boxes
+	 */
 
 	public ArrayList<Box> getBoxes() {
 		ArrayList<Box> boxes = new ArrayList<Box>();
@@ -146,7 +172,11 @@ public class Game extends Observable implements ActionListener {
 		}
 		return boxes;
 	}
-
+	
+	/**
+	 * get all the location for all the berries
+	 * @return -> get the arrayList of all the berries
+	 */
 	public ArrayList<Berry> getBerries() {
 		ArrayList<Berry> berries = new ArrayList<Berry>();
 		for (Berry berry : this.berries) {
@@ -154,6 +184,12 @@ public class Game extends Observable implements ActionListener {
 		}
 		return berries;
 	}
+	
+	/**
+	 * copy the matrix into a new matrix
+	 * @param original -> the original matrix
+	 * @return -> return the new matrix
+	 */
 
 	private int[][] copyMatrix(int[][] original) {
 		int[][] copy = new int[original.length][];
@@ -162,6 +198,11 @@ public class Game extends Observable implements ActionListener {
 		}
 		return copy;
 	}
+	
+	/**
+	 * get the number of seconds past in the game
+	 * @return -> return the number of seconds in the game
+	 */
 
 	public int getSeconds() {
 		return this.seconds;
@@ -171,7 +212,9 @@ public class Game extends Observable implements ActionListener {
 		this.gameTimer.stop();
 	}
 
-	// method to reset game level when R is pressed
+	/**
+	 * reset the game state when reset is pressed
+	 */
 	public void resetGame() {
 		this.numMoves = 0;
 		if (!this.isTutorial) {
@@ -193,7 +236,16 @@ public class Game extends Observable implements ActionListener {
 		notifyObservers();
 	}
 
-	// update the game state
+	/**
+	 * moves the player
+	 * set the direction of the player
+	 * set if the player is colliding with box
+	 * check if player is colliding with a berry
+	 * check if player is colliding with wall
+	 * moves the box
+	 * checks for collision
+	 * @param keyPress
+	 */
 	public void update(char keyPress) {
 		int row = this.player.getRow();
 		int column = this.player.getColumn();
@@ -339,7 +391,13 @@ public class Game extends Observable implements ActionListener {
 		this.undoBoxes.pop();
 		return false;
 	}
-
+	
+	/**
+	 * get the box given row and column of box
+	 * @param row -> the row of the box
+	 * @param column -> the column of the box
+	 * @return -> return the box object
+	 */
 	private Box getBox(int row, int column) {
 		for (Box box : this.boxes) {
 			if (box.getRow() == row && box.getColumn() == column) {
@@ -348,6 +406,13 @@ public class Game extends Observable implements ActionListener {
 		}
 		return null;
 	}
+	
+	/**
+	 * get the index of the berry from row and column
+	 * @param row -> the row of the berry
+	 * @param column -> the column of the berry
+	 * @return -> return the index of the berry for it to be removed from the arrayList/
+	 */
 
 	private int getBerry(int row, int column) {
 		int index = 0;
@@ -360,6 +425,12 @@ public class Game extends Observable implements ActionListener {
 		}
 		return -1;
 	}
+	
+	/**
+	 * move the player across the game grid
+	 * @param row -> row to move to
+	 * @param column -> column to move to
+	 */
 
 	private void movePlayer(int row, int column) {
 		this.undoPlayer.push(player.getColumn());
@@ -367,7 +438,13 @@ public class Game extends Observable implements ActionListener {
 		this.player.setPosition(row, column);
 		this.numMoves++;
 	}
-
+	
+	/**
+	 * remove the berry if the player collides with it
+	 * @param row
+	 * @param column
+	 * @return
+	 */
 	private boolean removeBerry(int row, int column) {
 		if (!isBerry(row, column)) {
 			return true;
@@ -377,7 +454,9 @@ public class Game extends Observable implements ActionListener {
 		return false;
 	}
 
-	// logic to undo move
+	/**
+	 * undo the previous moves made by the player
+	 */
 	public void undoMove() {
 		if (!this.undoPlayer.empty() && !this.undoBoxes.isEmpty()) {
 			this.numMoves++;
@@ -389,9 +468,12 @@ public class Game extends Observable implements ActionListener {
 		setChanged();
 		notifyObservers();
 	}
+	
+	/**
+	 * check if the game has been won by checking if all the boxes are on top of the cross
+	 */
 
 	private void checkWin() {
-		// check if crosses are present in level
 		this.checkWin = true;
 		for (int row = 0; row < this.matrix.length; row++) {
 			for (int column = 0; column < this.matrix[row].length; column++) {
@@ -405,30 +487,64 @@ public class Game extends Observable implements ActionListener {
 			System.out.println("win");
 		}
 	}
-
+	
+	/**
+	 * used to get isWin
+	 * @return -> return if the game is won or not
+	 */
 	public boolean isWin() {
 		return this.checkWin;
 	}
+	
+	/**
+	 * get the row the player is on
+	 * @return -> row the player is on
+	 */
 
 	public int getPlayerRow() {
 		return this.player.getRow();
 	}
+	
+	/**
+	 * get the column that player is on
+	 * @return -> column the player is on
+	 */
 
 	public int getPlayerColumn() {
 		return this.player.getColumn();
 	}
+	
+	/**
+	 * get the direction of the player
+	 * @return -> the direction the player is facing
+	 */
 
 	public int getPlayerDirection() {
 		return this.player.getDirection();
 	}
+	
+	/**
+	 * 
+	 * @return -> get if the player is colliding with a box
+	 */
 
 	public boolean getPlayerIsBox() {
 		return this.player.getIsBox();
 	}
+	
+	/**
+	 * get the number of moves made by the player
+	 * @return
+	 */
 
 	public int getNumMoves() {
 		return this.numMoves;
 	}
+	
+	/**
+	 * Sets save data
+	 * @return -> save data object
+	 */
 
 	public SaveData getState() {
 		return new SaveData(this.matrix, this.resetState, this.player, this.resetPlayer, this.undoPlayer, this.seconds,
@@ -439,6 +555,7 @@ public class Game extends Observable implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		this.seconds++;
+		//pauses the game timer if a berry is active
 		if (this.berryState) {
 			this.berryCount++;
 			this.seconds--;

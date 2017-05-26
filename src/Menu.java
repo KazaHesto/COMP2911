@@ -19,12 +19,15 @@ public class Menu extends JPanel {
 		this.resources = new Resources();
 	}
 
+	/**
+	 * set mouse listener for clicking on main menu options
+	 * @param controller -> controller for the main menu
+	 */
 	public void setController(MenuController controller) {
 		this.controller = controller;
 		addMouseListener(controller);
 	}
 
-	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(704, 504);

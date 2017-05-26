@@ -35,6 +35,11 @@ public class LevelMap extends JPanel implements ActionListener {
 	private int playerDirection;
 	private boolean isBox;
 
+	/**
+	 * Constructor for levelMap. Sets all the Images.
+	 * @param rows -> rows for the map matrix
+	 * @param columns -> columns for the map matrix
+	 */
 	public LevelMap(int rows, int columns) {
 		super();
 		this.rows = rows;
@@ -46,7 +51,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.timer = new Timer(5, this);
 		clearLevelMap();
 	}
-
+	
+	/**
+	 * Clears the level Map
+	 */
 	public void clearLevelMap() {
 		this.numMoves = 0;
 		this.seconds = 0;
@@ -57,34 +65,62 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.berries = new ArrayList<Berry>();
 	}
 
-	// Updates the grid shown in the ui
+	/**
+	 * Set the grid matrix for the game.
+	 * @param grid -> input matrix for the game
+	 */
 	public void setGrid(int[][] grid) {
 		this.grid = new int[grid.length][];
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
 	}
-
+	
+	/**
+	 * Sets the direction of the player in levelMapController
+	 * @param playerDirection -> gets the direction the player is in
+	 */
 	public void setDirection(int playerDirection) {
 		this.playerDirection = playerDirection;
 	}
-
+	
+	/**
+	 * Sets if the player is colliding with a box for box moving animations
+	 * @param isBox -> sets if the player is colliding with box or not
+	 */
 	public void setIsBox(boolean isBox) {
 		this.isBox = isBox;
 	}
-
+	
+	/**
+	 * set the positions for the box in levelMapController
+	 * @param boxes -> sets all the positions of the boxes
+	 */
 	public void setBoxPositions(ArrayList<Box> boxes) {
 		this.boxes = boxes;
 	}
-
+	
+	/**
+	 * set the positions for the berries in levelMapController
+	 * @param berries -> set all the positions of the berries
+	 */
 	public void setBerryPositions(ArrayList<Berry> berries) {
 		this.berries = berries;
 	}
 
+	/**
+	 * set the number of moves the player has made in levelMapController
+	 * @param numMoves -> number of moves the player has made
+	 */
 	public void setNumMoves(int numMoves) {
 		this.numMoves = numMoves;
 	}
-
+	
+	/**
+	 * set the position of the player in levelMapController
+	 * @param x -> the x cooridinate
+	 * @param y -> the y cooridinate
+	 */
 	public void setPlayerPosition(int x, int y) {
 		if (this.x == -1 && this.y == -1) {
 			this.x = x;
@@ -98,15 +134,29 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 	}
 
-	// Adds keylistener
+	/**
+	 * Set KeyListener for levelMapController
+	 * @param controller -> the levelMap controller
+	 */
 	public void setController(LevelMapController controller) {
 		this.controller = controller;
 		this.addKeyListener(this.controller);
 	}
-
+	
+	/**
+	 * General function that compares two numbers
+	 * @param a 
+	 * @param b
+	 * @return -> checking if two numbers are less than 0.01
+	 */
 	private boolean fuzzyMatch(double a, double b) {
 		return Math.abs(a - b) < 0.01;
 	}
+	
+	/**
+	 * Shows the winning window.
+	 * @return -> returns what button is pressed.
+	 */
 
 	public int showWin() {
 		String[] choices = { "Next Level", "Reset", "Quit Game" };
@@ -122,6 +172,11 @@ public class LevelMap extends JPanel implements ActionListener {
 		return 0;
 	}
 	
+	/**
+	 * Shows the winning window for tutorial level
+	 * @return
+	 */
+	
 	public int showTutWin() {
 		String[] choices = {"Practise", "Start Game", "Quit Game"};
 		int choice = JOptionPane.showOptionDialog(null, "Congradulations, Tutorial Complete!", "",
@@ -136,11 +191,21 @@ public class LevelMap extends JPanel implements ActionListener {
 		return 0;
 		
 	}
-
+	
+	/**
+	 * update the time
+	 * @param update -> number of seconds passed in game.
+	 */
 	public void updateTime(int update) {
 		this.seconds = update;
 	}
-
+	
+	/**
+	 * check if the player is colliding with box
+	 * @param row -> row coordinate
+	 * @param column -> column coordinate
+	 * @return -> true if it collides and false otherwise
+	 */
 	private boolean isBox(int row, int column) {
 		for (Box box : this.boxes) {
 			if (box.getRow() == row && box.getColumn() == column) {
@@ -150,13 +215,12 @@ public class LevelMap extends JPanel implements ActionListener {
 		return false;
 	}
 
-	// Sets the size of this JPanel
+
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 	}
 
-	// Sets what happens when level map is repainted
 	@Override
 	public void paintComponent(Graphics g) {
 		// For some reason this is needed on Windows?
