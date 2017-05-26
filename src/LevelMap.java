@@ -381,10 +381,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (Box box : this.boxes) {
 			if (this.grid[box.getRow()][box.getColumn()] == Resources.CROSS) {
 				g.drawImage(this.resources.getImage(Resources.BOX_CROSS_SIDE), box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.5) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((box.getRow() + 0.6) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.resources.getImage(Resources.BOX_SIDE), box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.5) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((box.getRow() + 0.6) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
 
@@ -401,34 +401,34 @@ public class LevelMap extends JPanel implements ActionListener {
 		if (playerDirection == 0) {
 			if (isBox == true) {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_UP), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_UP), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 90) {
 			if (isBox == true) {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_RIGHT), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_RIGHT), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 180) {
 			if (isBox == true) {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_DOWN), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_DOWN), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 270) {
 			if (isBox == true) {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_LEFT), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_LEFT), (int) (this.x * BOX_WIDTH),
-						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
 
@@ -436,10 +436,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (Box box : this.boxes) {
 			if (this.grid[box.getRow()][box.getColumn()] == Resources.CROSS) {
 				g.drawImage(this.resources.getImage(Resources.BOX_CROSS_TOP), box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+						(int) ((box.getRow() + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			} else {
 				g.drawImage(this.resources.getImage(Resources.BOX_TOP), box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+						(int) ((box.getRow() + 0.2) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			}
 		}
 
