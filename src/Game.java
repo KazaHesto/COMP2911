@@ -32,6 +32,7 @@ public class Game extends Observable implements ActionListener {
 	private boolean berryState;
 	private int berryCount;
 	private boolean isTutorial;
+	private boolean generateBerry;
 
 	// constructor
 	public Game(int row, int column) {
@@ -78,11 +79,18 @@ public class Game extends Observable implements ActionListener {
 		}
 		this.resetBoxes = getBoxes();
 		this.berries = new ArrayList<Berry>();
-		int berryRow = 2 + (int) (Math.random() * ((this.row - 6) + 1));
-		int berryColumn = 2 + (int) (Math.random() * ((this.column - 6) + 1));
-		System.out.println("Row = " + berryRow + " Column = " + berryColumn);
-		if(!isBox(berryRow, berryColumn) && !isWall(berryRow, berryColumn)){
-			this.berries.add(new Berry(berryRow,berryColumn));
+//		this.berries.add(new Berry(5, 6));
+//		System.out.println(2 + (int) (Math.random() * ((this.column - 6) + 1)));
+//		System.out.println(2 + (int) (Math.random() * ((this.row - 6) + 1)));
+		this.generateBerry = false;
+		while(!generateBerry){
+			int berryRow = 2 + (int) (Math.random() * ((this.row - 6) + 1));
+			int berryColumn = 2 + (int) (Math.random() * ((this.column - 6) + 1));
+			if(!isBox(berryRow, berryColumn) && !isWall(berryRow, berryColumn)){
+				this.berries.add(new Berry(berryRow,berryColumn));
+				generateBerry = true;
+				break;
+			}
 		}
 		this.resetBerries = getBerries();
 		this.berryState = false;
