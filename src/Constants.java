@@ -22,4 +22,6 @@ public class Constants {
 	public static final int CROSS = 3;
 	// int that represents a floor
 	public static final int FLOOR = 4;
+	// int that represents berry
+	public static final int BERRY = 6;
 }
