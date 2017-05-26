@@ -11,10 +11,10 @@ public class Menu extends JPanel {
 
 	private MenuController controller;
 
-	public Rectangle playButton = new Rectangle(175 + 120, 100, 140, 50);
-	public Rectangle tutorialButton = new Rectangle(175 + 120, 200, 140, 50);
-	public Rectangle helpButton = new Rectangle(175 + 120, 300, 140, 50);
-	public Rectangle quitButton = new Rectangle(175 + 120, 400, 140, 50);
+	public Rectangle playButton = new Rectangle(150, 150, 140, 100);
+	public Rectangle tutorialButton = new Rectangle(425, 150, 140, 100);
+	public Rectangle helpButton = new Rectangle(150, 300, 140, 100);
+	public Rectangle quitButton = new Rectangle(425, 300, 140, 100);
 
 	public void setController(MenuController controller) {
 		this.controller = controller;
