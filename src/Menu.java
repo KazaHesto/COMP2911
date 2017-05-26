@@ -16,12 +16,15 @@ public class Menu extends JPanel {
 	public Rectangle helpButton = new Rectangle(150, 300, 140, 100);
 	public Rectangle quitButton = new Rectangle(425, 300, 140, 100);
 
+	/**
+	 * set mouse listener for clicking on main menu options
+	 * @param controller -> controller for the main menu
+	 */
 	public void setController(MenuController controller) {
 		this.controller = controller;
 		addMouseListener(controller);
 	}
 
-	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(704, 504);

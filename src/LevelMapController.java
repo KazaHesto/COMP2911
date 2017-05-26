@@ -7,7 +7,12 @@ public class LevelMapController implements KeyListener, Observer {
 
 	private Game game;
 	private LevelMap mapUI;
-
+	/**
+	 * constructor of levelMapController
+	 * @param game -> the gamestate
+	 * @param mapUI -> the game rendering
+	 * @param window -> the jpanel
+	 */
 	public LevelMapController(Game game, LevelMap mapUI, WarehouseBoss window) {
 		super();
 		this.game = game;
@@ -15,7 +20,10 @@ public class LevelMapController implements KeyListener, Observer {
 		this.game.addObserver(this);
 		initLevelMap();
 	}
-
+	
+	/**
+	 * initialise the rendered image for the start of the game
+	 */
 	public void initLevelMap() {
 		this.mapUI.clearLevelMap();
 		this.mapUI.setGrid(this.game.getMatrix());

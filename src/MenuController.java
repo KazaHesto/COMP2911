@@ -9,6 +9,11 @@ public class MenuController implements MouseListener {
 	private Menu menu;
 	private WarehouseBoss window;
 
+	/**
+	 * constructor for the menu controller
+	 * @param menu -> renders the main menu
+	 * @param window -> the jframe
+	 */
 	public MenuController(Menu menu, WarehouseBoss window) {
 		this.menu = menu;
 		this.window = window;

@@ -10,15 +10,26 @@ public class Tutorial extends Observable implements Observer {
 	private boolean tutorialBerryCheck;
 	private boolean tutorialEndCheck;
 
+	/**
+	 * constructor for the tutorial class
+	 * @param game -> game state
+	 */
 	public Tutorial(Game game) {
 		super();
 		this.game = game;
 	}
-
+	
+	/**
+	 * renders the initial prompt during the tutorial
+	 */
 	public void ititialPrompt() {
 		JOptionPane.showMessageDialog(null, "Use WASD or arrow keys to move the player.", "Tutorial",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
+	
+	/**
+	 * the steps and game matrix state set during the tutorial
+	 */
 
 	private void tutorialSteps() {
 		if (!tutorialMoveCheck) {
@@ -73,6 +84,11 @@ public class Tutorial extends Observable implements Observer {
 			notifyObservers(option);
 		}
 	}
+	
+	/**
+	 * the options that are availiable the tutorial level is complete
+	 * @return -> the option chose by user
+	 */
 
 	private int showTutWin() {
 		String[] choices = { "Practice", "Start Game", "Quit Game" };
