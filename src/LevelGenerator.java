@@ -382,7 +382,7 @@ public class LevelGenerator {
 		Coordinate player = neighbours.get(rand.nextInt(neighbours.size()));
 		Coordinate temp = new Coordinate(player);
 		
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 100000; i++) {
 			neighbours = getFloorNeighbours(box);
 			temp = neighbours.get(rand.nextInt(neighbours.size()));
 			while (!isAccessible(player, temp, box)) {
@@ -390,7 +390,6 @@ public class LevelGenerator {
 			}
 			box = player;
 			player = temp;
-			System.out.println(player.getRow() + " " + player.getColumn());
 		}
 		return box;
 	}
