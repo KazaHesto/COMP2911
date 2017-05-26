@@ -114,6 +114,7 @@ public class LevelGenerator {
 	private int[][] level;
 	private int[] topConditions;
 	private int[] leftConditions;
+	private ArrayList<Coordinate> seen;
 	private ArrayList<Coordinate> boxes;
 
 	/**
@@ -184,6 +185,15 @@ public class LevelGenerator {
 	}
 
 	/**
+	 * Returns a coordinate for berry position
+	 * @return Coordinates of berry
+	 */
+	public Coordinate getBerry() {
+		Random rand = new Random();
+		return this.seen.get(rand.nextInt(this.seen.size()));
+	}
+
+	/**
 	 * Merges the path generated in pathtracer into the walls generated in this
 	 * class. Any empty spaces in the path are kept to the level is solvable.
 	 * 
@@ -233,7 +243,7 @@ public class LevelGenerator {
 	 */
 	private boolean isShallow() {
 		Stack<Coordinate> toDo = new Stack<Coordinate>();
-		ArrayList<Coordinate> seen = new ArrayList<Coordinate>();
+		this.seen = new ArrayList<Coordinate>();
 
 		toDo.add(getFirstFloor());
 		Coordinate curr = null;
