@@ -162,6 +162,7 @@ public class LevelGenerator {
 		int[][] pathedMatrix = path.makePath(columns, rows);
 
 		mergeMatrix(pathedMatrix);
+		path.print(columns, rows);
 
 		return level;
 	}

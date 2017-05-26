@@ -26,6 +26,7 @@ public class Player implements Serializable{
 		this.row = row;
 		// initialise the player's column
 		this.column = column;
+		this.direction = 180;
 	}
 	
 	/**
@@ -40,6 +41,7 @@ public class Player implements Serializable{
 		// set the player's coordinates
 		this.row = coordinates.getRow();
 		this.column = coordinates.getColumn();
+		this.direction = 180;
 	}
 	
 	/**
@@ -54,6 +56,7 @@ public class Player implements Serializable{
 		// set the player's position
 		this.row = player.getRow();
 		this.column = player.getColumn();
+		this.direction = player.getDirection();
 	}
 	
 	/**
