@@ -265,4 +265,18 @@ public class PathTracer {
 		
 	}
 	
+	public void print(int xsize, int ysize) {
+		int i = 0;
+		int j = 0;
+		while (i < ysize) {
+			j = 0;
+			while (j < xsize) {
+				System.out.print(matrix[i][j]+ " ");
+				j++;
+			}
+			System.out.println();
+			i++;
+		}
+	}
+	
 }
