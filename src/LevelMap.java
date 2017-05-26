@@ -285,34 +285,34 @@ public class LevelMap extends JPanel implements ActionListener {
 		if (playerDirection == 0) {
 			if (isBox == true) {
 				g.drawImage(this.playerPushForward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.playerForward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 90) {
 			if (isBox == true) {
 				g.drawImage(this.playerPushRight, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.playerRight, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 180) {
 			if (isBox == true) {
 				g.drawImage(this.playerPushBackward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.playerBackward, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		} else if (playerDirection == 270) {
 			if (isBox == true) {
 				g.drawImage(this.playerPushLeft, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.playerLeft, (int) (this.x * BOX_WIDTH),
-						(int) ((this.y + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((this.y) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
 
