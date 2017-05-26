@@ -66,7 +66,7 @@ public class LevelMap extends JPanel implements ActionListener {
 		setVisible(true);
 
 		this.wall = loadImage("/textures/WallTop.png");
-		this.playerBackward = loadImage("/textures/Mandown.png");
+		this.playerBackward = loadImage("/textures/ManDown.png");
 		this.playerForward = loadImage("/textures/ManPushUp.png");
 		this.playerRight = loadImage("/textures/ManRight.png");
 		this.playerLeft = loadImage("/textures/ManLeft.png");
