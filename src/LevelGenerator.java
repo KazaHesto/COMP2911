@@ -136,7 +136,7 @@ public class LevelGenerator {
 		for (int i = 0; i < level.length; i++) {
 			for (int j = 0; j < level[i].length; j++) {
 				if (i == 0 || i == level.length - 1 || j == 0 || j == level[i].length - 1) {
-					level[i][j] = Constants.WALL;
+					level[i][j] = Resources.WALL;
 				}
 			}
 		}
@@ -177,15 +177,15 @@ public class LevelGenerator {
 	private void mergeMatrix(int[][] pathedMatrix) {
 		for (int i = 0; i < pathedMatrix.length; i++) {
 			for (int j = 0; j < pathedMatrix[i].length; j++) {
-				if (pathedMatrix[i][j] != Constants.WALL) {
+				if (pathedMatrix[i][j] != Resources.WALL) {
 					// the coordinates below have + 1 because pathtracer doesn't
 					// take into account the outer wall
-					this.level[i + 1][j + 1] = Constants.FLOOR;
-					if (pathedMatrix[i][j] == Constants.BOX) {
+					this.level[i + 1][j + 1] = Resources.FLOOR;
+					if (pathedMatrix[i][j] == Resources.BOX) {
 						boxes.add(new Coordinate(i + 1, j + 1));
 					}
-					if (pathedMatrix[i][j] == Constants.CROSS) {
-						this.level[i + 1][j + 1] = Constants.CROSS;
+					if (pathedMatrix[i][j] == Resources.CROSS) {
+						this.level[i + 1][j + 1] = Resources.CROSS;
 					}
 				}
 			}
@@ -200,7 +200,7 @@ public class LevelGenerator {
 	private Coordinate getFirstFloor() {
 		for (int i = 0; i < level.length; i++) {
 			for (int j = 0; j < level[i].length; j++) {
-				if (level[i][j] == Constants.FLOOR) {
+				if (level[i][j] == Resources.FLOOR) {
 					Coordinate coord = new Coordinate(i, j);
 					return coord;
 				}
@@ -236,19 +236,19 @@ public class LevelGenerator {
 		int row = coord.getRow();
 		int column = coord.getColumn();
 
-		if (this.level[row - 1][column] == Constants.FLOOR) {
+		if (this.level[row - 1][column] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row - 1, column);
 			neighbourList.add(neighbour);
 		}
-		if (this.level[row + 1][column] == Constants.FLOOR) {
+		if (this.level[row + 1][column] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row + 1, column);
 			neighbourList.add(neighbour);
 		}
-		if (this.level[row][column - 1] == Constants.FLOOR) {
+		if (this.level[row][column - 1] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row, column - 1);
 			neighbourList.add(neighbour);
 		}
-		if (this.level[row][column + 1] == Constants.FLOOR) {
+		if (this.level[row][column + 1] == Resources.FLOOR) {
 			Coordinate neighbour = new Coordinate(row, column + 1);
 			neighbourList.add(neighbour);
 		}
@@ -318,12 +318,12 @@ public class LevelGenerator {
 							return false;
 						}
 						// Checks right conditions if the right-most column
-						if (j == level[i].length - 4 && template[k + 1][4] != Constants.WALL
+						if (j == level[i].length - 4 && template[k + 1][4] != Resources.WALL
 								&& template[k + 1][0] != 5) {
 							return false;
 						}
 						// Checks top conditions if the bottom-most row
-						if (i == level.length - 4 && template[4][k + 1] != Constants.WALL && template[0][k + 1] != 5) {
+						if (i == level.length - 4 && template[4][k + 1] != Resources.WALL && template[0][k + 1] != 5) {
 							return false;
 						}
 					}
