@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -15,7 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class WarehouseBoss implements ActionListener {
+public class WarehouseBoss implements ActionListener, Observer {
 
 	private JFrame frame;
 	private Game game;
@@ -59,20 +61,18 @@ public class WarehouseBoss implements ActionListener {
 	public void initGame() {
 		this.game = new Game(this.row, this.column);
 		showGame(this.row, this.column);
+		showGameOptions();
 	}
 	
 	public void initTutorial() {
-		int[][] matrix = new int[][] {
-			{1,1,1,1,1,1,1,1,1,1,1},
-			{1,4,4,1,4,1,4,1,4,1,1},
-			{1,1,1,1,4,1,1,1,1,1,1},
-			{1,1,1,1,4,4,4,1,4,3,1},
-			{1,1,1,3,4,4,4,1,4,3,1},
-			{1,1,1,1,1,1,1,1,1,1,1}
-		};
-		SaveData start = new SaveData(matrix, null, player, null, null, 0, 0, null, null, null, null, false, 0);
-		this.game = new Game(start);
-		showGame(row,column);
+		this.game = new Game(-1, -1);
+		this.game.startTut();
+		Tutorial tutorial = new Tutorial(this.game);
+		game.addObserver(tutorial);
+		tutorial.addObserver(this);
+		showGame(6, 11);
+		showTutorialOptions();
+		tutorial.ititialPrompt();
 	}
 
 	private void showGame(int row, int column) {
@@ -89,7 +89,6 @@ public class WarehouseBoss implements ActionListener {
 		frame.getContentPane().add(mapUI);
 		mapUI.requestFocusInWindow();
 
-		showGameOptions();
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -147,15 +146,27 @@ public class WarehouseBoss implements ActionListener {
 
 	// enables game related menubar items, such as undo
 	private void showGameOptions() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(5).setEnabled(true);
+		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
+	}
+
+	private void showTutorialOptions() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(5).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(7).setEnabled(true);
 	}
 
 	// undo gameMenuBar()
 	private void hideGameOptions() {
+		this.menuBar.getMenu(0).getItem(1).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(2).setEnabled(false);
 		this.menuBar.getMenu(0).getItem(4).setEnabled(false);
+		this.menuBar.getMenu(0).getItem(5).setEnabled(true);
 		this.menuBar.getMenu(0).getItem(7).setEnabled(false);
 	}
 
@@ -196,6 +207,7 @@ public class WarehouseBoss implements ActionListener {
 			SaveData data = (SaveData) ResourceManager.load(chooser.getSelectedFile());
 			this.game = new Game(data);
 			showGame(this.row, this.column);
+			showGameOptions();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -245,6 +257,16 @@ public class WarehouseBoss implements ActionListener {
 		if (e.getSource().equals(menuBar.getMenu(1).getItem(1))) {
 			JOptionPane.showMessageDialog(null, Constants.ABOUT_TEXT, Constants.ABOUT_TITLE,
 					JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if ((int) arg == 1) {
+			this.game.resetGame();
+			this.mapController.initLevelMap();
+		} else if ((int) arg == 2) {
+			initGame();
 		}
 	}
 
