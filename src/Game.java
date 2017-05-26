@@ -78,7 +78,12 @@ public class Game extends Observable implements ActionListener {
 		}
 		this.resetBoxes = getBoxes();
 		this.berries = new ArrayList<Berry>();
-		this.berries.add(new Berry(5, 6));
+		int berryRow = 2 + (int) (Math.random() * ((this.row - 6) + 1));
+		int berryColumn = 2 + (int) (Math.random() * ((this.column - 6) + 1));
+		System.out.println("Row = " + berryRow + " Column = " + berryColumn);
+		if(!isBox(berryRow, berryColumn) && !isWall(berryRow, berryColumn)){
+			this.berries.add(new Berry(berryRow,berryColumn));
+		}
 		this.resetBerries = getBerries();
 		this.berryState = false;
 		this.berryCount = 0;
@@ -261,6 +266,13 @@ public class Game extends Observable implements ActionListener {
 			if (box.getRow() == row && box.getColumn() == column) {
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	public boolean isWall(int row, int column){
+		if(this.matrix[row][column] == 1){
+			return true;
 		}
 		return false;
 	}
