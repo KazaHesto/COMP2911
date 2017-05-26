@@ -208,6 +208,15 @@ public class LevelMap extends JPanel implements ActionListener {
 		this.seconds = update;
 	}
 
+	private boolean isBox(int row, int column) {
+		for (Box box : this.boxes) {
+			if (box.getRow() == row && box.getColumn() == column) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	// Sets the size of this JPanel
 	@Override
 	public Dimension getPreferredSize() {
@@ -322,7 +331,7 @@ public class LevelMap extends JPanel implements ActionListener {
 					g.drawImage(this.halfWallTop, col * BOX_WIDTH, row * BOX_HEIGHT + SCORE_GUTTER, BOX_WIDTH,
 							BOX_HEIGHT, null);
 				}
-				if (this.grid[row][col] == Constants.CROSS) {
+				if (this.grid[row][col] == Constants.CROSS && !isBox(row, col)) {
 					g.drawImage(this.crossGlow, col * BOX_WIDTH, (int) ((row + 0.9 - 1) * BOX_HEIGHT + SCORE_GUTTER),
 							BOX_WIDTH, BOX_HEIGHT, null);
 				}
