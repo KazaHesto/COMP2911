@@ -12,14 +12,6 @@ public class Game extends Observable implements ActionListener {
 	public enum DIRECTION {
 		UP, DOWN, LEFT, RIGHT
 	}
-<<<<<<< HEAD
-	
-	// defining enums to represent the possible "GAMESTATE"
-	public enum GAMESTATE {
-		TUTORIAL, GAME
-	};
-=======
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 
 	// declaring variables
 	
@@ -59,16 +51,9 @@ public class Game extends Observable implements ActionListener {
 	private boolean berryState;
 	// the number of berries in the map
 	private int berryCount;
-<<<<<<< HEAD
-	// the current state of the game
-	private GAMESTATE state = GAMESTATE.GAME;
-=======
 	private boolean isTutorial;
 	private boolean generateBerry;
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 
-<<<<<<< HEAD
-	// constructor
 	/**
 	 * constructor
 	 * 
@@ -78,59 +63,12 @@ public class Game extends Observable implements ActionListener {
 	 * @throws 	-
 	 */
 	public Game(int row, int column) {
-		// if we are creating a new game (not a tutorial)
-		if(state == GAMESTATE.GAME){
-			// initialise the number of rows in the game
-			this.row = row;
-			// initialise the number of columns in the game
-			this.column = column;
-			// create an array so that we can undo moves for the player
-			this.undoPlayer = new Stack<Integer>();
-			// create an array so we can undo box movement
-			this.undoBoxes = new Stack<ArrayList<Box>>();
-			// creating a new timer for the game
-			this.gameTimer = new Timer(1000, this);
-			// initialising the time the consumer to complete the level as 0 initially
-			this.seconds = 0;
-			// create a new level (maze)
-			newLevel();
-		}
-	}
-=======
-	/**
-	 * Constructor for game
-	 * @param row -> row size of the game matrix
-	 * @param column -> column size of the game matrix
-	 */
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
-	
-<<<<<<< HEAD
-	/**
-	 * alternative constructor (for tutorials only)
-	 * 
-	 * @param 	row			the size of the map's rows
-	 * @param 	column		the size of the map's columns 
-	 * @param 	matrix		the tutorial map
-	 * @return	-
-	 * @throws	-
-	 */
-	Game(int row, int column, int[][] matrix){
-		// we are creating a new tutorial
-		state = GAMESTATE.TUTORIAL;
-		// initialise the number of rows in the game
-=======
-	public Game(int row, int column) {
 		this.isTutorial = false;
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		this.row = row;
-		// initialise the number of columns in the game
 		this.column = column;
-<<<<<<< HEAD
 		// create a new player and place him on the map
 		this.player = new Player(1, 1);
 		// create an array so that we can undo moves for the player
-=======
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		this.undoPlayer = new Stack<Integer>();
 		// create an array so we can undo box movement
 		this.undoBoxes = new Stack<ArrayList<Box>>();
@@ -138,42 +76,10 @@ public class Game extends Observable implements ActionListener {
 		this.gameTimer = new Timer(1000, this);
 		// initialising the time the consumer to complete the level as 0 initially
 		this.seconds = 0;
-<<<<<<< HEAD
-		// initialising a list to hold the boxes in the map
-		this.boxes = new ArrayList<Box>();
-		// adding a new box to the list
-		this.boxes.add(new Box(2, 4));
-		// adding a new box to the list
-		this.boxes.add(new Box(3, 7));
-		// adding a new box to the list
-		this.boxes.add(new Box(4, 7));
-		// initialising the list of original boxes to equal the list of boxes just initialised
-		// refer to lines previous
-		this.resetBoxes = getBoxes();
-		// initialising a list to store the berries in the map
-		this.berries = new ArrayList<Berry>();
-		// adding a new berry to the list of berries
-		this.berries.add(new Berry(1,6));
-		// intialising the list of original berries to equal the list of boxes just initialised
-		// refer to lines previous
-		this.resetBerries = getBerries();
-		// setting the berries to be un-triggered
-		this.berryState = false;
-		// setting the number of berries triggered to be 0
-		this.berryCount = 0;
-		// create the tutorial level
-		newTutLevel(matrix);
-=======
 		if (row != -1 && column != -1) {
 			newLevel();
 		}
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	}
-	
-	/**
-	 * loads game state for save/load feature
-	 * @param data -> from save file
-	 */
 
 	/**
 	 * alternative constructor (for normal games)
@@ -183,11 +89,8 @@ public class Game extends Observable implements ActionListener {
 	 * @throws	-
 	 */
 	public Game(SaveData data) {
-<<<<<<< HEAD
 		// initialising matrix to saved data's matrix
-=======
 		this.isTutorial = false;
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		this.matrix = data.matrix;
 		// initialising resetState to saved data's resetState
 		this.resetState = data.resetState;
@@ -218,7 +121,6 @@ public class Game extends Observable implements ActionListener {
 		// initialising berryCount to saved data's berryCount
 		this.berryCount = data.berryCount;
 	}
-<<<<<<< HEAD
 
 	/**
 	 * method: newLevel() -> generates a new level
@@ -226,11 +128,6 @@ public class Game extends Observable implements ActionListener {
 	 * @param	-
 	 * @return	-
 	 * @throws	-
-=======
-	
-	/**
-	 * generates level, sets player, boxes and berries
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public void newLevel() {
 		// create a new LevelGenerator instance
@@ -255,11 +152,6 @@ public class Game extends Observable implements ActionListener {
 		this.resetBoxes = getBoxes();
 		// creating a new list for the berries
 		this.berries = new ArrayList<Berry>();
-<<<<<<< HEAD
-		// adding the berries to the list
-		this.berries.add(new Berry(5, 6));
-		// copying the original berries so we can reset them
-=======
 		this.generateBerry = false;
 		while(!generateBerry){
 			int berryRow = 2 + (int) (Math.random() * ((this.row - 6) + 1));
@@ -270,52 +162,14 @@ public class Game extends Observable implements ActionListener {
 				break;
 			}
 		}
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		this.resetBerries = getBerries();
 		// the berries have not been triggered yet
 		this.berryState = false;
 		// no berries have been triggered yet
 		this.berryCount = 0;
-		// no berries have been triggered yet
+		this.player.setIsBox(false);
 	}
-<<<<<<< HEAD
-	
-	/**
-	 * method: newTutLevel() -> creates the level for the tutorial
-	 * 
-	 * @param 	matrix
-	 * @return	-
-	 * @throws	-
-	 */
-	public void newTutLevel(int[][] matrix){
-		// sets the game's matrix to the one parsed in
-		this.matrix = matrix;
-		// records the original matrix
-		this.resetState = copyMatrix(matrix);
-	}
-	
-	/**
-	 * getter: getBerryList() -> gets the list of berries
-	 * 
-	 * @param	-
-	 * @return	this.berries	the list of berries
-	 * @throws	-
-	 */
-	public ArrayList<Berry> getBerryList(){
-		// returns the list of berries
-		return this.berries;
-	}
-=======
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 
-<<<<<<< HEAD
-	/**
-	 * getter: getMatrix() -> gets the game's matrix
-	 * 
-	 * @param	-
-	 * @return	this.matrix		the game's matrix
-	 * @throws	-
-=======
 	public void startTut() {
 		this.isTutorial = true;
 		this.matrix = new int[][] {
@@ -346,7 +200,6 @@ public class Game extends Observable implements ActionListener {
 	/**
 	 * sets getter for matrix
 	 * @return -> returns the game matrix
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public int[][] getMatrix() {
 		// returns the game's matrix
@@ -369,11 +222,6 @@ public class Game extends Observable implements ActionListener {
 	public boolean isTutorial() {
 		return isTutorial;
 	}
-	
-	/**
-	 * get all the locations of the boxes
-	 * @return -> returns the arraylist of all the boxes
-	 */
 
 	/**
 	 * getter: getBoxes() -> gets the boxes in the game
@@ -392,7 +240,6 @@ public class Game extends Observable implements ActionListener {
 		// returning desired list
 		return boxes;
 	}
-<<<<<<< HEAD
 
 	/**
 	 * getter: getBerries() -> gets the berries in the current level
@@ -400,12 +247,6 @@ public class Game extends Observable implements ActionListener {
 	 * @param	-
 	 * @return	berries		the list of berries
 	 * @throws	-
-=======
-	
-	/**
-	 * get all the location for all the berries
-	 * @return -> get the arrayList of all the berries
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public ArrayList<Berry> getBerries() {
 		// initialising a new list of berries to populate
@@ -417,12 +258,6 @@ public class Game extends Observable implements ActionListener {
 		// returning desired list
 		return berries;
 	}
-	
-	/**
-	 * copy the matrix into a new matrix
-	 * @param original -> the original matrix
-	 * @return -> return the new matrix
-	 */
 
 	/**
 	 * method: copyMatrix() -> copies a matrix
@@ -441,11 +276,6 @@ public class Game extends Observable implements ActionListener {
 		// returning desired matrix
 		return copy;
 	}
-	
-	/**
-	 * get the number of seconds past in the game
-	 * @return -> return the number of seconds in the game
-	 */
 
 	/**
 	 * getter: getSeconds() -> returns the number of 
@@ -473,26 +303,18 @@ public class Game extends Observable implements ActionListener {
 	}
 
 	/**
-<<<<<<< HEAD
 	 *  method: resetGame() -> resets game level when R is pressed
 	 *  
 	 *  @param	-
 	 *  @return	-
 	 *  @throws	-
-=======
-	 * reset the game state when reset is pressed
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public void resetGame() {
 		// resets the number of moves made
 		this.numMoves = 0;
-<<<<<<< HEAD
 		// if there is a tutorial being played, not a normal game
-		if(state != GAMESTATE.TUTORIAL){
-			// reset the player
-=======
 		if (!this.isTutorial) {
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
+			// reset the player
 			this.player = new Player(this.resetPlayer);
 		} else {
 			// resets the player's position
@@ -504,11 +326,8 @@ public class Game extends Observable implements ActionListener {
 		this.boxes = this.resetBoxes;
 		// reset's the game's berries to their original configuration
 		this.berries = this.resetBerries;
-<<<<<<< HEAD
 		// re-initialises the resetBoxes variable to the original configuration
-=======
 		this.resetBerries = getBerries();
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		this.resetBoxes = getBoxes();
 		// reset's the game's win parameter to reflect the reset
 		this.checkWin = false;
@@ -525,22 +344,11 @@ public class Game extends Observable implements ActionListener {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * method: update() -> updates the game state
 	 * 
 	 * @param 	keyPress	the keyboard input
 	 * @return	-
 	 * @throws	-
-=======
-	 * moves the player
-	 * set the direction of the player
-	 * set if the player is colliding with box
-	 * check if player is colliding with a berry
-	 * check if player is colliding with wall
-	 * moves the box
-	 * checks for collision
-	 * @param keyPress
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public void update(char keyPress) {
 		// find the player's row
@@ -618,12 +426,8 @@ public class Game extends Observable implements ActionListener {
 	 * @throws	-
 	 */
 	private boolean isObstructed(int row, int column) {
-<<<<<<< HEAD
 		// return true if there exists a box or wall, false otherwise
-		return isBox(row, column) || matrix[row][column] == Constants.WALL;
-=======
 		return isBox(row, column) || matrix[row][column] == Resources.WALL;
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	}
 
 	/**
@@ -692,7 +496,6 @@ public class Game extends Observable implements ActionListener {
 		if (!isBox(row, column)) {
 			return true;
 		}
-		
 		this.player.setIsBox(true);
 		// if the player moved up
 		if (direction == DIRECTION.UP) {
@@ -728,7 +531,6 @@ public class Game extends Observable implements ActionListener {
 		// return a failure
 		return false;
 	}
-<<<<<<< HEAD
 
 	/**
 	 * method: getBox() -> return the box at the specified coordinates
@@ -737,14 +539,6 @@ public class Game extends Observable implements ActionListener {
 	 * @param 	column	column specified
 	 * @return	box		the box at the coordinates (can be null if no box present)
 	 * @throws	-
-=======
-	
-	/**
-	 * get the box given row and column of box
-	 * @param row -> the row of the box
-	 * @param column -> the column of the box
-	 * @return -> return the box object
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	private Box getBox(int row, int column) {
 		// for each box in the list
@@ -758,13 +552,6 @@ public class Game extends Observable implements ActionListener {
 		// return nothing if box not found
 		return null;
 	}
-	
-	/**
-	 * get the index of the berry from row and column
-	 * @param row -> the row of the berry
-	 * @param column -> the column of the berry
-	 * @return -> return the index of the berry for it to be removed from the arrayList/
-	 */
 
 	/**
 	 * getter: getBerry() -> gets the index of the berry at the coordinates
@@ -791,12 +578,6 @@ public class Game extends Observable implements ActionListener {
 		// return failure
 		return -1;
 	}
-	
-	/**
-	 * move the player across the game grid
-	 * @param row -> row to move to
-	 * @param column -> column to move to
-	 */
 
 	/**
 	 * method: movePlayer() -> moves the player to the coordinates
@@ -816,7 +597,6 @@ public class Game extends Observable implements ActionListener {
 		// increment the move counter
 		this.numMoves++;
 	}
-<<<<<<< HEAD
 
 	/**
 	 * method: removeBerry() -> removes the berry at the coordinates
@@ -825,14 +605,6 @@ public class Game extends Observable implements ActionListener {
 	 * @param 	column		column of the berry
 	 * @return	boolean		result of the operation
 	 * @throws	-
-=======
-	
-	/**
-	 * remove the berry if the player collides with it
-	 * @param row
-	 * @param column
-	 * @return
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	private boolean removeBerry(int row, int column) {
 		// if there is no berry at the coordinates
@@ -849,15 +621,11 @@ public class Game extends Observable implements ActionListener {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * method: undoMove() -> logic to undo move
 	 * 
 	 * @param	-
 	 * @return	-
 	 * @throws	-
-=======
-	 * undo the previous moves made by the player
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public void undoMove() {
 		// if there are moves to undo
@@ -878,10 +646,6 @@ public class Game extends Observable implements ActionListener {
 		// notify the Observer
 		notifyObservers();
 	}
-	
-	/**
-	 * check if the game has been won by checking if all the boxes are on top of the cross
-	 */
 
 	/**
 	 * method: checkWin() -> tests to see if the level has been completed
@@ -891,22 +655,15 @@ public class Game extends Observable implements ActionListener {
 	 * @throws	-
 	 */
 	private void checkWin() {
-<<<<<<< HEAD
 		// assume we won until proven otherwise
-=======
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		this.checkWin = true;
 		// for the whole map's rows
 		for (int row = 0; row < this.matrix.length; row++) {
 			// for the whole map's columns
 			for (int column = 0; column < this.matrix[row].length; column++) {
-<<<<<<< HEAD
 				// if there is a cross at the coordinate
-				if (this.matrix[row][column] == Constants.CROSS && !isBox(row, column)) {
-					// we did not win
-=======
 				if (this.matrix[row][column] == Resources.CROSS && !isBox(row, column)) {
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
+					// we did not win
 					this.checkWin = false;
 				}
 			}
@@ -919,64 +676,16 @@ public class Game extends Observable implements ActionListener {
 	}
 	
 	/**
-<<<<<<< HEAD
-	 * getter: getGameState() -> gets the game's state
-	 * 
-	 * @param	-
-	 * @return	this.state	the game's state
-	 * @throws	-
-	 */
-	public GAMESTATE getGameState(){
-		// return the game state
-		return this.state;
-	}
-	
-	/**
-	 * setter: isTutorial() -> checks to see if we are running the tutorial
-	 * 
-	 * @param	-
-	 * @return	GAMESTATE.TUTORIAL	a variable that indicates if the
-	 * 								gamestate is in tutorial mode
-	 * @throws	-
-	 */
-	public GAMESTATE isTutorial(){
-		// return desired variable
-		return GAMESTATE.TUTORIAL;
-	}
-	
-	/**
-	 * setter: isGame() -> checks to see if we are running a normal game
-	 * 
-	 * @param	-
-	 * @return	GAMESTATE.GAME	a variable that indicates if the
-	 * 							gamestate is in normal game mode
-	 * @throws	-
-	 */
-	public GAMESTATE isGame(){
-		// return desired variable
-		return GAMESTATE.GAME;
-	}
-	
-	/**
 	 * setter: isWin() -> checks to see if we have won
 	 * 
 	 * @param	-
 	 * @return	this.checkWin	a variable that indicates if we have won
 	 * @throws	-
-=======
-	 * used to get isWin
-	 * @return -> return if the game is won or not
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	 */
 	public boolean isWin() {
 		// returns result
 		return this.checkWin;
 	}
-	
-	/**
-	 * get the row the player is on
-	 * @return -> row the player is on
-	 */
 
 	/**
 	 * getter: getPlayerRow() -> gets the player's row
@@ -989,11 +698,6 @@ public class Game extends Observable implements ActionListener {
 		// returns the player's row
 		return this.player.getRow();
 	}
-	
-	/**
-	 * get the column that player is on
-	 * @return -> column the player is on
-	 */
 
 	/**
 	 * getter: getPlayerColumn() -> gets the player's column
@@ -1006,11 +710,6 @@ public class Game extends Observable implements ActionListener {
 		// returns the player's column
 		return this.player.getColumn();
 	}
-	
-	/**
-	 * get the direction of the player
-	 * @return -> the direction the player is facing
-	 */
 
 	/**
 	 * getter: getPlayerDirection() -> gets the player's direction
@@ -1023,11 +722,6 @@ public class Game extends Observable implements ActionListener {
 		// returns the player's direction
 		return this.player.getDirection();
 	}
-	
-	/**
-	 * 
-	 * @return -> get if the player is colliding with a box
-	 */
 
 	/**
 	 * getter: getPlayerIsBox() -> gets whether the player is colliding with a box
@@ -1036,15 +730,10 @@ public class Game extends Observable implements ActionListener {
 	 * @return	this.player.getIsBox	checks if a collision between player and box occurs
 	 * @throws	-
 	 */
-	public boolean getPlayerIsBox(){
+	public boolean getPlayerIsBox() {
 		// returns a boolean value
 		return this.player.getIsBox();
 	}
-	
-	/**
-	 * get the number of moves made by the player
-	 * @return
-	 */
 
 	/**
 	 * getter: getNumMoves() -> gets number of moves made by player
@@ -1057,11 +746,6 @@ public class Game extends Observable implements ActionListener {
 		// returns number of moves made
 		return this.numMoves;
 	}
-	
-	/**
-	 * Sets save data
-	 * @return -> save data object
-	 */
 
 	/**
 	 * getter: getState() -> returns the state of the game currently
@@ -1084,11 +768,7 @@ public class Game extends Observable implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// increment second count
 		this.seconds++;
-<<<<<<< HEAD
 		// if a berry has been triggered
-=======
-		//pauses the game timer if a berry is active
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		if (this.berryState) {
 			// increment number of berries triggered
 			this.berryCount++;
