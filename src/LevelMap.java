@@ -267,10 +267,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (Box box : this.boxes) {
 			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
 				g.drawImage(this.boxSideCross, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.7) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((box.getRow() + 0.5) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			} else {
 				g.drawImage(this.boxSide, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.7) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
+						(int) ((box.getRow() + 0.5) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_SIDE_HEIGHT, null);
 			}
 		}
 
@@ -320,10 +320,10 @@ public class LevelMap extends JPanel implements ActionListener {
 		for (Box box : this.boxes) {
 			if (this.grid[box.getRow()][box.getColumn()] == Constants.CROSS) {
 				g.drawImage(this.boxCross, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+						(int) ((box.getRow() + 0.1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			} else {
 				g.drawImage(this.box, box.getColumn() * BOX_WIDTH,
-						(int) ((box.getRow() + 0.4) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
+						(int) ((box.getRow() + 0.1) * BOX_HEIGHT + SCORE_GUTTER), BOX_WIDTH, BOX_HEIGHT, null);
 			}
 		}
 
