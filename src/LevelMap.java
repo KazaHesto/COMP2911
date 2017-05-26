@@ -12,156 +12,244 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class LevelMap extends JPanel implements ActionListener {
-
+	// declaring variables
+	
+	// setting box height
 	private final int BOX_HEIGHT = 48;
+	// setting box's side height
 	private final int BOX_SIDE_HEIGHT = 64;
+	// setting box width
 	private final int BOX_WIDTH = 64;
+	// setting score gutter size
 	private final int SCORE_GUTTER = 120;
 
+	// number of rows in the map
 	private int rows;
+	// number of columns in the map
 	private int columns;
+	// declaring a Resources instance
 	private Resources resources;
+	// grid representing the map
 	private int[][] grid;
+	// LevelMapController instance
 	private LevelMapController controller;
+	// x-coordinate
 	private double x;
+	// y-coordinate
 	private double y;
+	// x-coordinate used as a temporary value
 	private int tempX;
+	// y-coordinate used as a temporary value
 	private int tempY;
+	// Timer instance
 	private Timer timer;
+	// number of moves made
 	private int numMoves;
+	// number of seconds played
 	private int seconds;
+	// list of boxes
 	private ArrayList<Box> boxes;
+	// list of berries
 	private ArrayList<Berry> berries;
+	// represents direction in which the player is facing
 	private int playerDirection;
+	// determines whether something is a box
 	private boolean isBox;
 
 	/**
-	 * Constructor for levelMap. Sets all the Images.
-	 * @param rows -> rows for the map matrix
-	 * @param columns -> columns for the map matrix
+	 * constructor
+	 * 
+	 * @param 	rows		rows for the map matrix
+	 * @param 	columns		columns for the map matrix
+	 * @return	-
+	 * @throws	-
 	 */
 	public LevelMap(int rows, int columns) {
 		super();
+		// initialise the number of rows in the map
 		this.rows = rows;
+		// initialise the number of columns in the map
 		this.columns = columns;
+		// initialise a new Resources instance
 		this.resources = new Resources();
+		// setting size of map
 		setSize(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT);
+		// visability settings
 		setFocusable(true);
 		setVisible(true);
+		// creating a new timer
 		this.timer = new Timer(5, this);
+		// wiping the map
 		clearLevelMap();
 	}
 	
 	/**
-	 * Clears the level Map
+	 * method: clearLevelMap() -> clears the level Map
+	 * 
+	 * @param	-
+	 * @return	-
+	 * @throws	-
 	 */
 	public void clearLevelMap() {
+		// reset number of moves made
 		this.numMoves = 0;
+		// reset timer
 		this.seconds = 0;
 
+		// reset x-coordinate
 		this.x = -1;
+		// reset y-coordinate
 		this.y = -1;
+		// reset box list
 		this.boxes = new ArrayList<Box>();
+		// reset berry list
 		this.berries = new ArrayList<Berry>();
 	}
 
 	/**
-	 * Set the grid matrix for the game.
-	 * @param grid -> input matrix for the game
+	 * setter: setGrid() -> set the grid matrix for the game
+	 * 
+	 * @param 	grid		input matrix for the game
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setGrid(int[][] grid) {
+		// creating a new matrix
 		this.grid = new int[grid.length][];
+		// populating the matrix
 		for (int i = 0; i < grid.length; i++) {
 			this.grid[i] = grid[i].clone();
 		}
 	}
 	
 	/**
-	 * Sets the direction of the player in levelMapController
-	 * @param playerDirection -> gets the direction the player is in
+	 * setter: setDirection() -> sets the direction of the player in levelMapController
+	 * 
+	 * @param 	playerDirection		gets the direction the player is in
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setDirection(int playerDirection) {
+		// sets direction
 		this.playerDirection = playerDirection;
 	}
 	
 	/**
-	 * Sets if the player is colliding with a box for box moving animations
-	 * @param isBox -> sets if the player is colliding with box or not
+	 * setter: setIsBox() -> sets if the player is colliding with a box for box 
+	 * 							moving animations
+	 * 
+	 * @param 	isBox	sets if the player is colliding with box or not
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setIsBox(boolean isBox) {
+		// sets internal variable based on parsed Boolean variable
 		this.isBox = isBox;
 	}
 	
 	/**
-	 * set the positions for the box in levelMapController
-	 * @param boxes -> sets all the positions of the boxes
+	 * setter: setBoxPositions() -> set the positions for the box in levelMapController
+	 * 
+	 * @param 	boxes	sets all the positions of the boxes
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setBoxPositions(ArrayList<Box> boxes) {
+		// copies the box list
 		this.boxes = boxes;
 	}
 	
 	/**
-	 * set the positions for the berries in levelMapController
-	 * @param berries -> set all the positions of the berries
+	 * setter: setBerryPositions() -> set the positions for the berries in levelMapController
+	 * 
+	 * @param 	berries		set all the positions of the berries
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setBerryPositions(ArrayList<Berry> berries) {
+		// copies berry list
 		this.berries = berries;
 	}
 
 	/**
-	 * set the number of moves the player has made in levelMapController
-	 * @param numMoves -> number of moves the player has made
+	 * setter: setNumMoves() -> the number of moves the player has made in levelMapController
+	 * 
+	 * @param 	numMoves	number of moves the player has made
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setNumMoves(int numMoves) {
+		// setting internal variable based on input
 		this.numMoves = numMoves;
 	}
 	
 	/**
-	 * set the position of the player in levelMapController
-	 * @param x -> the x cooridinate
-	 * @param y -> the y cooridinate
+	 * setter: setPlayerPosition() -> the position of the player in levelMapController
+	 * 
+	 * @param 	x		the x cooridinate
+	 * @param 	y		the y cooridinate
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setPlayerPosition(int x, int y) {
+		// if a position has not been set
 		if (this.x == -1 && this.y == -1) {
+			// set position
 			this.x = x;
 			this.y = y;
 		} else {
+			// if the timer is not running
 			if (!this.timer.isRunning()) {
+				// start the timer
 				this.timer.start();
 			}
+			// set the temporary variables within this class
 			this.tempX = x;
 			this.tempY = y;
 		}
 	}
 
 	/**
-	 * Set KeyListener for levelMapController
-	 * @param controller -> the levelMap controller
+	 * setter: setController() -> set KeyListener for levelMapController
+	 * 
+	 * @param 	controller		the levelMap controller
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setController(LevelMapController controller) {
+		// sets the controller variable within this class
 		this.controller = controller;
+		// adds a key listener to the controller so it can react
+		// depending on input
 		this.addKeyListener(this.controller);
 	}
 	
 	/**
-	 * General function that compares two numbers
-	 * @param a 
-	 * @param b
-	 * @return -> checking if two numbers are less than 0.01
+	 * method: fuzzyMatch() -> general function that compares two numbers
+	 * 
+	 * @param 	a 						number of type double
+	 * @param 	b 						number of type double
+	 * @return 	Maths.abs(a-b)<0.01		checking if two numbers are less than 0.01
 	 */
 	private boolean fuzzyMatch(double a, double b) {
+		// return result
 		return Math.abs(a - b) < 0.01;
 	}
 	
 	/**
-	 * Shows the winning window.
-	 * @return -> returns what button is pressed.
+	 * method: showWin() -> shows the winning window
+	 * 
+	 * @param	-
+	 * @return	(an int)		returns what button is pressed
+	 * @throws	-
 	 */
-
 	public int showWin() {
+		// list of choices available
 		String[] choices = { "Next Level", "Reset", "Quit Game" };
+		// show the options to the user
 		int choice = JOptionPane.showOptionDialog(null, "Do you want to continue?", "",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+		// depending on each choice, act accordingly
 		if (choice == JOptionPane.CANCEL_OPTION) {
 			System.exit(1);
 		} else if (choice == JOptionPane.YES_OPTION) {
@@ -173,14 +261,19 @@ public class LevelMap extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Shows the winning window for tutorial level
-	 * @return
+	 * methodL showTutWin() -> shows the winning window for tutorial level
+	 * 
+	 * @param	-
+	 * @return	(an int)	an int that represents the user's choice
+	 * @throws	-
 	 */
-	
 	public int showTutWin() {
+		// list of choices available
 		String[] choices = {"Practise", "Start Game", "Quit Game"};
+		// show the options to the user
 		int choice = JOptionPane.showOptionDialog(null, "Congradulations, Tutorial Complete!", "",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+		// depending on each choice, act accordingly
 		if (choice == JOptionPane.CANCEL_OPTION) {
 			System.exit(1);
 		} else if (choice == JOptionPane.YES_OPTION) {
@@ -193,34 +286,58 @@ public class LevelMap extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * update the time
-	 * @param update -> number of seconds passed in game.
+	 * method: updateTime() -> update the time
+	 * 
+	 * @param 	update		number of seconds passed in game
+	 * @return	-
+	 * @throws	-
 	 */
 	public void updateTime(int update) {
+		// update the seconds variable
 		this.seconds = update;
 	}
 	
 	/**
-	 * check if the player is colliding with box
-	 * @param row -> row coordinate
-	 * @param column -> column coordinate
-	 * @return -> true if it collides and false otherwise
+	 * method: isBox() -> check if the player is colliding with box
+	 * 
+	 * @param 	row			row coordinate
+	 * @param 	column		column coordinate
+	 * @return 	Boolean		true if it collides and false otherwise
 	 */
 	private boolean isBox(int row, int column) {
+		// for each box in the list
 		for (Box box : this.boxes) {
+			// if a box is at the coordinates
 			if (box.getRow() == row && box.getColumn() == column) {
+				// return success
 				return true;
 			}
 		}
+		// else, return failure
 		return false;
 	}
 
 
+	/**
+	 * override: getPrefferedSize() -> sets size of window
+	 * 
+	 * @param	-
+	 * @return	(a Dimension instance)		the window size
+	 * @throws	-
+	 */
 	@Override
 	public Dimension getPreferredSize() {
+		// return the window size
 		return new Dimension(this.columns * BOX_WIDTH, this.rows * BOX_HEIGHT + SCORE_GUTTER);
 	}
 
+	/**
+	 * override: paintComponent() -> repaints the window
+	 * 
+	 * @param	g		the graphics to repaint with
+	 * @return	-
+	 * @throws	-
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		// For some reason this is needed on Windows?
@@ -271,6 +388,7 @@ public class LevelMap extends JPanel implements ActionListener {
 			}
 		}
 
+		// draws berries
 		for (Berry berry : this.berries) {
 			if (!isBox(berry.getRow(), berry.getColumn())) {
 				g.drawImage(this.resources.getImage(Resources.BERRY_TILE), berry.getColumn() * BOX_WIDTH,
@@ -279,6 +397,7 @@ public class LevelMap extends JPanel implements ActionListener {
 			}
 		}
 
+		// represents player based on his direction and if he is next to a box
 		if (playerDirection == 0) {
 			if (isBox == true) {
 				g.drawImage(this.resources.getImage(Resources.PLAYER_PUSH_UP), (int) (this.x * BOX_WIDTH),
@@ -339,8 +458,16 @@ public class LevelMap extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * override: actionPerformed() -> used for animations
+	 * 
+	 * @param	arg0	an ActionEvent instance
+	 * @return	-
+	 * @throws	-
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		// code to make the animations smooth
 		if (!fuzzyMatch(this.tempX, this.x)) {
 			this.x = (5 * this.x + this.tempX) / 6;
 		}
@@ -352,6 +479,7 @@ public class LevelMap extends JPanel implements ActionListener {
 			this.x = this.tempX;
 			this.y = this.tempY;
 		}
+		// repaint the window
 		repaint();
 	}
 }
