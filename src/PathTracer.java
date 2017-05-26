@@ -35,7 +35,12 @@ public class PathTracer {
 		this.pathLength = 10 + (int)(Math.random() * ((20 - 10) + 1));
 		this.direction = 1 + (int)(Math.random() * ((3 - 1) + 1));
 		while (length <= ysize/2) {
-		
+			this.randx = 2 + (int)(Math.random() * ((xsize - 5) + 1));
+			this.randy = 2 + (int)(Math.random() * ((ysize - 5) + 1));
+			this.x = this.randx;
+			this.y = this.randy;
+			this.pathLength = 10 + (int)(Math.random() * ((20 - 10) + 1));
+			this.direction = 1 + (int)(Math.random() * ((3 - 1) + 1));
 		//this.matrix[this.randy][this.randx] = 2;
 		
 		this.matrix[this.randy+1][this.randx+1] = 4;
