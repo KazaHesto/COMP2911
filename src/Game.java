@@ -11,10 +11,6 @@ public class Game extends Observable implements ActionListener {
 	public enum DIRECTION {
 		UP, DOWN, LEFT, RIGHT
 	}
-	
-	public enum GAMESTATE {
-		TUTORIAL, GAME
-	};
 
 	// local stuff for the game
 	private int[][] matrix;
@@ -35,43 +31,42 @@ public class Game extends Observable implements ActionListener {
 	private int column;
 	private boolean berryState;
 	private int berryCount;
-	private GAMESTATE state = GAMESTATE.GAME;
 
 	// constructor
 	public Game(int row, int column) {
-		if(state == GAMESTATE.GAME){
-			this.row = row;
-			this.column = column;
-			this.undoPlayer = new Stack<Integer>();
-			this.undoBoxes = new Stack<ArrayList<Box>>();
-			this.gameTimer = new Timer(1000, this);
-			this.seconds = 0;
-			newLevel();
-		}
-	}
-	
-	Game(int row, int column, int[][] matrix){
-		state = GAMESTATE.TUTORIAL;
 		this.row = row;
 		this.column = column;
-		this.player = new Player(1, 1);
 		this.undoPlayer = new Stack<Integer>();
 		this.undoBoxes = new Stack<ArrayList<Box>>();
 		this.gameTimer = new Timer(1000, this);
 		this.seconds = 0;
-		this.boxes = new ArrayList<Box>();
-		this.boxes.add(new Box(2, 4));
-		this.boxes.add(new Box(3, 7));
-		this.boxes.add(new Box(4, 7));
-		this.resetBoxes = getBoxes();
-		this.berries = new ArrayList<Berry>();
-		this.resetBoxes = getBoxes();
-		this.berries.add(new Berry(1,6));
-		this.resetBerries = getBerries();
-		this.berryState = false;
-		this.berryCount = 0;
-		newTutLevel(matrix);
+		newLevel();
 	}
+
+/*	public Game(int[][] matrix, int[][] resetState, Stack<Integer> undoPlayer, Stack<ArrayList<Box>> undoBoxes,
+			int numMoves, Player player, Player resetPlayer, ArrayList<Box> boxes, ArrayList<Box> resetBoxes,
+			ArrayList<Berry> berries, ArrayList<Berry> resetBerries, Boolean checkWin, Timer gameTimer, int seconds,
+			int row, int column, boolean berryState, int berryCount) {
+		super();
+		this.matrix = matrix;
+		this.resetState = copyMatrix(this.matrix);
+		this.undoPlayer = new ArrayList<>;
+		this.undoBoxes = undoBoxes;
+		this.numMoves = numMoves;
+		this.player = player;
+		this.resetPlayer = resetPlayer;
+		this.boxes = boxes;
+		this.resetBoxes = resetBoxes;
+		this.berries = berries;
+		this.resetBerries = resetBerries;
+		this.checkWin = checkWin;
+		this.gameTimer = gameTimer;
+		this.seconds = seconds;
+		this.row = row;
+		this.column = column;
+		this.berryState = berryState;
+		this.berryCount = berryCount;
+	}*/
 
 	public Game(SaveData data) {
 		this.matrix = data.matrix;
@@ -108,16 +103,6 @@ public class Game extends Observable implements ActionListener {
 		this.berryState = false;
 		this.berryCount = 0;
 		this.player.setIsBox(false);
-	}
-	
-	public void newTutLevel(int[][] matrix){
-		this.matrix = matrix;
-		this.resetState = copyMatrix(matrix);
-		this.player.setIsBox(false);
-	}
-	
-	public ArrayList<Berry> getBerryList(){
-		return this.berries;
 	}
 
 	public int[][] getMatrix() {
@@ -159,11 +144,7 @@ public class Game extends Observable implements ActionListener {
 	// method to reset game level when R is pressed
 	public void resetGame() {
 		this.numMoves = 0;
-		if(state != GAMESTATE.TUTORIAL){
-			this.player = new Player(this.resetPlayer);
-		} else {
-			this.player.setPosition(1, 1);
-		}
+		this.player = new Player(this.resetPlayer);
 		this.matrix = copyMatrix(this.resetState);
 		this.boxes = this.resetBoxes;
 		this.berries = this.resetBerries;
@@ -382,19 +363,7 @@ public class Game extends Observable implements ActionListener {
 			System.out.println("win");
 		}
 	}
-	
-	public GAMESTATE getGameState(){
-		return this.state;
-	}
-	
-	public GAMESTATE isTutorial(){
-		return GAMESTATE.TUTORIAL;
-	}
-	
-	public GAMESTATE isGame(){
-		return GAMESTATE.GAME;
-	}
-	
+
 	public boolean isWin() {
 		return this.checkWin;
 	}

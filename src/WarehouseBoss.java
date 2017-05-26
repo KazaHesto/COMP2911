@@ -62,18 +62,7 @@ public class WarehouseBoss implements ActionListener {
 	}
 	
 	public void initTutorial() {
-		int[][] matrix = new int[][] {
-			{1,1,1,1,1,1,1,1,1,1,1},
-			{1,4,4,1,4,1,4,1,4,1,1},
-			{1,1,1,1,4,1,1,1,1,1,1},
-			{1,1,1,1,4,4,4,1,4,3,1},
-			{1,1,1,3,4,4,4,1,4,3,1},
-			{1,1,1,1,1,1,1,1,1,1,1}
-		};
-		int row = 6;
-		int column = 11;
-		this.game = new Game(row, column, matrix);
-		showGame(row,column);
+		
 	}
 
 	private void showGame(int row, int column) {
@@ -222,20 +211,10 @@ public class WarehouseBoss implements ActionListener {
 			initGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(1))) {
-			if(this.game.getGameState() == this.game.isTutorial()){
-				JOptionPane.showMessageDialog(null, "You can not Load during the Tutorial!", "Warning",
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				loadGame();
-			}
+			loadGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(2))) {
-			if(this.game.getGameState() == this.game.isTutorial()){
-				JOptionPane.showMessageDialog(null, "You can not Save during the Tutorial!", "Warning",
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				saveGame();
-			}
+			saveGame();
 		}
 		if (e.getSource().equals(menuBar.getMenu(0).getItem(4))) {
 			this.game.undoMove();
