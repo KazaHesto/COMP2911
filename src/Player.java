@@ -1,101 +1,144 @@
 import java.io.Serializable;
 
 public class Player implements Serializable{
+	// declaring variables
+	
+	// the player's row
 	private int row;
+	// the player's column
 	private int column;
+	// the player's direction
 	private int direction;
+	// the player's interaction with a box
 	private boolean isBox;
 
 	/**
-	 * constructor for the player
-	 * @param row -> row to set the player at
-	 * @param column -> column to set the player at
+	 * constructor
+	 * 
+	 * @param 	row			row to set the player at
+	 * @param 	column		column to set the player at
+	 * @return	-
+	 * @throws	-
 	 */
 	public Player(int row, int column) {
 		super();
+		// initialise the player's row
 		this.row = row;
+		// initialise the player's column
 		this.column = column;
 	}
 	
 	/**
-	 *Constructor set player at a specific coordinate
-	 * @param coordinates -> coordinate of the player
+	 *	alternative constructor
+	 *
+	 * @param 	coordinates		coordinate of the player
+	 * @return	-
+	 * @throws	-
 	 */
-
 	public Player(Coordinate coordinates) {
 		super();
+		// set the player's coordinates
 		this.row = coordinates.getRow();
 		this.column = coordinates.getColumn();
 	}
 	
 	/**
-	 * Constructor to set player based on row and column from previous player object
-	 * @param player
+	 * another alternative constructor
+	 * 
+	 * @param 	player		a Player instance
+	 * @return	-
+	 * @throws	-
 	 */
 	public Player(Player player) {
 		super();
+		// set the player's position
 		this.row = player.getRow();
 		this.column = player.getColumn();
 	}
+	
 	/**
-	 * get the row the player is on
-	 * @return -> the row the player is on
+	 * getter: getRow() -> gets the row the player is on
+	 * 
+	 * @param	-
+	 * @return	this.row	the row the player is on
+	 * @throws	-
 	 */
 	public int getRow() {
+		// return the player's row
 		return this.row;
 	}
 	
 	/**
-	 * get the column the player is on 
-	 * @return -> the column the player is on
+	 * getter: getColumn() -> gets the column the player is on 
+	 * 
+	 * @param	-
+	 * @return	this.column		the column the player is on
+	 * @throws	-
 	 */
-
 	public int getColumn() {
+		// return the player's column
 		return this.column;
 	}
 	
 	/**
-	 * set the position fo the player based on row and column
-	 * @param row -> row you want the player to be set at 
-	 * @param column -> column you want the player to be set at
+	 * setter: setPosition() -> sets the position fo the player based on row and column
+	 * 
+	 * @param 	row			row you want the player to be set at 
+	 * @param 	column		column you want the player to be set at
+	 * @return	-
+	 * @throws	-
 	 */
-
 	public void setPosition(int row, int column) {
+		// set the player's row and column (i.e position)
 		this.row = row;
 		this.column = column;
 	}
 	
 	/**
-	 * getter for the direction of the player
-	 * @return -> returns the direction of the player
+	 * getter: getDirection() -> gets the direction of the player
+	 * 
+	 * @param	-
+	 * @return	this.direction	returns the direction of the player
+	 * @throws	-
 	 */
 	public int getDirection(){
+		// return the player's directoin
 		return this.direction;
 	}
 	
 	/**
-	 * set the direction of the player
-	 * @param direction -> direction of the player
+	 * setter: setDirection() -> set the direction of the player
+	 * 
+	 * @param 	direction	direction of the player
+	 * @return	-
+	 * @throws	-
 	 */
-
 	public void setDirection(int direction) {
+		// sets the direction of the player
 		this.direction = direction;
 	}
 	
 	/**
-	 * get if the the player is colliding with a box used for animmation
-	 * @return -> if the player is colliding with the box or not
+	 * getter: getIsBox() -> gets if the the player is colliding with a box used for animation
+	 * 
+	 * @param	-
+	 * @return	this.isBox		if the player is colliding with the box or not
+	 * @throws	-
 	 */
-	
 	public boolean getIsBox(){
+		// return required variable
 		return this.isBox;
 	}
 	
 	/**
-	 * set if the player is colliding with box
-	 * @param isBox -> the boolean that checks if the player is colliding with box
+	 * setter: setIsBox() -> sets if the player is colliding with box
+	 * 
+	 * @param 	isBox	the boolean that checks if the player is colliding with box
+	 * @return	-
+	 * @throws	-
 	 */
 	public void setIsBox(Boolean isBox){
+		// sets required variable within this class
 		this.isBox = isBox; 
 	}
 }
