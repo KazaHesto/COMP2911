@@ -3,6 +3,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+// a class that holds the constants used in the game
 public class Resources {
 	// declaring variables
 	
@@ -17,12 +18,18 @@ public class Resources {
 	// the text presented when the "about" button is pressed
 	public static final String ABOUT_TEXT = "IT'S A THING";
 
-	// ints used to represent different things (named in a explanatory manner)
+	// int that represents a wall
 	public static final int WALL = 1;
+	// int that represents a box
 	public static final int BOX = 2;
+	// int that represents a cross
 	public static final int CROSS = 3;
+	// int that represents a floor
 	public static final int FLOOR = 4;
+	// int that represents berry
 	public static final int BERRY = 6;
+
+	// ints used to represent different things (named in a explanatory manner)
 	public static final int PLAYER_UP = 1;
 	public static final int PLAYER_DOWN = 2;
 	public static final int PLAYER_LEFT = 3;
@@ -47,16 +54,6 @@ public class Resources {
 	public static final int HELP_BUTTON = 22;
 	public static final int QUIT_BUTTON = 23;
 
-<<<<<<< HEAD
-	// ints representing direction
-	public static final int UP = 1;
-	public static final int DOWN = 2;
-	public static final int LEFT = 3;
-	public static final int RIGHT = 4;
-
-	// images used in our game
-=======
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	private final Image playerUp;
 	private final Image playerDown;
 	private final Image playerLeft;
@@ -77,7 +74,6 @@ public class Resources {
 	private final Image wallSideCross;
 	private final Image berryTile;
 
-	// images used for buttons in our game
 	private final Image playButton;
 	private final Image tutorialButton;
 	private final Image helpButton;
@@ -92,7 +88,6 @@ public class Resources {
 	 */
 	public Resources() {
 		super();
-		// load all required resources
 		this.playerUp = loadImage("/textures/ManUp.png");
 		this.playerDown = loadImage("/textures/ManDown.png");
 		this.playerLeft = loadImage("/textures/ManLeft.png");
@@ -124,8 +119,8 @@ public class Resources {
 	 * @return	-
 	 * @throws	-
 	 */
+	// Reads images from file system
 	private Image loadImage(String path) {
-		// load the image
 		try {
 			return ImageIO.read(getClass().getResource(path));
 		} catch (IOException e) {
@@ -142,7 +137,6 @@ public class Resources {
 	 * @throws	-
 	 */
 	public Image getImage(int i) {
-		// return the image based on the input
 		switch (i) {
 		case PLAYER_UP:
 			return this.playerUp;
@@ -194,3 +188,4 @@ public class Resources {
 		return null;
 	}
 }
+

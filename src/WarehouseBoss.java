@@ -60,12 +60,9 @@ public class WarehouseBoss implements ActionListener, Observer {
 		// set the coordinates of the window
 		this.row = 11;
 		this.column = 14;
-<<<<<<< HEAD
 		// show the menu
-=======
 		Resources resources = new Resources();
 		frame.setIconImage(resources.getImage(Resources.PLAYER_PUSH_RIGHT));
->>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 		showMenu();
 	}
 
