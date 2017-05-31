@@ -162,19 +162,35 @@ public class LevelGenerator {
 		int[][] pathedMatrix = path.makePath(columns, rows);
 
 		mergeMatrix(pathedMatrix);
-		path.print(columns, rows);
-
 		return level;
 	}
 
+	/**
+	 * Returns the coordinates of the player
+	 * 
+	 * @return Coordinates of the player in the level
+	 */
 	public Coordinate getPlayer() {
 		return getFirstFloor();
 	}
 
+	/**
+	 * Returns an arrayList of Coordinates for where boxes whould be placed
+	 * 
+	 * @return ArrayList of Coordinates for box placement
+	 */
 	public ArrayList<Coordinate> getBox() {
 		return boxes;
 	}
 
+	/**
+	 * Merges the path generated in pathtracer into the walls generated in this
+	 * class. Any empty spaces in the path are kept to the level is solvable.
+	 * 
+	 * @param pathedMatrix
+	 *            The matrix from pathtracer
+	 * @pre pathedMatrix != null
+	 */
 	private void mergeMatrix(int[][] pathedMatrix) {
 		for (int i = 0; i < pathedMatrix.length; i++) {
 			for (int j = 0; j < pathedMatrix[i].length; j++) {
@@ -210,6 +226,11 @@ public class LevelGenerator {
 		return null;
 	}
 
+	/**
+	 * Performs a DFS to check the size of reachable empty space in the level
+	 * 
+	 * @return true if less than half the area is reachable, false otherwise.
+	 */
 	private boolean isShallow() {
 		Stack<Coordinate> toDo = new Stack<Coordinate>();
 		ArrayList<Coordinate> seen = new ArrayList<Coordinate>();
@@ -232,6 +253,14 @@ public class LevelGenerator {
 		return false;
 	}
 
+	/**
+	 * Returns the neighbours of a coordinate which are empty
+	 * 
+	 * @param coord
+	 *            Coordinate to return neighbours of.
+	 * @pre coord != null, coord is on level (not out of bounds)
+	 * @return ArrayList of coordinates of neighbours.
+	 */
 	private ArrayList<Coordinate> getFloorNeighbours(Coordinate coord) {
 		ArrayList<Coordinate> neighbourList = new ArrayList<Coordinate>();
 		int row = coord.getRow();
@@ -257,10 +286,12 @@ public class LevelGenerator {
 	}
 
 	/**
-	 * Adds specified template to level
+	 * Adds specified template to level, returns true if successful, false
+	 * otherwise
 	 * 
 	 * @param level
 	 *            Level to ad template to.
+	 * @pre level level != null, level can hold a template
 	 * @param template
 	 *            Template to add to level.
 	 * @return true if successful, false otherwise.
@@ -293,6 +324,17 @@ public class LevelGenerator {
 		return false;
 	}
 
+	/**
+	 * Checks if the conditions for the template are met.
+	 * 
+	 * @param level
+	 *            Level to check.
+	 * @pre level != null, level is large enough to hold a level.
+	 * @param template
+	 *            Template to check
+	 * @pre template != null
+	 * @return returns true if compatible, false otherwise.
+	 */
 	private boolean isCompatible(int[][] level, int[][] template) {
 		for (int i = 1; i <= level.length - 4; i += 3) {
 			for (int j = 1; j <= level[i].length - 4; j += 3) {
@@ -335,6 +377,12 @@ public class LevelGenerator {
 		return false;
 	}
 
+	/**
+	 * Returns a random template which has been flipped and rotated a random
+	 * number of times.
+	 * 
+	 * @return A random template
+	 */
 	private int[][] getRandomTemplate() {
 		Random rand = new Random();
 		int[][] template = copyMatrix(this.templates[rand.nextInt(16)]);
@@ -353,6 +401,14 @@ public class LevelGenerator {
 		return template;
 	}
 
+	/**
+	 * returns a deeply copied matrix with equal contents to the one given.
+	 * 
+	 * @param original
+	 *            matrix to copy.
+	 * @pre original != null
+	 * @return copy of given matrix.
+	 */
 	private int[][] copyMatrix(int[][] original) {
 		int[][] copy = new int[original.length][original[1].length];
 		for (int i = 0; i < original.length; i++) {
@@ -363,6 +419,14 @@ public class LevelGenerator {
 		return copy;
 	}
 
+	/**
+	 * Flips given matrix
+	 * 
+	 * @param original
+	 *            Matrix to flip
+	 * @pre original != null
+	 * @return Flipped matrix
+	 */
 	private int[][] flipMatrix(int[][] original) {
 		int[][] flipped = new int[original.length][original[1].length];
 		for (int i = 0; i < original.length; i++) {
@@ -371,6 +435,14 @@ public class LevelGenerator {
 		return flipped;
 	}
 
+	/**
+	 * Rotates given matrix
+	 * 
+	 * @param original
+	 *            Matrix to flip
+	 * @pre original != null
+	 * @return Rotated matrix.
+	 */
 	private int[][] rotateMatrix(int[][] original) {
 		int[][] rotated = new int[original.length][original.length];
 		for (int i = 0; i < original.length; i++) {
@@ -381,6 +453,13 @@ public class LevelGenerator {
 		return rotated;
 	}
 
+	/**
+	 * Prints given matrix
+	 * 
+	 * @param matrix
+	 *            Matrix to print
+	 * @pre matrix != null
+	 */
 	private void printMatrix(int[][] matrix) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {

@@ -47,6 +47,7 @@ public class Resources {
 	public static final int HELP_BUTTON = 22;
 	public static final int QUIT_BUTTON = 23;
 
+<<<<<<< HEAD
 	// ints representing direction
 	public static final int UP = 1;
 	public static final int DOWN = 2;
@@ -54,6 +55,8 @@ public class Resources {
 	public static final int RIGHT = 4;
 
 	// images used in our game
+=======
+>>>>>>> branch 'master' of https://github.com/KazaHesto/COMP2911.git
 	private final Image playerUp;
 	private final Image playerDown;
 	private final Image playerLeft;
